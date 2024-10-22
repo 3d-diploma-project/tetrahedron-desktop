@@ -1,3 +1,3 @@
-# 3d-app-desktop
-
-Workflow tutorial: [here](https://docs.google.com/document/d/1QJ_aPE3kYIXs6J7uHMTFpVwkObSrH2yibf9JSNLUqNc/edit?usp=sharing)
+# To run the project locally:
+- `git clone` the project
+- Launch the file `src/main/java/com.tetrahedron.app/DemoProject.java`
