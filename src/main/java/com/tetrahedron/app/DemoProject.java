@@ -40,6 +40,8 @@ public class DemoProject extends Application{
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
+    private FileReader fileReader = new FileReader();
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -47,8 +49,8 @@ public class DemoProject extends Application{
         Button loadFacesButton = new Button("Load Faces");
         Button createMeshButton = new Button("Create Mesh");
 
-        loadVerticesButton.setOnAction(e -> loadVerticesFromFile());
-        loadFacesButton.setOnAction(e -> loadFacesFromFile());
+        loadVerticesButton.setOnAction(e -> loadVertices());
+        loadFacesButton.setOnAction(e -> loadFaces());
         createMeshButton.setOnAction(e -> createMeshView(primaryStage));
 
         VBox layout = new VBox(10, loadVerticesButton, loadFacesButton, createMeshButton);
@@ -172,103 +174,23 @@ public class DemoProject extends Application{
         });
     }
 
-    private void loadVerticesFromFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Vertices File");
-        File file = fileChooser.showOpenDialog(null);
-
-        if (file != null) {
-            try (Scanner scanner = new Scanner(file)) {
-                List<Float> vertexList = new ArrayList<>();
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine().trim();
-                    String[] values = line.split("\\s+");
-
-                    for (int i = 1; i < values.length; i++) {
-                        try {
-                            vertexList.add(Float.parseFloat(values[i]));
-                        } catch (NumberFormatException e) {
-                            System.out.println("Error parsing number: " + values[i]);
-                        }
-                    }
-                }
-                vertices = new float[vertexList.size()];
-                for (int i = 0; i < vertexList.size(); i++) {
-                    vertices[i] = vertexList.get(i);
-                }
-                System.out.println("Vertices loaded successfully.");
-                System.out.println("Vertices length is " + vertices.length);
-
-                // Для отладки - выводим массив вершин
-                for (float i : vertices) {
-                    System.out.println(i);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+    private void loadVertices() {
+        vertices = fileReader.loadVerticesFromFile();
+        if (vertices != null) {
+            texture = new float[vertices.length / 3 * 2];
+            for (int i = 0; i < texture.length; i += 2) {
+                texture[i] = 0;    // Значение u
+                texture[i + 1] = 0; // Значение v
             }
-        }
-
-        texture = new float[vertices.length / 3 * 2];
-        for (int i = 0; i < texture.length; i += 2) {
-            texture[i] = 0;    // Значение u
-            texture[i + 1] = 0; // Значение v
-        }
-        System.out.println("Textures array");
-        System.out.println("Texture length is " + vertices.length);
-        for (float i : texture) {
-            System.out.println(i);
+            System.out.println("Vertices loaded successfully.");
         }
     }
 
-    private void loadFacesFromFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Faces File");
-        File file = fileChooser.showOpenDialog(null);
-
-        if (file != null) {
-            try (Scanner scanner = new Scanner(file)) {
-                List<Integer> facesList = new ArrayList<>();
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine().trim();
-                    String[] values = line.split("\\s+");
-
-                    // Пропускаем первое значение (индекс)
-                    int[] indices = new int[values.length - 1];
-                    for (int i = 1; i < values.length; i++) {
-                        try {
-                            indices[i - 1] = Integer.parseInt(values[i]) - 1;
-                        } catch (NumberFormatException e) {
-                            System.out.println("Error parsing number: " + values[i]);
-                        }
-                    }
-
-                    addTriangleToFacesList(facesList, indices[0], indices[1], indices[2]);
-                    addTriangleToFacesList(facesList, indices[0], indices[1], indices[3]);
-                    addTriangleToFacesList(facesList, indices[1], indices[2], indices[3]);
-                    addTriangleToFacesList(facesList, indices[0], indices[2], indices[3]);
-                }
-
-                faces = new int[facesList.size()];
-                for (int i = 0; i < facesList.size(); i++) {
-                    faces[i] = facesList.get(i);
-                }
-                System.out.println("Faces loaded successfully.");
-                for (int i : faces) {
-                    System.out.println(i);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+    private void loadFaces() {
+        faces = fileReader.loadFacesFromFile();
+        if (faces != null) {
+            System.out.println("Faces loaded successfully.");
         }
-    }
-
-    private void addTriangleToFacesList(List<Integer> facesList, int index1, int index2, int index3) {
-        facesList.add(index1);
-        facesList.add(0);
-        facesList.add(index2);
-        facesList.add(0);
-        facesList.add(index3);
-        facesList.add(0);
     }
 
     public static void main(String[] args) {
