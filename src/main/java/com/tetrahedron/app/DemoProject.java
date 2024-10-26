@@ -168,11 +168,7 @@ public class DemoProject extends Application {
     private void loadVertices() {
         vertices = fileReader.loadVerticesFromFile();
         if (vertices != null) {
-            texture = new float[vertices.length / 3 * 2];
-            for (int i = 0; i < texture.length; i += 2) {
-                texture[i] = 0;    // Значение u
-                texture[i + 1] = 0; // Значение v
-            }
+            loadTextures(vertices.length);
             System.out.println("Vertices loaded successfully.");
         }
     }
@@ -181,6 +177,14 @@ public class DemoProject extends Application {
         faces = fileReader.loadFacesFromFile();
         if (faces != null) {
             System.out.println("Faces loaded successfully.");
+        }
+    }
+
+    private void loadTextures(int length) {
+        texture = new float[length / 3 * 2];
+        for (int i = 0; i < texture.length; i += 2) {
+            texture[i] = 0;    // Значение u
+            texture[i + 1] = 0; // Значение v
         }
     }
 
