@@ -14,18 +14,9 @@ import javafx.scene.shape.CullFace;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Transform;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-
-public class DemoProject extends Application{
+public class DemoProject extends Application {
 
     private float[] vertices;
     private int[] faces;
@@ -40,7 +31,7 @@ public class DemoProject extends Application{
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
-    private FileReader fileReader = new FileReader();
+    private final FileReader fileReader = new FileReader();
 
     @Override
     public void start(Stage primaryStage) {
