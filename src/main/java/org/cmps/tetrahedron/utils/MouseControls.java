@@ -1,6 +1,5 @@
 package org.cmps.tetrahedron.utils;
 
-import org.joml.Quaternionf;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -21,7 +20,7 @@ public class MouseControls {
             @Override
             public void invoke(long window, double xOffset, double yOffset) {
                 zoomFactor += (float) yOffset;
-                zoomFactor = Math.max(1f, Math.min(zoomFactor, 5.0f));
+                zoomFactor = Math.max(1f, Math.min(zoomFactor, 100.0f));
             }
         });
         GLFW.glfwSetMouseButtonCallback(windowHandle, new GLFWMouseButtonCallback() {
@@ -49,11 +48,11 @@ public class MouseControls {
         return zoomFactor;
     }
 
-    public Quaternionf getRotation() {
-        Quaternionf rotation = new Quaternionf();
-        rotation.rotateLocalX((float) deltaY * 0.1f);
-        rotation.rotateLocalY((float) deltaX * 0.1f);
+    public float getY() {
+        return (float) deltaY * 0.1f;
+    }
 
-        return rotation;
+    public float getX() {
+        return (float) deltaX * 0.1f;
     }
 }

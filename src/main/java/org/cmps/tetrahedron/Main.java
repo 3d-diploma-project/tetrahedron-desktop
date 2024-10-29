@@ -2,7 +2,7 @@ package org.cmps.tetrahedron;
 
 import org.cmps.tetrahedron.utils.MouseControls;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
+import org.joml.Matrix4x3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -33,9 +33,12 @@ public class Main {
 
     private int viewportSizeUniform;
     private int viewMatrixUniform;
+    private int projMatrixUniform;
 
     private MouseControls mouseControls;
-    private final Matrix4f viewMatrix = new Matrix4f();
+    private final Matrix4x3f viewMatrix = new Matrix4x3f();
+    private final Matrix4f projMatrix = new Matrix4f();
+
     private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     private final Map<Integer, float[]> vertices = readVerticesCoordinates();
@@ -100,7 +103,8 @@ public class Main {
 
         /* Create all needed GL resources */
         createVao();
-        createRasterProgram();
+        int program = createRasterProgram();
+        initProgram(program);
     }
 
     private void createVao() {
@@ -124,7 +128,7 @@ public class Main {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
     }
 
-    private void createRasterProgram() {
+    private int createRasterProgram() {
         int program = glCreateProgram();
 
         int vShader = createShader("shaders/vs.glsl", GL_VERTEX_SHADER);
@@ -139,8 +143,13 @@ public class Main {
 
         glLinkProgram(program);
 
+        return program;
+    }
+
+    void initProgram(int program) {
         glUseProgram(program);
         viewMatrixUniform = glGetUniformLocation(program, "viewMatrix");
+        projMatrixUniform = glGetUniformLocation(program, "projMatrix");
         viewportSizeUniform = glGetUniformLocation(program, "viewportSize");
     }
 
@@ -158,18 +167,18 @@ public class Main {
     }
 
     private void updateMatrix() {
-        final Vector3f position = new Vector3f(0.5f, 0, 3).negate();
-        Matrix4f modelMatrix = new Matrix4f()
-                .translate(position)
-                .rotate(mouseControls.getRotation());
+        float fov = (float) Math.toRadians(30 / mouseControls.getZoomFactor());
+        projMatrix.setPerspective((float) Math.min(fov, Math.PI), (float) width / height, 0.1f, Float.POSITIVE_INFINITY);
 
-        float fov = (float) Math.toRadians(60 / mouseControls.getZoomFactor());
-        viewMatrix.setPerspective(fov, (float) width / height, 0.1f, 1000.0f)
-                .mul(modelMatrix);
+        viewMatrix.setLookAt(0.0f, 2.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
+                  .rotateY(mouseControls.getX())
+                  .rotateX(mouseControls.getY());
     }
 
     private void render() {
-        glUniformMatrix4fv(viewMatrixUniform, false, viewMatrix.get(matrixBuffer));
+        glUniformMatrix4fv(viewMatrixUniform, false, viewMatrix.get4x4(matrixBuffer));
+        glUniformMatrix4fv(projMatrixUniform, false, projMatrix.get(matrixBuffer));
+
         glUniform2f(viewportSizeUniform, width, height);
 
         glBindVertexArray(vao);
