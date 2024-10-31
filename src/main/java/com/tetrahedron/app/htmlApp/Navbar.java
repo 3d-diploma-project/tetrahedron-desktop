@@ -2,21 +2,15 @@ package com.tetrahedron.app.htmlApp;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 public class Navbar extends HBox {
 
-    public Navbar(Scene scene) throws FileNotFoundException {
+    public Navbar(Scene scene) {
         getStyleClass().add("navbar");
 
         VBox logo = new Logo();

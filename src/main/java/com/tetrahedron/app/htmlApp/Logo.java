@@ -1,26 +1,13 @@
 package com.tetrahedron.app.htmlApp;
 
+import com.tetrahedron.app.utils.ResourceReader;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 public class Logo extends VBox {
     public Logo() {
-        // TODO: create a separate class for reading image
-        InputStream input = getClass().getResourceAsStream("/logo.png");
-        if (input == null) {
-            try {
-                throw new FileNotFoundException("Файл logo.svg не найден в папке ресурсов");
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        Image image = new Image(input);
-        ImageView logo = new ImageView(image);
+        ImageView logo = ResourceReader.imageReader("/logo.png");
 
         Label logoText = new Label("TETRAHEDRON");
         logoText.getStyleClass().add("logo-text");

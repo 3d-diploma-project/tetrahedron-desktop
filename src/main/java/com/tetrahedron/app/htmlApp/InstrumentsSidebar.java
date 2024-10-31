@@ -1,19 +1,30 @@
 package com.tetrahedron.app.htmlApp;
 
+import com.tetrahedron.app.utils.ResourceReader;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
-import javafx.scene.paint.Color;
 
 public class InstrumentsSidebar extends VBox {
+
+    private Button customButtonWithImage(String filePath) {
+        ImageView customButtonImage = ResourceReader.imageReader(filePath);
+        Button customButton = new Button("", customButtonImage);
+        customButtonImage.setFitWidth(24);
+        customButtonImage.setFitHeight(24);
+        customButton.getStyleClass().add("sidebar-button");
+        return customButton;
+    }
 
     public InstrumentsSidebar() {
         getStyleClass().add("sidebar");
 
-        // Добавляем кнопки в сайдбар
-        for (int i = 0; i < 5; i++) {
-            Circle button = new Circle(20, Color.BLUE); // Пример кнопки
-            button.getStyleClass().add("sidebar-button");
-            getChildren().add(button);
+        String[] iconsFilePaths = {"/cursor.png", "/move.png", "/reload.png", "/scale.png",
+                "/copy.png", "/delete.png"};
+
+        for (String iconFilePath : iconsFilePaths) {
+            Button customSidebarBtn = customButtonWithImage(iconFilePath);
+            getChildren().add(customSidebarBtn);
         }
     }
 }
