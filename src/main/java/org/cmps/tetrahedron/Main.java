@@ -185,4 +185,24 @@ public class Main {
         glDrawArrays(GL_TRIANGLES, 0, faces.size() * 3);
         glBindVertexArray(0);
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Matrix4x3f getViewMatrix() {
+        return viewMatrix;
+    }
+
+    public Matrix4f getProjMatrix() {
+        return projMatrix;
+    }
+
+    public Map<Integer, float[]> getVertices() {
+        return vertices;
+    }
 }
