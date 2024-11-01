@@ -26,8 +26,8 @@ import static org.lwjgl.system.MemoryUtil.memAddress;
 public class Main {
 
     private long window;
-    public int width = 1024;
-    public int height = 768;
+    private int width = 1024;
+    private int height = 768;
 
     private int vao;
 
@@ -36,12 +36,12 @@ public class Main {
     private int projMatrixUniform;
 
     private MouseControls mouseControls;
-    public final Matrix4x3f viewMatrix = new Matrix4x3f();
-    public final Matrix4f projMatrix = new Matrix4f();
+    private final Matrix4x3f viewMatrix = new Matrix4x3f();
+    private final Matrix4f projMatrix = new Matrix4f();
 
     private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
-    public final Map<Integer, float[]> vertices = readVerticesCoordinates();
+    private final Map<Integer, float[]> vertices = readVerticesCoordinates();
     private final List<float[][]> faces = readIndexesAndConvertToFaces(vertices);
 
     public static void main(String[] args) {
