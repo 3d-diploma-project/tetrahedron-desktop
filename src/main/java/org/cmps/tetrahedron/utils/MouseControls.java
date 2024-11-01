@@ -10,7 +10,7 @@ public class MouseControls {
 
     private float zoomFactor = 1.0f;
     private Main main;
-    private final ConvertTo3D convertTo3D;
+    private final CoordinatesConvertor coordinatesConvertor;
 
     private boolean isRotating;
     private double lastMouseX = 0;
@@ -20,7 +20,7 @@ public class MouseControls {
 
     public MouseControls(long windowHandle, Main main) {
         this.main = main;
-        this.convertTo3D = new ConvertTo3D(main, this);
+        this.coordinatesConvertor = new CoordinatesConvertor(main, this);
 
         GLFW.glfwSetScrollCallback(windowHandle, new GLFWScrollCallback() {
             @Override
@@ -38,7 +38,7 @@ public class MouseControls {
                 else if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_PRESS) {
                     System.out.println("Cursor X: " + lastMouseX);
                     System.out.println("Cursor Y: " + lastMouseY);
-                    convertTo3D.get3Dcoordinate();
+                    coordinatesConvertor.print3DCoordinates();
                 }
             }
         });

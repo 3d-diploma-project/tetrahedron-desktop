@@ -7,12 +7,12 @@ import org.lwjgl.opengl.GL11C;
 import java.lang.Math;
 
 
-public class ConvertTo3D {
+public class CoordinatesConvertor {
 
     private Main main;
     private final MouseControls mouseControls;
 
-    public ConvertTo3D(Main main, MouseControls mouseControls) {
+    public CoordinatesConvertor(Main main, MouseControls mouseControls) {
         this.main = main;
         this.mouseControls = mouseControls;
     }
@@ -25,9 +25,8 @@ public class ConvertTo3D {
         return viewProjMatrix.unproject((float) mouseX, (float) (main.height - mouseY), depth[0], new int[] {0, 0, main.width, main.height}, new Vector3f());
     }
 
-    public void get3Dcoordinate() {
+    public void print3DCoordinates() {
         final double maxAcceptableDistanceSqr = 1e-3;
-        final double err = 1e-3;
         double xMouse = mouseControls.getLastMouseX();
         double yMouse = mouseControls.getLastMouseY();
         Vector3f mouseCords = convertScreenToWorld(xMouse, yMouse);
