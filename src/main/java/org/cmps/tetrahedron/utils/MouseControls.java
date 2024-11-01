@@ -20,7 +20,8 @@ public class MouseControls {
 
     public MouseControls(long windowHandle, Main main) {
         this.main = main;
-        this.coordinatesConvertor = new CoordinatesConvertor(main, this);
+        this.coordinatesConvertor = new CoordinatesConvertor(main.getProjMatrix(), main.getViewMatrix(),
+                main.getWidth(), main.getHeight(), main.getVertices(), this);
 
         GLFW.glfwSetScrollCallback(windowHandle, new GLFWScrollCallback() {
             @Override
