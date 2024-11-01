@@ -21,7 +21,7 @@ public class MouseControls {
     public MouseControls(long windowHandle, Main main) {
         this.main = main;
         this.coordinatesConvertor = new CoordinatesConvertor(main.getProjMatrix(), main.getViewMatrix(),
-                main.getWidth(), main.getHeight(), main.getVertices(), this);
+                main.getWidth(), main.getHeight(), main.getVertices());
 
         GLFW.glfwSetScrollCallback(windowHandle, new GLFWScrollCallback() {
             @Override
@@ -39,7 +39,7 @@ public class MouseControls {
                 else if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_PRESS) {
                     System.out.println("Cursor X: " + lastMouseX);
                     System.out.println("Cursor Y: " + lastMouseY);
-                    coordinatesConvertor.print3DCoordinates();
+                    coordinatesConvertor.print3DCoordinates(lastMouseX, lastMouseY);
                 }
             }
         });

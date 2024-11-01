@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class CoordinatesConvertor {
 
-    private final MouseControls mouseControls;
     private final Matrix4f projMatrix;
     private final Matrix4x3f viewMatrix;
     private final int width;
@@ -19,14 +18,12 @@ public class CoordinatesConvertor {
 
     public CoordinatesConvertor(Matrix4f projMatrix, Matrix4x3f viewMatrix,
                                 int width, int height,
-                                Map<Integer, float[]> vertices,
-                                MouseControls mouseControls) {
+                                Map<Integer, float[]> vertices) {
         this.projMatrix = projMatrix;
         this.viewMatrix = viewMatrix;
         this.width = width;
         this.height = height;
         this.vertices = vertices;
-        this.mouseControls = mouseControls;
     }
 
     public Vector3f convertScreenToWorld(double mouseX, double mouseY) {
@@ -41,11 +38,9 @@ public class CoordinatesConvertor {
                 new Vector3f());
     }
 
-    public void print3DCoordinates() {
+    public void print3DCoordinates(double mouseX, double mouseY) {
         final double maxAcceptableDistanceSqr = 1e-3;
-        double xMouse = mouseControls.getLastMouseX();
-        double yMouse = mouseControls.getLastMouseY();
-        Vector3f mouseCords = convertScreenToWorld(xMouse, yMouse);
+        Vector3f mouseCords = convertScreenToWorld(mouseX, mouseY);
         System.out.println("Mouse coordinates -----> X: " + mouseCords.x + ", Y: " + mouseCords.y + ", Z: " +mouseCords.z);
 
         for (int i = 1; i < vertices.size(); i++) {
