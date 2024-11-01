@@ -19,8 +19,8 @@ public class InstrumentsSidebar extends VBox {
     public InstrumentsSidebar() {
         getStyleClass().add("sidebar");
 
-        String[] iconsFilePaths = {"/cursor.png", "/move.png", "/reload.png", "/scale.png",
-                "/copy.png", "/delete.png"};
+        String[] iconsFilePaths = {"/toolsUI/cursor.png", "/toolsUI/move.png", "/toolsUI/reload.png", "/toolsUI/scale.png",
+                "/toolsUI/copy.png", "/toolsUI/delete.png"};
 
         for (String iconFilePath : iconsFilePaths) {
             Button customSidebarBtn = customButtonWithImage(iconFilePath);
