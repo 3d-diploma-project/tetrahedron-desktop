@@ -15,7 +15,8 @@ public class MouseControls {
     private double deltaX = 0;
     private double deltaY = 0;
 
-    public MouseControls(long windowHandle) {
+    // Most likely we will remove coordinatesConvertor from MouseControls in future
+    public MouseControls(long windowHandle, CoordinatesConvertor coordinatesConvertor) {
         GLFW.glfwSetScrollCallback(windowHandle, new GLFWScrollCallback() {
             @Override
             public void invoke(long window, double xOffset, double yOffset) {
@@ -26,8 +27,13 @@ public class MouseControls {
         GLFW.glfwSetMouseButtonCallback(windowHandle, new GLFWMouseButtonCallback() {
             @Override
             public void invoke(long window, int button, int action, int mods) {
-                if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+                if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     isRotating = (action == GLFW.GLFW_PRESS);
+                }
+                else if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_PRESS) {
+                    System.out.println("Cursor X: " + lastMouseX);
+                    System.out.println("Cursor Y: " + lastMouseY);
+                    coordinatesConvertor.print3DCoordinates(lastMouseX, lastMouseY);
                 }
             }
         });
@@ -49,10 +55,10 @@ public class MouseControls {
     }
 
     public float getY() {
-        return (float) deltaY * 0.1f;
+        return (float) deltaY * 0.01f;
     }
 
     public float getX() {
-        return (float) deltaX * 0.1f;
+        return (float) deltaX * 0.01f;
     }
 }
