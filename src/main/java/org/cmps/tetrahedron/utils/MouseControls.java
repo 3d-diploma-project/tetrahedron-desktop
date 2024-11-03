@@ -1,6 +1,5 @@
 package org.cmps.tetrahedron.utils;
 
-import org.cmps.tetrahedron.Main;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -9,8 +8,6 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 public class MouseControls {
 
     private float zoomFactor = 1.0f;
-    private Main main;
-    private final CoordinatesConvertor coordinatesConvertor;
 
     private boolean isRotating;
     private double lastMouseX = 0;
@@ -18,11 +15,8 @@ public class MouseControls {
     private double deltaX = 0;
     private double deltaY = 0;
 
-    public MouseControls(long windowHandle, Main main) {
-        this.main = main;
-        this.coordinatesConvertor = new CoordinatesConvertor(main.getProjMatrix(), main.getViewMatrix(),
-                main.getWidth(), main.getHeight(), main.getVertices());
-
+    // Most likely we will remove coordinatesConvertor from MouseControls in future
+    public MouseControls(long windowHandle, CoordinatesConvertor coordinatesConvertor) {
         GLFW.glfwSetScrollCallback(windowHandle, new GLFWScrollCallback() {
             @Override
             public void invoke(long window, double xOffset, double yOffset) {
@@ -58,14 +52,6 @@ public class MouseControls {
 
     public float getZoomFactor() {
         return zoomFactor;
-    }
-
-    public double getLastMouseX() {
-        return lastMouseX;
-    }
-
-    public double getLastMouseY() {
-        return lastMouseY;
     }
 
     public float getY() {

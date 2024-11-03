@@ -10,6 +10,7 @@ out VertexData {
 } vVertexOut;
 
 void main(void) {
+  // Implementation of Single-pass Wireframe Rendering
   vec2 p0 = viewportSize * gl_in[0].gl_Position.xy / gl_in[0].gl_Position.w;
   vec2 p1 = viewportSize * gl_in[1].gl_Position.xy / gl_in[1].gl_Position.w;
   vec2 p2 = viewportSize * gl_in[2].gl_Position.xy / gl_in[2].gl_Position.w;
