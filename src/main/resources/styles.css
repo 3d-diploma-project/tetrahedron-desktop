@@ -1,19 +1,42 @@
+.main {
+    -fx-min-width: 100px;
+    -fx-max-width: 1200px;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
 .model-view-page {
     -fx-background-color: #ECF4FE;
     -fx-spacing: 20;
 }
 
-.sidebar {
-    -fx-padding: 10;
+.instrument-sidebar {
+    -fx-padding: 14;
     -fx-spacing: 10;
-    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-color: #ECF4FE;
+    -fx-opacity: 0.9;
     -fx-background-radius: 15;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+    -fx-translate-x: 30px;
+    -fx-translate-y: 60px;
 }
 
 .sidebar-button {
-    -fx-radius: 20;
-    -fx-background-color: #4A90E2;
+    -fx-background-color: rgba(255, 255, 255, 0.0);
+    -fx-background-radius: 50%;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-max-width: 50px;
+    -fx-max-height: 50px;
+    -fx-padding: 0;
+}
+
+.sidebar-button:focused {
+    -fx-background-color: #E0E6EE;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #FAFCFE;
 }
 
 .navbar {
@@ -28,6 +51,11 @@
 }
 
 .language-selector {
-    -fx-text-fill: black;
-    -fx-font-size: 14;
+    -fx-background-color: rgba(255, 255, 255, 0.0);
+    -fx-background-radius: 15;
+    -fx-padding: 4;
+}
+
+.language-selector:hover {
+    -fx-border-color: #C4C8CE;
 }
