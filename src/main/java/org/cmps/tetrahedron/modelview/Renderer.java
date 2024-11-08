@@ -1,4 +1,4 @@
-package org.cmps.tetrahedron.modelView;
+package org.cmps.tetrahedron.modelview;
 
 import org.cmps.tetrahedron.config.WindowProperties;
 import org.joml.Matrix4f;
@@ -21,8 +21,8 @@ import static org.lwjgl.opengl.GL32C.GL_GEOMETRY_SHADER;
  * A class responsible for rendering a model and storing
  * all required for this functionality data.
  *
- * @author mariia.borodin (HappyMary16)
- * @since 1.1
+ * @author Mariia Borodin (HappyMary16)
+ * @since 1.0
  */
 public class Renderer {
 

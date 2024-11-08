@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
+import org.joml.Vector2d;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -40,12 +41,14 @@ public class MouseControls {
         GLFW.glfwSetCursorPosCallback(windowHandle, new GLFWCursorPosCallback() {
             @Override
             public void invoke(long window, double xPos, double yPos) {
+                Vector2d pos = scaleCursorPosIfNeeded(window, xPos, yPos);
+
                 if (isRotating) {
-                    deltaX += xPos - lastMouseX;
-                    deltaY += yPos - lastMouseY;
+                    deltaX += pos.x - lastMouseX;
+                    deltaY += pos.y - lastMouseY;
                 }
-                lastMouseX = xPos;
-                lastMouseY = yPos;
+                lastMouseX = pos.x;
+                lastMouseY = pos.y;
             }
         });
     }
@@ -60,5 +63,23 @@ public class MouseControls {
 
     public float getX() {
         return (float) deltaX * 0.01f;
+    }
+
+    private Vector2d scaleCursorPosIfNeeded(long window, double xPos, double yPos) {
+        Vector2d cursor = new Vector2d(xPos, yPos);
+        String osName = System.getProperty("os.name", "");
+
+        if (osName.contains("Windows")) {
+            return cursor;
+        }
+
+        float[] xScale = new float[1];
+        float[] yScale = new float[1];
+        GLFW.glfwGetWindowContentScale(window, xScale, yScale);
+        xPos *= xScale[0];
+        yPos *= yScale[0];
+        cursor.set(xPos, yPos);
+
+        return cursor;
     }
 }

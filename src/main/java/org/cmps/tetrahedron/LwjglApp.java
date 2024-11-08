@@ -1,7 +1,7 @@
 package org.cmps.tetrahedron;
 
 import org.cmps.tetrahedron.config.WindowProperties;
-import org.cmps.tetrahedron.modelView.Renderer;
+import org.cmps.tetrahedron.modelview.Renderer;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.cmps.tetrahedron.utils.MouseControls;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
@@ -21,7 +21,7 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.system.MemoryUtil.memAddress;
 
-public class Main {
+public class LwjglApp {
 
     private long window;
 
@@ -32,7 +32,7 @@ public class Main {
     private final List<float[][]> faces = readIndexesAndConvertToFaces(vertices);
 
     public static void main(String[] args) {
-        new Main().run();
+        new LwjglApp().run();
     }
 
     public void run() {
