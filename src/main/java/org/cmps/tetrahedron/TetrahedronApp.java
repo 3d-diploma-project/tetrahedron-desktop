@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * To start a program you need to use {@link Launcher}.
  *
- * @author Mariia Borodin (HappyMary16)
+ * @author Vadim Startchak (VadimST04)
  * @since 1.0
  */
 public class TetrahedronApp extends Application {
