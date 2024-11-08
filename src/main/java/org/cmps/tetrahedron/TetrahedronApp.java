@@ -10,6 +10,12 @@ import javafx.stage.Stage;
 
 import java.util.Objects;
 
+/**
+ * To start a program you need to use {@link Launcher}.
+ *
+ * @author Mariia Borodin (HappyMary16)
+ * @since 1.0
+ */
 public class TetrahedronApp extends Application {
     @Override
     public void start(Stage stage) {
@@ -36,9 +42,5 @@ public class TetrahedronApp extends Application {
         stage.setScene(scene);
         stage.setTitle("Tetrahedron Model View");
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

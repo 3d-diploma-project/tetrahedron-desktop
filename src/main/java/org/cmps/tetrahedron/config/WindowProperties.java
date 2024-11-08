@@ -3,8 +3,8 @@ package org.cmps.tetrahedron.config;
 /**
  * Stores properties related to lwjgl window.
  *
- * @author mariia.borodin (HappyMary16)
- * @since 1.1
+ * @author Mariia Borodin (HappyMary16)
+ * @since 1.0
  */
 public class WindowProperties {
 
