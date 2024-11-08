@@ -1,7 +1,7 @@
 #version 150
 
-const vec3 edgeColor = vec3(0.0, 0.0, 0.0);
-const vec3 faceColor = vec3(0.8, 0.8, 0.8);
+const vec3 edgeColor = vec3(0.918, 0.956, 1.0);
+const vec3 faceColor = vec3(0.395, 0, 0.797);
 
 in VertexData {
   noperspective vec3 distance;
