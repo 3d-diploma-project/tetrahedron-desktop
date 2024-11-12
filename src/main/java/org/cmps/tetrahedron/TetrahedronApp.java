@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron;
 
+import javafx.scene.input.ScrollEvent;
 import org.cmps.tetrahedron.components.InstrumentsSidebar;
 import org.cmps.tetrahedron.components.Navbar;
 import javafx.application.Application;
@@ -16,14 +17,14 @@ import java.util.Objects;
  * @author Vadim Startchak (VadimST04)
  * @since 1.0
  */
-public class TetrahedronApp extends Application {
-    @Override
-    public void start(Stage stage) {
+public class TetrahedronApp {
+
+    public static Scene start() {
         VBox root = new VBox();
         root.getStyleClass().add("model-view-page");
 
         Scene scene = new Scene(root, 1200, 800);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(TetrahedronApp.class.getResource("/styles.css")).toExternalForm());
 
         HBox navbar = new Navbar(scene);
         HBox main = new HBox();
@@ -39,8 +40,14 @@ public class TetrahedronApp extends Application {
 
         root.getChildren().addAll(navbar, main);
 
-        stage.setScene(scene);
-        stage.setTitle("Tetrahedron Model View");
-        stage.show();
+        scene.setOnScroll((ScrollEvent e) -> {
+            System.out.println("dsf");
+        });
+
+
+        return scene;
+//        stage.setScene(scene);
+//        stage.setTitle("Tetrahedron Model View");
+//        stage.show();
     }
 }

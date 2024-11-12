@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.2</junit.version>
         <javafx.version>24-ea+5</javafx.version>
@@ -54,6 +55,18 @@
         </profile>
     </profiles>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.lwjgl</groupId>
+                <artifactId>lwjgl-bom</artifactId>
+                <version>${lwjgl.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.joml</groupId>
@@ -66,11 +79,11 @@
             <artifactId>lwjgl</artifactId>
             <version>${lwjgl.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-glfw</artifactId>
-            <version>${lwjgl.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.lwjgl</groupId>-->
+<!--            <artifactId>lwjgl-glfw</artifactId>-->
+<!--            <version>${lwjgl.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-opengl</artifactId>
@@ -83,17 +96,22 @@
             <version>${lwjgl.version}</version>
             <classifier>natives-${platform}</classifier>
         </dependency>
-        <dependency>
-            <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-glfw</artifactId>
-            <version>${lwjgl.version}</version>
-            <classifier>natives-${platform}</classifier>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.lwjgl</groupId>-->
+<!--            <artifactId>lwjgl-glfw</artifactId>-->
+<!--            <version>${lwjgl.version}</version>-->
+<!--            <classifier>natives-${platform}</classifier>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-opengl</artifactId>
             <version>${lwjgl.version}</version>
             <classifier>natives-${platform}</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-jawt</artifactId>
+            <version>${lwjgl.version}</version>
         </dependency>
 
         <dependency>
@@ -112,6 +130,26 @@
             <artifactId>javafx-web</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.lwjglx/lwjgl3-awt -->
+        <dependency>
+            <groupId>org.lwjglx</groupId>
+            <artifactId>lwjgl3-awt</artifactId>
+            <version>0.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx</artifactId>
+            <version>${javafx.version}</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -121,8 +159,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>${javafx.version}</source>
-                    <target>${javafx.version}</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
 

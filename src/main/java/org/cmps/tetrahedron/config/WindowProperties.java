@@ -8,8 +8,8 @@ package org.cmps.tetrahedron.config;
  */
 public class WindowProperties {
 
-    private static int width = 1024;
-    private static int height = 768;
+    private static int width = 1000;
+    private static int height = 1000;
 
     public static int getWidth() {
         return width;
