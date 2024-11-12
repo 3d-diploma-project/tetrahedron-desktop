@@ -1,17 +1,18 @@
 package org.cmps.tetrahedron;
 
 import javafx.scene.Scene;
+import org.cmps.tetrahedron.config.CanvasProperties;
 import org.cmps.tetrahedron.config.WindowProperties;
+import org.cmps.tetrahedron.controller.SceneController;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
-import org.cmps.tetrahedron.utils.MouseControls;
 import org.joml.Matrix4f;
 import org.joml.Matrix4x3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11C;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 
-import javax.swing.*;
 import java.nio.FloatBuffer;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +32,10 @@ import static org.lwjgl.opengl.GL30C.glBindVertexArray;
 import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
 
 /**
- * TODO: add description.
+ * Class responsible for painting of a 3D model.
  *
- * @author mariia.borodin (mborodin)
- * @since 1.1
+ * @author Mariia Borodin (HappyMary16)
+ * @since 1.0
  */
 public class ModelCanvas extends AWTGLCanvas {
 
@@ -49,23 +50,18 @@ public class ModelCanvas extends AWTGLCanvas {
     private final Matrix4x3f viewMatrix = new Matrix4x3f();
     private final Matrix4f projMatrix = new Matrix4f();
 
-    MouseControls mouseControls;
+    private final SceneController sceneController = SceneController.getInstance();
     private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     private final Map<Integer, float[]> vertices = readVerticesCoordinates();
     private final List<float[][]> faces = readIndexesAndConvertToFaces(vertices);
 
-    Scene scene;
-
-    public ModelCanvas(GLData data, Scene scene) {
+    public ModelCanvas(GLData data) {
         super(data);
-
-        this.scene = scene;
     }
 
     @Override
     public void initGL() {
-        System.out.println("OpenGL version: " + effective.majorVersion + "." + effective.minorVersion + " (Profile: " + effective.profile + ")");
         GL.createCapabilities();
         glClearColor(0.918f, 0.956f, 1.0f, 1.0f);
 
@@ -82,24 +78,31 @@ public class ModelCanvas extends AWTGLCanvas {
         int program = createRasterProgram();
         initProgram(program);
 
+        //TODO: move it somewhere
         CoordinatesConvertor coordinatesConvertor = new CoordinatesConvertor(projMatrix, viewMatrix, vertices);
-        mouseControls = new MouseControls(scene, coordinatesConvertor);
     }
 
     @Override
     public void paintGL() {
-        glViewport(0, 0, WindowProperties.getWidth(), WindowProperties.getHeight());
+        glViewport(0, 0, CanvasProperties.getPhysicalWidth(), CanvasProperties.getPhysicalHeight());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        updateMatrix(mouseControls.getZoomFactor(), mouseControls.getX(), mouseControls.getY());
+        updateMatrix(sceneController.getZoomFactor(), sceneController.getX(), sceneController.getY());
         renderModel();
         swapBuffers();
+
+
+        //TODO: do something with this
+        float[] depth = new float[1];
+        GL11C.glReadPixels((int) 704, (int) (CanvasProperties.getPhysicalHeight() - 598), 1, 1,
+                           GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
+        //System.out.println(depth[0]);
     }
 
     private void updateMatrix(float zoomFactor, float x, float y) {
         float fov = (float) Math.toRadians(30 / zoomFactor);
         projMatrix.setPerspective((float) Math.min(fov, Math.PI),
-                                  (float) WindowProperties.getWidth() / WindowProperties.getHeight(),
+                                  (float) CanvasProperties.getPhysicalWidth() / CanvasProperties.getPhysicalHeight(),
                                   0.1f,
                                   Float.POSITIVE_INFINITY);
 
@@ -112,7 +115,7 @@ public class ModelCanvas extends AWTGLCanvas {
         glUniformMatrix4fv(viewMatrixUniform, false, viewMatrix.get4x4(matrixBuffer));
         glUniformMatrix4fv(projMatrixUniform, false, projMatrix.get(matrixBuffer));
 
-        glUniform2f(viewportSizeUniform, WindowProperties.getWidth(),  WindowProperties.getHeight());
+        glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(),  WindowProperties.getPhysicalHeight());
 
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, faces.size() * 3);

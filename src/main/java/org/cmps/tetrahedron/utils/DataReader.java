@@ -8,8 +8,8 @@ import static java.util.Locale.US;
 
 public class DataReader {
 
-    public static final String COORDINATES_FILE_NAME = "models/coordinates_table.txt";
-    public static final String INDEXES_FILE_NAME = "models/index_matrix.txt";
+    public static final String COORDINATES_FILE_NAME = "models/Vertices (model 1).txt";
+    public static final String INDEXES_FILE_NAME = "models/Indices (model 1).txt";
 
     public static Map<Integer, float[]> readVerticesCoordinates() {
         Locale.setDefault(US);

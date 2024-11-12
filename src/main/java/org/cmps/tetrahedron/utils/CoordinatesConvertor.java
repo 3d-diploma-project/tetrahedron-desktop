@@ -1,6 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
-import org.cmps.tetrahedron.config.WindowProperties;
+import org.cmps.tetrahedron.config.CanvasProperties;
 import org.joml.*;
 import org.lwjgl.opengl.GL11C;
 
@@ -20,9 +20,21 @@ public class CoordinatesConvertor {
         this.vertices = vertices;
     }
 
+    public double mouseXToCanvasXCoordinate(double mouseX) {
+        return Scaler.scaleByX(mouseX - CanvasProperties.X_SHIFT);
+    }
+
+    public double mouseYToCanvasYCoordinate(double mouseY) {
+        return Scaler.scaleByY(mouseY - CanvasProperties.Y_SHIFT);
+    }
+
     public void print3DCoordinates(double mouseX, double mouseY) {
         final double maxAcceptableDistanceSqr = 1e-3;
-        Vector3f mouseCords = convertScreenToWorld(mouseX, mouseY);
+
+        System.out.println("Mouse coordinates -> X: " + mouseXToCanvasXCoordinate(mouseX)
+                                   + ", Y: " + mouseYToCanvasYCoordinate(mouseY));
+
+        Vector3f mouseCords = convertScreenToWorld(mouseXToCanvasXCoordinate(mouseX), mouseYToCanvasYCoordinate(mouseY));
         System.out.println("Mouse coordinates -> X: " + mouseCords.x + ", Y: " + mouseCords.y + ", Z: " + mouseCords.z);
 
         for (int i = 1; i < vertices.size(); i++) {
@@ -43,13 +55,13 @@ public class CoordinatesConvertor {
     private Vector3f convertScreenToWorld(double mouseX, double mouseY) {
         Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix);
         float[] depth = new float[1];
-        GL11C.glReadPixels((int) mouseX, (int) (WindowProperties.getHeight() - mouseY), 1, 1,
+        GL11C.glReadPixels((int) mouseX, (int) (CanvasProperties.getPhysicalHeight() - mouseY), 1, 1,
                            GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
 
         return viewProjMatrix.unproject((float) mouseX,
-                                        (float) (WindowProperties.getHeight() - mouseY),
+                                        (float) (CanvasProperties.getPhysicalHeight() - mouseY),
                                         depth[0],
-                                        new int[]{0, 0, WindowProperties.getWidth(), WindowProperties.getHeight()},
+                                        new int[]{0, 0, CanvasProperties.getPhysicalWidth(), CanvasProperties.getPhysicalWidth()},
                                         new Vector3f());
     }
 }

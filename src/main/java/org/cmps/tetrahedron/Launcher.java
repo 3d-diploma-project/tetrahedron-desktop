@@ -1,11 +1,10 @@
 package org.cmps.tetrahedron;
 
-import javafx.application.Application;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
+import org.cmps.tetrahedron.config.CanvasProperties;
 import org.cmps.tetrahedron.config.WindowProperties;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.awt.AWTGLCanvas;
+import org.cmps.tetrahedron.controller.SceneController;
 import org.lwjgl.opengl.awt.GLData;
 
 import javax.swing.*;
@@ -15,8 +14,7 @@ import java.awt.event.ComponentEvent;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Don't know why, but it's required to have a main method in a separate file.
- * We can't have it inside of class which extends {@link Application}.
+ * Creates a program window and inits all components (LWJGL and JavaFX parts).
  *
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
@@ -24,61 +22,52 @@ import java.lang.reflect.InvocationTargetException;
 public class Launcher {
 
     public static void main(String[] args) throws InterruptedException, InvocationTargetException {
-        JFrame frame = new JFrame("AWT test");
+        JFrame frame = new JFrame("Tetrahedron");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        frame.setMinimumSize(new Dimension(1000, 800));
+        frame.setMinimumSize(new Dimension(WindowProperties.MIN_WIDTH, WindowProperties.MIN_HEIGHT));
+        frame.setPreferredSize(WindowProperties.getLogicalSize());
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth();
-        double height = screenSize.getHeight();
-
-        frame.setPreferredSize(screenSize);
-        JLayeredPane pane = frame.getLayeredPane();
+        final JFXPanel fxPanel = new JFXPanel();
+        fxPanel.setSize(WindowProperties.getLogicalSize());
+        Scene scene = SceneController.getScene();
+        fxPanel.setScene(scene);
 
         GLData data = new GLData();
         data.majorVersion = 3;
         data.minorVersion = 2;
 
-        final JFXPanel fxPanel = new JFXPanel();
-        fxPanel.setSize(screenSize);
-        Scene scene = TetrahedronApp.start();
-        fxPanel.setScene(scene);
+        ModelCanvas canvas = new ModelCanvas(data);
+        canvas.setLocation(CanvasProperties.X_SHIFT, CanvasProperties.Y_SHIFT);
 
-        AWTGLCanvas canvas = new ModelCanvas(data, scene);
-
-        frame.addComponentListener(new ComponentAdapter()
-        {
-            public void componentResized(ComponentEvent evt) {
-                Component c = (Component)evt.getSource();
-                Dimension size = c.getSize();
-                fxPanel.setSize(size);
-                canvas.setSize((int) (size.getWidth() - 500), (int) (size.getHeight() - 300));
-                canvas.validate();
-
-                WindowProperties.setWidth((int) size.getWidth() * 2);
-                WindowProperties.setHeight((int) size.getHeight() * 2);
-            }
-        });
-
-        canvas.setLocation(250, 150);
-        canvas.setSize((int) (width - 500), (int) (height - 300));
-
-        //frame.add(canvas);
+        JLayeredPane pane = frame.getLayeredPane();
         pane.add(canvas, Integer.valueOf(1));
         pane.add(fxPanel, Integer.valueOf(10));
 
         frame.pack();
         frame.setVisible(true);
         frame.transferFocus();
+        frame.addComponentListener(new ComponentAdapter()
+        {
+            public void componentResized(ComponentEvent evt) {
+                Component c = (Component)evt.getSource();
+                Dimension size = c.getSize();
 
-        while (true) {
+                WindowProperties.setWidth((int) size.getWidth());
+                WindowProperties.setHeight((int) size.getHeight());
+            }
+        });
+
+        while (frame.isEnabled()) {
+            if (WindowProperties.isChanged()) {
+                fxPanel.setSize(WindowProperties.getLogicalSize());
+                canvas.setSize(CanvasProperties.getWidth(), CanvasProperties.getHeight());
+            }
+
             if (!canvas.isValid()) {
-                GL.setCapabilities(null);
-                return;
+                canvas.validate();
             }
             canvas.render();
         }
-
     }
 }
