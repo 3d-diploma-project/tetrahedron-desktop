@@ -64,11 +64,6 @@ public class SceneController {
 
         root.getChildren().addAll(navbar, main);
 
-        scene.setOnScroll((ScrollEvent e) -> {
-            System.out.println("dsf");
-        });
-
-
         return scene;
     }
 
@@ -105,6 +100,9 @@ public class SceneController {
         });
 
         scene.setOnScroll(scrollEvent -> {
+            if (scrollEvent.isShiftDown()) {
+                return;
+            }
             zoomFactor += (float) scrollEvent.getDeltaY() / 100;
             zoomFactor = Math.max(1f, Math.min(zoomFactor, 100.0f));
         });

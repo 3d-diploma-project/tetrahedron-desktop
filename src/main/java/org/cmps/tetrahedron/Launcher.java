@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Creates a program window and inits all components (LWJGL and JavaFX parts).
@@ -21,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Launcher {
 
-    public static void main(String[] args) throws InterruptedException, InvocationTargetException {
+    public static void main(String[] args) {
         JFrame frame = new JFrame("Tetrahedron");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
@@ -47,8 +46,7 @@ public class Launcher {
         frame.pack();
         frame.setVisible(true);
         frame.transferFocus();
-        frame.addComponentListener(new ComponentAdapter()
-        {
+        frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 Component c = (Component)evt.getSource();
                 Dimension size = c.getSize();
@@ -59,15 +57,15 @@ public class Launcher {
         });
 
         while (frame.isEnabled()) {
-            if (WindowProperties.isChanged()) {
-                fxPanel.setSize(WindowProperties.getLogicalSize());
-                canvas.setSize(CanvasProperties.getWidth(), CanvasProperties.getHeight());
-            }
-
             if (!canvas.isValid()) {
                 canvas.validate();
             }
             canvas.render();
+
+            if (WindowProperties.isChanged()) {
+                fxPanel.setSize(WindowProperties.getLogicalSize());
+                canvas.setSize(CanvasProperties.getWidth(), CanvasProperties.getHeight());
+            }
         }
     }
 }

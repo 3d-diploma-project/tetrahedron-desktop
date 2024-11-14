@@ -63,7 +63,7 @@ public class ModelCanvas extends AWTGLCanvas {
     @Override
     public void initGL() {
         GL.createCapabilities();
-        glClearColor(0.918f, 0.956f, 1.0f, 1.0f);
+        glClearColor(0.93f, 0.956f, 0.992f, 1.0f);
 
         // Enable depth test
         glEnable(GL_DEPTH_TEST);
