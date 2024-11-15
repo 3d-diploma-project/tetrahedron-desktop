@@ -1,8 +1,8 @@
 package org.cmps.tetrahedron.controller;
 
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.ScrollEvent;
 import org.cmps.tetrahedron.Launcher;
+import org.cmps.tetrahedron.components.InfoPanel;
 import org.cmps.tetrahedron.components.InstrumentsSidebar;
 import org.cmps.tetrahedron.components.Navbar;
 import javafx.scene.Scene;
@@ -23,6 +23,8 @@ public class SceneController {
     private static final SceneController instance = new SceneController();
 
     private final Scene scene;
+
+    private InfoPanel infoPanel;
 
     private float zoomFactor = 1.0f;
     private double lastMouseX = 0;
@@ -62,7 +64,8 @@ public class SceneController {
 
         main.getChildren().addAll(instrumentSidebar, experience);
 
-        root.getChildren().addAll(navbar, main);
+        infoPanel = new InfoPanel();
+        root.getChildren().addAll(navbar, main, infoPanel);
 
         return scene;
     }
@@ -96,7 +99,9 @@ public class SceneController {
             int y = (int) mouseEvent.getY();
             System.out.println("Cursor X: " + x);
             System.out.println("Cursor Y: " + y);
-            //coordinatesConvertor.print3DCoordinates(x, y);
+
+            VertexInfoController.getInstance().setDisplayInfo(infoPanel::setText);
+            VertexInfoController.getInstance().setClickCoords(x, y);
         });
 
         scene.setOnScroll(scrollEvent -> {

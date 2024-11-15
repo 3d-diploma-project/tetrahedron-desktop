@@ -11,7 +11,18 @@ public class DataReader {
     public static final String COORDINATES_FILE_NAME = "models/Vertices (model 1).txt";
     public static final String INDEXES_FILE_NAME = "models/Indices (model 1).txt";
 
-    public static Map<Integer, float[]> readVerticesCoordinates() {
+    private static final Map<Integer, float[]> vertices = readVerticesCoordinates();
+    private static final List<float[][]> faces = readIndexesAndConvertToFaces(vertices);
+
+    public static Map<Integer, float[]> getVertices() {
+        return vertices;
+    }
+
+    public static List<float[][]> getFaces() {
+        return faces;
+    }
+
+    private static Map<Integer, float[]> readVerticesCoordinates() {
         Locale.setDefault(US);
 
         try (Scanner fid = new Scanner(new File(COORDINATES_FILE_NAME))) {
@@ -27,7 +38,7 @@ public class DataReader {
         }
     }
 
-    public static List<float[][]> readIndexesAndConvertToFaces(Map<Integer, float[]> verticesCoordinates) {
+    private static List<float[][]> readIndexesAndConvertToFaces(Map<Integer, float[]> verticesCoordinates) {
         Locale.setDefault(US);
 
         try (Scanner fid = new Scanner(new File(INDEXES_FILE_NAME))) {
