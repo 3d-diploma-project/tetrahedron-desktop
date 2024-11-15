@@ -1,7 +1,5 @@
 package org.cmps.tetrahedron.controller;
 
-import javafx.scene.input.MouseButton;
-import org.cmps.tetrahedron.Launcher;
 import org.cmps.tetrahedron.components.InfoPanel;
 import org.cmps.tetrahedron.components.InstrumentsSidebar;
 import org.cmps.tetrahedron.components.Navbar;
@@ -24,21 +22,8 @@ public class SceneController {
 
     private final Scene scene;
 
-    private InfoPanel infoPanel;
-
-    private float zoomFactor = 1.0f;
-    private double lastMouseX = 0;
-    private double lastMouseY = 0;
-    private double deltaX = 0;
-    private double deltaY = 0;
-
     private SceneController() {
         scene = buildScene();
-        setupEventListeners();
-    }
-
-    public static SceneController getInstance() {
-        return instance;
     }
 
     public static Scene getScene() {
@@ -64,64 +49,8 @@ public class SceneController {
 
         main.getChildren().addAll(instrumentSidebar, experience);
 
-        infoPanel = new InfoPanel();
-        root.getChildren().addAll(navbar, main, infoPanel);
+        root.getChildren().addAll(navbar, main, InfoPanel.getInstance());
 
         return scene;
-    }
-
-    private void setupEventListeners() {
-        scene.setOnMouseDragged(mouseEvent -> {
-            if (mouseEvent.getButton() != MouseButton.SECONDARY) {
-                return;
-            }
-            int x = (int) mouseEvent.getX();
-            int y = (int) mouseEvent.getY();
-            deltaX += (x - lastMouseX);
-            deltaY += (y - lastMouseY);
-            lastMouseX = x;
-            lastMouseY = y;
-        });
-
-        scene.setOnMousePressed((mouseEvent -> {
-            if (mouseEvent.getButton() != MouseButton.SECONDARY) {
-                return;
-            }
-            lastMouseX = (int) mouseEvent.getX();
-            lastMouseY = (int) mouseEvent.getY();
-        }));
-
-        scene.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() != MouseButton.PRIMARY) {
-                return;
-            }
-            int x = (int) mouseEvent.getX();
-            int y = (int) mouseEvent.getY();
-            System.out.println("Cursor X: " + x);
-            System.out.println("Cursor Y: " + y);
-
-            VertexInfoController.getInstance().setDisplayInfo(infoPanel::setText);
-            VertexInfoController.getInstance().setClickCoords(x, y);
-        });
-
-        scene.setOnScroll(scrollEvent -> {
-            if (scrollEvent.isShiftDown()) {
-                return;
-            }
-            zoomFactor += (float) scrollEvent.getDeltaY() / 100;
-            zoomFactor = Math.max(1f, Math.min(zoomFactor, 100.0f));
-        });
-    }
-
-    public float getZoomFactor() {
-        return zoomFactor;
-    }
-
-    public float getY() {
-        return (float) deltaY * 0.01f;
-    }
-
-    public float getX() {
-        return (float) deltaX * 0.01f;
     }
 }

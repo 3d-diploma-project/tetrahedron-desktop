@@ -11,9 +11,15 @@ import javafx.scene.layout.HBox;
  */
 public class InfoPanel extends HBox {
 
+    private static final InfoPanel instance = new InfoPanel();
+
+    public static InfoPanel getInstance() {
+        return instance;
+    }
+
     Label nodeInfo = new Label("Click on a vertex");
 
-    public InfoPanel() {
+    private InfoPanel() {
         getChildren().add(nodeInfo);
         nodeInfo.getStyleClass().add("info-text");
     }

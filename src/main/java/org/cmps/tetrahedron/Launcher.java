@@ -4,13 +4,13 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import org.cmps.tetrahedron.config.CanvasProperties;
 import org.cmps.tetrahedron.config.WindowProperties;
+import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.SceneController;
 import org.lwjgl.opengl.awt.GLData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 
 /**
  * Creates a program window and inits all components (LWJGL and JavaFX parts).
@@ -39,9 +39,13 @@ public class Launcher {
         ModelCanvas canvas = new ModelCanvas(data);
         canvas.setLocation(CanvasProperties.X_SHIFT, CanvasProperties.Y_SHIFT);
 
+        canvas.addMouseListener(MouseController.getInstance());
+        canvas.addMouseWheelListener(MouseController.getInstance());
+        canvas.addMouseMotionListener(MouseController.getInstance());
+
         JLayeredPane pane = frame.getLayeredPane();
-        pane.add(canvas, Integer.valueOf(1));
-        pane.add(fxPanel, Integer.valueOf(10));
+        pane.add(canvas, Integer.valueOf(10));
+        pane.add(fxPanel, Integer.valueOf(1));
 
         frame.pack();
         frame.setVisible(true);

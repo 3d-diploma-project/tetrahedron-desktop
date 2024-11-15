@@ -2,7 +2,7 @@ package org.cmps.tetrahedron;
 
 import org.cmps.tetrahedron.config.CanvasProperties;
 import org.cmps.tetrahedron.config.WindowProperties;
-import org.cmps.tetrahedron.controller.SceneController;
+import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.VertexInfoController;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.cmps.tetrahedron.utils.DataReader;
@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11C;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 
+import java.io.Serial;
 import java.nio.FloatBuffer;
 import java.util.List;
 
@@ -37,8 +38,6 @@ import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
  */
 public class ModelCanvas extends AWTGLCanvas {
 
-    private static final long serialVersionUID = 1L;
-
     private int vao;
 
     private int viewportSizeUniform;
@@ -48,7 +47,7 @@ public class ModelCanvas extends AWTGLCanvas {
     private final Matrix4x3f viewMatrix = new Matrix4x3f();
     private final Matrix4f projMatrix = new Matrix4f();
 
-    private final SceneController sceneController = SceneController.getInstance();
+    private final MouseController mouseController = MouseController.getInstance();
     private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     public ModelCanvas(GLData data) {
@@ -81,7 +80,7 @@ public class ModelCanvas extends AWTGLCanvas {
         glViewport(0, 0, CanvasProperties.getPhysicalWidth(), CanvasProperties.getPhysicalHeight());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        updateMatrix(sceneController.getZoomFactor(), sceneController.getX(), sceneController.getY());
+        updateMatrix(mouseController.getZoomFactor(), mouseController.getX(), mouseController.getY());
         renderModel();
         swapBuffers();
 

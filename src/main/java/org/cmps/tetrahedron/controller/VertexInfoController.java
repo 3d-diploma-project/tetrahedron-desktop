@@ -3,13 +3,11 @@ package org.cmps.tetrahedron.controller;
 import javafx.application.Platform;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.cmps.tetrahedron.utils.DataReader;
+import org.cmps.tetrahedron.utils.Scaler;
 import org.joml.Vector3f;
 
 import java.util.Map;
 import java.util.function.Consumer;
-
-import static org.cmps.tetrahedron.utils.CoordinatesConvertor.mouseXToCanvasXCoordinate;
-import static org.cmps.tetrahedron.utils.CoordinatesConvertor.mouseYToCanvasYCoordinate;
 
 /**
  * Checks if a vertex present on clicked coordinates and display vertex info.
@@ -19,7 +17,7 @@ import static org.cmps.tetrahedron.utils.CoordinatesConvertor.mouseYToCanvasYCoo
  */
 public class VertexInfoController {
 
-    private static final double MAX_ACCEPTABLE_DISTANCE_SQR = 1e-3;
+    private static final double MAX_ACCEPTABLE_DISTANCE_SQR = 0.002;
 
     private static final VertexInfoController instance = new VertexInfoController();
 
@@ -56,8 +54,8 @@ public class VertexInfoController {
     }
 
     public void setClickCoords(int x, int y) {
-        this.x = mouseXToCanvasXCoordinate(x);
-        this.y = mouseYToCanvasYCoordinate(y);
+        this.x = Scaler.scaleByX(x);
+        this.y = Scaler.scaleByY(y);
         clicked = true;
     }
 

@@ -34,14 +34,6 @@ public class CoordinatesConvertor {
         return instance;
     }
 
-    public static int mouseXToCanvasXCoordinate(double mouseX) {
-        return Scaler.scaleByX(mouseX - CanvasProperties.X_SHIFT);
-    }
-
-    public static int mouseYToCanvasYCoordinate(double mouseY) {
-        return Scaler.scaleByY(mouseY - CanvasProperties.Y_SHIFT);
-    }
-
     public Vector3f getWorldCoordinates(int mouseX, int mouseY, float depth) {
         Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix);
 
