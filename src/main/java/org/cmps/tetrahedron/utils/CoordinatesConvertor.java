@@ -34,18 +34,15 @@ public class CoordinatesConvertor {
         return instance;
     }
 
-    public int mouseXToCanvasXCoordinate(double mouseX) {
+    public static int mouseXToCanvasXCoordinate(double mouseX) {
         return Scaler.scaleByX(mouseX - CanvasProperties.X_SHIFT);
     }
 
-    public int mouseYToCanvasYCoordinate(double mouseY) {
+    public static int mouseYToCanvasYCoordinate(double mouseY) {
         return Scaler.scaleByY(mouseY - CanvasProperties.Y_SHIFT);
     }
 
     public Vector3f getWorldCoordinates(int mouseX, int mouseY, float depth) {
-        System.out.println("Canvas coordinates -> X: " + mouseXToCanvasXCoordinate(mouseX)
-                                   + ", Y: " + mouseYToCanvasYCoordinate(mouseY));
-
         Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix);
 
         return viewProjMatrix.unproject(mouseX,

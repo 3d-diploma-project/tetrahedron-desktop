@@ -8,6 +8,9 @@ import org.joml.Vector3f;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static org.cmps.tetrahedron.utils.CoordinatesConvertor.mouseXToCanvasXCoordinate;
+import static org.cmps.tetrahedron.utils.CoordinatesConvertor.mouseYToCanvasYCoordinate;
+
 /**
  * TODO: add description.
  *
@@ -25,6 +28,7 @@ public class VertexInfoController {
 
     private int x;
     private int y;
+    private float depth;
     private boolean clicked;
 
     private String lastInfoToDisplay = "Click on a vertex";
@@ -52,12 +56,13 @@ public class VertexInfoController {
     }
 
     public void setClickCoords(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.x = mouseXToCanvasXCoordinate(x);
+        this.y = mouseYToCanvasYCoordinate(y);
         clicked = true;
     }
 
     public void setDepthAndUpdateInfo(float depth) {
+        this.depth = depth;
         Vector3f worldCoord = coordinatesConvertor.getWorldCoordinates(x, y, depth);
         lastInfoToDisplay = buildNodeInfo(worldCoord);
 
@@ -84,6 +89,6 @@ public class VertexInfoController {
             }
         }
 
-        return "Clicked coords -> X: " + worldCoord.x + ", Y: " + worldCoord.y + ", Z: " + worldCoord.z;
+        return "Clicked coords -> X: " + worldCoord.x + ", Y: " + worldCoord.y + ", Z: " + worldCoord.z + ", depth: " + depth;
     }
 }
