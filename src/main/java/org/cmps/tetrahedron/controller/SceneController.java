@@ -13,7 +13,7 @@ import org.cmps.tetrahedron.config.WindowProperties;
 import java.util.Objects;
 
 /**
- * To start a program you need to use {@link Launcher}.
+ * Builds scene and adds to it all mouse event listeners.
  *
  * @author Vadim Startchak (VadimST04)
  * @since 1.0

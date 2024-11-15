@@ -12,14 +12,14 @@ import static org.cmps.tetrahedron.utils.CoordinatesConvertor.mouseXToCanvasXCoo
 import static org.cmps.tetrahedron.utils.CoordinatesConvertor.mouseYToCanvasYCoordinate;
 
 /**
- * TODO: add description.
+ * Checks if a vertex present on clicked coordinates and display vertex info.
  *
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
  */
 public class VertexInfoController {
 
-    private static final double MAX_ACCEPTABLE_DISTANCE_SQR = 1e-2;
+    private static final double MAX_ACCEPTABLE_DISTANCE_SQR = 1e-3;
 
     private static final VertexInfoController instance = new VertexInfoController();
 

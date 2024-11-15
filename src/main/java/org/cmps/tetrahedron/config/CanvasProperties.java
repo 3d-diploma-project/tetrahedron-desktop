@@ -3,7 +3,7 @@ package org.cmps.tetrahedron.config;
 import org.cmps.tetrahedron.utils.Scaler;
 
 /**
- * TODO: add description.
+ * Stores and updates all properties related to LWJGL canvas.
  *
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
