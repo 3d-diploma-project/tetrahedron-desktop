@@ -59,3 +59,9 @@
 .language-selector:hover {
     -fx-border-color: #C4C8CE;
 }
+
+.info-text {
+    -fx-font-size: 18;
+    -fx-text-fill: #1B018E;
+    -fx-padding: 100 0 0 30;
+}

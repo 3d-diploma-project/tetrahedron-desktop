@@ -30,14 +30,5 @@ public class Navbar extends HBox {
 
         getChildren().addAll(logo, spacer, languageSelector);
         setAlignment(Pos.CENTER_LEFT);
-
-        scene.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double logoWidth = logo.getBoundsInParent().getWidth();
-            double selectorWidth = languageSelector.getBoundsInParent().getWidth();
-            if (logoWidth > 0 && selectorWidth > 0) {
-                double spacing = (newVal.doubleValue() - logoWidth - selectorWidth) / 2;
-                setSpacing(spacing);
-            }
-        });
     }
 }
