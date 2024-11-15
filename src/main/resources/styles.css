@@ -69,8 +69,8 @@
     -fx-border-width: 2;
     -fx-border-color: #C9C9C9;
     -fx-padding: 15;
-    -fx-translate-x: 700px;
-    -fx-translate-y: -70px;
+    -fx-translate-x: 1100px;
+    -fx-translate-y: 40px;
     -fx-background-color: #E7EDF2;
     -fx-spacing: 5
 }
@@ -110,4 +110,10 @@
 
 .load-button:hover {
     -fx-background-color: #1E00AA;
+}
+
+.info-text {
+    -fx-font-size: 18;
+    -fx-text-fill: #1B018E;
+    -fx-padding: 100 0 0 30;
 }

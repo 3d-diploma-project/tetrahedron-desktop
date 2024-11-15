@@ -12,11 +12,8 @@ public class RightToolbar extends VBox {
 
     public RightToolbar() {
         getStyleClass().add("right-toolbar");
-        addCoordinates("Координати");
-        addCoordinates("Обертання");
 
         setupColourLayout();
-        setupLabelAndSwitchLayout();
         setupFileUploadSection("Напруження у вузлах");
         setupFileUploadSection("Переміщення у вузлах");
         setupFileUploadSection("Прикладені сили");
