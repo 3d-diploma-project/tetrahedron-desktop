@@ -4,7 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 /**
- * TODO: add description.
+ * A component for displaying a vertex info (number and coordinates).
  *
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
