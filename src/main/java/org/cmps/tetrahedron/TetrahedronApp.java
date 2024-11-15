@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron;
 
+import javafx.scene.layout.Priority;
 import org.cmps.tetrahedron.components.InstrumentsSidebar;
 import org.cmps.tetrahedron.components.Navbar;
 import javafx.application.Application;
@@ -7,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.cmps.tetrahedron.components.RightToolbar;
 
 import java.util.Objects;
 
@@ -32,11 +34,9 @@ public class TetrahedronApp extends Application {
         VBox instrumentSidebar = new InstrumentsSidebar();
         instrumentSidebar.getStyleClass().add("instrument-sidebar");
 
-        VBox experience = new VBox();
-        experience.getStyleClass().add("experience");
+        VBox rightToolbar = new RightToolbar();
 
-        main.getChildren().addAll(instrumentSidebar, experience);
-
+        main.getChildren().addAll(instrumentSidebar, rightToolbar);
         root.getChildren().addAll(navbar, main);
 
         stage.setScene(scene);

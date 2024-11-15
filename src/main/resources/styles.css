@@ -11,6 +11,7 @@
 }
 
 .instrument-sidebar {
+    -fx-max-height: 0px;
     -fx-padding: 14;
     -fx-spacing: 10;
     -fx-background-color: #ECF4FE;
@@ -58,4 +59,55 @@
 
 .language-selector:hover {
     -fx-border-color: #C4C8CE;
+}
+
+.right-toolbar {
+    -fx-min-width: 250px;
+    -fx-alignment: center-top;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-width: 2;
+    -fx-border-color: #C9C9C9;
+    -fx-padding: 15;
+    -fx-translate-x: 700px;
+    -fx-translate-y: -70px;
+    -fx-background-color: #E7EDF2;
+    -fx-spacing: 5
+}
+
+.h-box-coordinates {
+   -fx-alignment: center;
+   -fx-spacing: 50;
+}
+
+.v-box-colour-1 {
+    -fx-background-color: #EAF4FF;
+    -fx-background-radius: 5;
+    -fx-border-color: #888888;
+    -fx-border-radius: 5;
+}
+
+.v-box-colour-2 {
+    -fx-background-color: #4B56B7;
+    -fx-background-radius: 5;
+}
+
+.v-box-colour-3 {
+    -fx-background-color: #1E0094;
+    -fx-background-radius: 5;
+}
+
+.main-box-switches {
+    -fx-padding: 10 0 0 0;
+}
+
+.load-button {
+    -fx-background-color: #1E0094;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-max-width: Infinity;
+}
+
+.load-button:hover {
+    -fx-background-color: #1E00AA;
 }
