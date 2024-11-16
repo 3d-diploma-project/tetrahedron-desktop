@@ -14,7 +14,6 @@ import org.lwjgl.opengl.GL11C;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 
-import java.io.Serial;
 import java.nio.FloatBuffer;
 import java.util.List;
 
@@ -23,9 +22,16 @@ import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11C.glDrawArrays;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL15C.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15C.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15C.glBindBuffer;
+import static org.lwjgl.opengl.GL15C.glBufferData;
 import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20C.glBindAttribLocation;
+import static org.lwjgl.opengl.GL20C.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20C.glUniform2f;
 import static org.lwjgl.opengl.GL20C.glUniformMatrix4fv;
+import static org.lwjgl.opengl.GL20C.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL30C.glBindVertexArray;
 import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
@@ -70,6 +76,7 @@ public class ModelCanvas extends AWTGLCanvas {
         /* Create all needed GL resources */
         createVao();
         int program = createRasterProgram();
+        createColorBuffer(program);
         initProgram(program);
 
         CoordinatesConvertor.initInstance(projMatrix, viewMatrix);
@@ -137,6 +144,27 @@ public class ModelCanvas extends AWTGLCanvas {
         glBufferData(GL_ARRAY_BUFFER, pb, GL_STATIC_DRAW);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
+    }
+
+    private void createColorBuffer(int program) {
+        int colorBuffer = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+
+        FloatBuffer colors = BufferUtils.createFloatBuffer(DataReader.getFaces().size() * 3 * 3 * 3);
+        for (int i = 0; i < DataReader.getFaces().size(); i++) {
+            float color = (float) Math.random();
+            System.out.println(color);
+            for (int j = 0; j < 3 * 3 * 3; j++) {
+                colors.put(color);
+            }
+        }
+        colors.flip();
+
+        // setup color positions buffer
+        glBufferData(GL_ARRAY_BUFFER, colors, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0L);
+        glBindAttribLocation(program, 1, "colors");
     }
 
     private int createRasterProgram() {
