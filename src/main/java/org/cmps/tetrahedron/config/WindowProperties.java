@@ -12,20 +12,13 @@ import java.awt.*;
  */
 public class WindowProperties {
 
-    private static int logicalWidth;
-    private static int logicalHeight;
+    private static int logicalWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int logicalHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 
     public static final int MIN_WIDTH = 1000;
     public static final int MIN_HEIGHT = 800;
 
     private static boolean changed = true;
-
-    static {
-        // Получение размеров экрана пользователя
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        logicalWidth = screenSize.width;
-        logicalHeight = screenSize.height;
-    }
 
     public static boolean isChanged() {
         if (changed) {
