@@ -6,6 +6,7 @@ import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.VertexInfoController;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.cmps.tetrahedron.utils.DataReader;
+import org.cmps.tetrahedron.utils.StressUtils;
 import org.joml.Matrix4f;
 import org.joml.Matrix4x3f;
 import org.lwjgl.BufferUtils;
@@ -150,12 +151,18 @@ public class ModelCanvas extends AWTGLCanvas {
         int colorBuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 
-        FloatBuffer colors = BufferUtils.createFloatBuffer(DataReader.getFaces().size() * 3 * 3 * 3);
-        for (int i = 0; i < DataReader.getFaces().size(); i++) {
-            float color = (float) Math.random();
-            System.out.println(color);
-            for (int j = 0; j < 3 * 3 * 3; j++) {
-                colors.put(color);
+        FloatBuffer colors = BufferUtils.createFloatBuffer(DataReader.getFaces().size() * 3 * 3);
+
+        float[] stress = DataReader.getStress();
+
+        StressUtils.printColorDiapasons();
+        for (int i = 0; i < DataReader.getFaces().size() / 4; i++) {
+            float[] color = StressUtils.getColor(stress[i]);
+
+            for (int j = 0; j < 4 * 3; j++) {
+                for (float colorPart : color) {
+                    colors.put(colorPart);
+                }
             }
         }
         colors.flip();
@@ -164,7 +171,7 @@ public class ModelCanvas extends AWTGLCanvas {
         glBufferData(GL_ARRAY_BUFFER, colors, GL_STATIC_DRAW);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0L);
-        glBindAttribLocation(program, 1, "colors");
+        glBindAttribLocation(program, 1, "color");
     }
 
     private int createRasterProgram() {
@@ -178,7 +185,7 @@ public class ModelCanvas extends AWTGLCanvas {
         glAttachShader(program, gShader);
 
         glBindAttribLocation(program, 0, "position");
-        glBindFragDataLocation(program, 0, "color");
+        //glBindFragDataLocation(program, 0, "color");
 
         glLinkProgram(program);
 

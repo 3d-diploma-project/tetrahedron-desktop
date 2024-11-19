@@ -8,11 +8,19 @@ import static java.util.Locale.US;
 
 public class DataReader {
 
-    public static final String COORDINATES_FILE_NAME = "models/Vertices (model 1).txt";
-    public static final String INDEXES_FILE_NAME = "models/Indices (model 1).txt";
+    public static final String COORDINATES_FILE_NAME = "models/таблиця координат.txt";
+    public static final String INDEXES_FILE_NAME = "models/матриця індексів.txt";
+    public static final String STRESS_FILE_NAME = "models/stress.txt";
+
+    private static final boolean WITH_INDICES = false;
 
     private static final Map<Integer, float[]> vertices = readVerticesCoordinates();
     private static final List<float[][]> faces = readIndexesAndConvertToFaces(vertices);
+
+
+    private static float minStress = Float.MAX_VALUE;
+    private static float maxStress = Float.MIN_VALUE;
+    private static final float[] stress = readStress();
 
     public static Map<Integer, float[]> getVertices() {
         return vertices;
@@ -22,14 +30,34 @@ public class DataReader {
         return faces;
     }
 
+    public static float[] getStress() {
+        return stress;
+    }
+
+    public static float getMinStress() {
+        return minStress;
+    }
+
+    public static float getMaxStress() {
+        return maxStress;
+    }
+
     private static Map<Integer, float[]> readVerticesCoordinates() {
         Locale.setDefault(US);
 
+        int i = 1;
         try (Scanner fid = new Scanner(new File(COORDINATES_FILE_NAME))) {
             Map<Integer, float[]> coordinates = new HashMap<>();
 
             while (fid.hasNext()) {
-                coordinates.put(fid.nextInt(), new float[]{fid.nextFloat(), fid.nextFloat(), fid.nextFloat()});
+                int index;
+                if (WITH_INDICES) {
+                    index = fid.nextInt();
+                } else {
+                    index = i++;
+                }
+
+                coordinates.put(index, new float[]{fid.nextFloat(), fid.nextFloat(), fid.nextFloat()});
             }
 
             return coordinates;
@@ -46,7 +74,9 @@ public class DataReader {
 
             while (fid.hasNext()) {
                 // reading index of a tetrahedron
-                fid.nextInt();
+                if (WITH_INDICES) {
+                    fid.nextInt();
+                }
 
                 float[] vertex1 = verticesCoordinates.get(fid.nextInt());
                 float[] vertex2 = verticesCoordinates.get(fid.nextInt());
@@ -60,6 +90,38 @@ public class DataReader {
             }
 
             return faces;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static float[] readStress() {
+        Locale.setDefault(US);
+
+        try (Scanner fid = new Scanner(new File(STRESS_FILE_NAME))) {
+            float[] stress = new float[getFaces().size() / 4];
+            int i = 0;
+
+            while (fid.hasNext()) {
+                if (WITH_INDICES) {
+                    fid.nextInt();
+                    stress[i] = StressUtils.misesStress(fid.nextFloat(),fid.nextFloat(), fid.nextFloat(), fid.nextFloat(), fid.nextFloat(), fid.nextFloat());
+                } else {
+                    stress[i] = fid.nextFloat();
+                }
+
+                if (stress[i] < minStress) {
+                    minStress = stress[i];
+                }
+
+                if (stress[i] > maxStress) {
+                    maxStress = stress[i];
+                }
+
+                i++;
+            }
+
+            return stress;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

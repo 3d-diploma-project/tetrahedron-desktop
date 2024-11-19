@@ -1,13 +1,15 @@
 package org.cmps.tetrahedron.controller;
 
 import javafx.application.Platform;
+import javafx.util.Pair;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.Scaler;
 import org.joml.Vector3f;
 
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Checks if a vertex present on clicked coordinates and display vertex info.
@@ -72,6 +74,8 @@ public class VertexInfoController {
      * TODO: Make this search more efficient.
      */
     private String buildNodeInfo(Vector3f worldCoord) {
+        SortedSet<Pair<Integer, Double>> sortedSet = new TreeSet<>(Comparator.comparing(Pair::getValue));
+
         for (Map.Entry<Integer, float[]> entry : DataReader.getVertices().entrySet()) {
             float[] vertex = entry.getValue();;
             double xVertex = vertex[0];
@@ -81,12 +85,16 @@ public class VertexInfoController {
             double distanceSqr = Math.pow(xVertex - worldCoord.x, 2)
                     + Math.pow(yVertex - worldCoord.y, 2)
                     + Math.pow(zVertex - worldCoord.z, 2);
+            sortedSet.add(new Pair<>(entry.getKey(), distanceSqr));
 
-            if (distanceSqr < MAX_ACCEPTABLE_DISTANCE_SQR) {
-                return "Key " + entry.getKey() + "-> X: " + xVertex + ", Y: " + yVertex + ", Z: " + zVertex;
+            if (sortedSet.size() > 4) {
+                sortedSet.removeLast();
             }
         }
+        Pair<Integer, Double> closestNode = sortedSet.first();
+        float[] vertex = DataReader.getVertices().get(closestNode.getKey());
+        return "Closest node " + closestNode.getKey() + "-> X: " + vertex[0] + ", Y: " + vertex[1] + ", Z: " + vertex[2];
 
-        return "Clicked coords -> X: " + worldCoord.x + ", Y: " + worldCoord.y + ", Z: " + worldCoord.z + ", depth: " + depth;
+        //return "Clicked coords -> X: " + worldCoord.x + ", Y: " + worldCoord.y + ", Z: " + worldCoord.z + ", depth: " + depth;
     }
 }
