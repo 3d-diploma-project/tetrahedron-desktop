@@ -60,6 +60,7 @@ public class WindowProperties {
     }
 
     public static int getPhysicalWidth() {
+        //AffineTransform scaleFactor = ModelCanvas.getInstance().getScaleFactor();
         return Scaler.scaleByX(logicalWidth);
     }
 
