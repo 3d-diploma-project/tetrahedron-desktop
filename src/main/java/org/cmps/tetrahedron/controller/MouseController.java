@@ -1,6 +1,6 @@
 package org.cmps.tetrahedron.controller;
 
-import org.cmps.tetrahedron.components.InfoPanel;
+import org.cmps.tetrahedron.view.InfoPanel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

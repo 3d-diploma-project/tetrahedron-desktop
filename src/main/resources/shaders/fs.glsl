@@ -13,9 +13,12 @@ out vec4 color;
 void main(void) {
   // determine frag distance to closest edge
   float fNearest = min(min(vVertexIn.distance[0], vVertexIn.distance[1]), vVertexIn.distance[2]);
-  float fEdgeIntensity = clamp(exp2(-0.9 * fNearest * fNearest), 0.0, 1.0);
+  float fEdgeIntensity = clamp(exp2(-0.8 * fNearest * fNearest), 0.0, 1.0);
 
   // blend between edge color and face color
-  color = vec4(mix(vVertexIn.fragmentColor, edgeColor, fEdgeIntensity), 1.0);
-  //color = vec4(vVertexIn.fragmentColor, 1.0);
+  if (vVertexIn.fragmentColor != vec3(0, 0, 0)) {
+    color = vec4(mix(vVertexIn.fragmentColor, edgeColor, fEdgeIntensity), 1.0);
+  } else {
+    color = vec4(mix(faceColor, edgeColor, fEdgeIntensity), 1.0);
+  }
 }

@@ -2,11 +2,10 @@ package org.cmps.tetrahedron;
 
 import org.cmps.tetrahedron.config.CanvasProperties;
 import org.cmps.tetrahedron.config.WindowProperties;
+import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.VertexInfoController;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
-import org.cmps.tetrahedron.utils.DataReader;
-import org.cmps.tetrahedron.utils.StressUtils;
 import org.joml.Matrix4f;
 import org.joml.Matrix4x3f;
 import org.lwjgl.BufferUtils;
@@ -45,6 +44,8 @@ import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
  */
 public class ModelCanvas extends AWTGLCanvas {
 
+    private final ModelController modelController = ModelController.getInstance();
+
     private int vao;
 
     private int viewportSizeUniform;
@@ -77,7 +78,6 @@ public class ModelCanvas extends AWTGLCanvas {
         /* Create all needed GL resources */
         createVao();
         int program = createRasterProgram();
-        createColorBuffer(program);
         initProgram(program);
 
         CoordinatesConvertor.initInstance(projMatrix, viewMatrix);
@@ -119,9 +119,19 @@ public class ModelCanvas extends AWTGLCanvas {
         glUniformMatrix4fv(projMatrixUniform, false, projMatrix.get(matrixBuffer));
 
         glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(),  WindowProperties.getPhysicalHeight());
-
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, DataReader.getFaces().size() * 3);
+
+        if (modelController.isModelReady()) {
+            initVao();
+            modelController.setModelReady(false);
+        }
+
+        if (modelController.isStressDataLoaded()) {
+            createColorBuffer();
+            modelController.setStressDataLoaded(false);
+        }
+
+        glDrawArrays(GL_TRIANGLES, 0, modelController.getFaces().size() * 3);
         glBindVertexArray(0);
     }
 
@@ -129,8 +139,11 @@ public class ModelCanvas extends AWTGLCanvas {
         // vao - Vertex Array Object
         this.vao = glGenVertexArrays();
         glBindVertexArray(vao);
+        initVao();
+    }
 
-        List<float[][]> faces = DataReader.getFaces();
+    private void initVao() {
+        List<float[][]> faces = modelController.getFaces();
         FloatBuffer pb = BufferUtils.createFloatBuffer(faces.size() * 3 * 3);
         for (float[][] face : faces) {
             for (float[] vertex : face) {
@@ -147,20 +160,15 @@ public class ModelCanvas extends AWTGLCanvas {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
     }
 
-    private void createColorBuffer(int program) {
+    private void createColorBuffer() {
         int colorBuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 
-        FloatBuffer colors = BufferUtils.createFloatBuffer(DataReader.getFaces().size() * 3 * 3);
-
-        float[] stress = DataReader.getStress();
-
-        StressUtils.printColorDiapasons();
-        for (int i = 0; i < DataReader.getFaces().size() / 4; i++) {
-            float[] color = StressUtils.getColor(stress[i]);
-
+        FloatBuffer colors = BufferUtils.createFloatBuffer(modelController.getFaces().size() * 3 * 3);
+        List<float[]> stressColors = modelController.getStress().getColors();
+        for (int i = 0; i < modelController.getFaces().size() / 4; i++) {
             for (int j = 0; j < 4 * 3; j++) {
-                for (float colorPart : color) {
+                for (float colorPart : stressColors.get(i)) {
                     colors.put(colorPart);
                 }
             }
@@ -171,7 +179,6 @@ public class ModelCanvas extends AWTGLCanvas {
         glBufferData(GL_ARRAY_BUFFER, colors, GL_STATIC_DRAW);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0L);
-        glBindAttribLocation(program, 1, "color");
     }
 
     private int createRasterProgram() {
@@ -185,7 +192,7 @@ public class ModelCanvas extends AWTGLCanvas {
         glAttachShader(program, gShader);
 
         glBindAttribLocation(program, 0, "position");
-        //glBindFragDataLocation(program, 0, "color");
+        glBindAttribLocation(program, 1, "color");
 
         glLinkProgram(program);
 

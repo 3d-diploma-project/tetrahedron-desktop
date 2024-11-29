@@ -1,0 +1,30 @@
+.file-selector {
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+    -fx-background-color: #E5EEFF;
+    -fx-background-radius: 40px;
+}
+
+.file-selectors-block {
+    -fx-alignment: center;
+    -fx-spacing: 33px;
+    -fx-background-color: #FAFAFA;
+}
+
+.plus-button {
+    -fx-background-color: #1E0094;
+}
+
+.centered-box {
+    -fx-alignment: center;
+}
+
+.label {
+    -fx-text-alignment: center;
+}
+
+.create-model-button {
+    -fx-background-radius: 66px;
+    -fx-background-color: #E5E5E6;
+    -fx-padding: 12px 24px;
+}

@@ -1,5 +1,7 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.model.Stress;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -8,45 +10,13 @@ import static java.util.Locale.US;
 
 public class DataReader {
 
-    public static final String COORDINATES_FILE_NAME = "models/таблиця координат.txt";
-    public static final String INDEXES_FILE_NAME = "models/матриця індексів.txt";
-    public static final String STRESS_FILE_NAME = "models/stress.txt";
+    private static final boolean WITH_INDICES = true;
 
-    private static final boolean WITH_INDICES = false;
-
-    private static final Map<Integer, float[]> vertices = readVerticesCoordinates();
-    private static final List<float[][]> faces = readIndexesAndConvertToFaces(vertices);
-
-
-    private static float minStress = Float.MAX_VALUE;
-    private static float maxStress = Float.MIN_VALUE;
-    private static final float[] stress = readStress();
-
-    public static Map<Integer, float[]> getVertices() {
-        return vertices;
-    }
-
-    public static List<float[][]> getFaces() {
-        return faces;
-    }
-
-    public static float[] getStress() {
-        return stress;
-    }
-
-    public static float getMinStress() {
-        return minStress;
-    }
-
-    public static float getMaxStress() {
-        return maxStress;
-    }
-
-    private static Map<Integer, float[]> readVerticesCoordinates() {
+    public static Map<Integer, float[]> readVertices(File coordinatesTableFile) {
         Locale.setDefault(US);
 
         int i = 1;
-        try (Scanner fid = new Scanner(new File(COORDINATES_FILE_NAME))) {
+        try (Scanner fid = new Scanner(coordinatesTableFile)) {
             Map<Integer, float[]> coordinates = new HashMap<>();
 
             while (fid.hasNext()) {
@@ -66,10 +36,11 @@ public class DataReader {
         }
     }
 
-    private static List<float[][]> readIndexesAndConvertToFaces(Map<Integer, float[]> verticesCoordinates) {
+    public static List<float[][]> readIndexesAndConvertToFaces(File indicesMatrix,
+                                                               Map<Integer, float[]> verticesCoordinates) {
         Locale.setDefault(US);
 
-        try (Scanner fid = new Scanner(new File(INDEXES_FILE_NAME))) {
+        try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
 
             while (fid.hasNext()) {
@@ -95,33 +66,36 @@ public class DataReader {
         }
     }
 
-    private static float[] readStress() {
+    public static Stress readStress(File stressData) {
         Locale.setDefault(US);
 
-        try (Scanner fid = new Scanner(new File(STRESS_FILE_NAME))) {
-            float[] stress = new float[getFaces().size() / 4];
-            int i = 0;
+        Stress stressModel = new Stress();
+
+        try (Scanner fid = new Scanner(stressData)) {
+            List<Float> stress = new ArrayList<>();
 
             while (fid.hasNext()) {
+                float stressValue;
                 if (WITH_INDICES) {
                     fid.nextInt();
-                    stress[i] = StressUtils.misesStress(fid.nextFloat(),fid.nextFloat(), fid.nextFloat(), fid.nextFloat(), fid.nextFloat(), fid.nextFloat());
+                    stressValue = StressUtils.misesStress(fid.nextFloat(),fid.nextFloat(),
+                                                       fid.nextFloat(), fid.nextFloat(),
+                                                       fid.nextFloat(), fid.nextFloat());
                 } else {
-                    stress[i] = fid.nextFloat();
+                    stressValue = fid.nextFloat();
                 }
 
-                if (stress[i] < minStress) {
-                    minStress = stress[i];
+                if (stressValue < stressModel.getMinStress()) {
+                    stressModel.setMinStress(stressValue);
+                } else if (stressValue > stressModel.getMaxStress()) {
+                    stressModel.setMaxStress(stressValue);
                 }
 
-                if (stress[i] > maxStress) {
-                    maxStress = stress[i];
-                }
-
-                i++;
+                stress.add(stressValue);
             }
 
-            return stress;
+            stressModel.setStress(stress);
+            return stressModel;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -3,13 +3,11 @@ package org.cmps.tetrahedron.controller;
 import javafx.application.Platform;
 import javafx.util.Pair;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
-import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.Scaler;
 import org.joml.Vector3f;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Checks if a vertex present on clicked coordinates and display vertex info.
@@ -23,6 +21,7 @@ public class VertexInfoController {
 
     private static final VertexInfoController instance = new VertexInfoController();
 
+    private final ModelController modelController = ModelController.getInstance();
     private final CoordinatesConvertor coordinatesConvertor = CoordinatesConvertor.getInstance();
     private Consumer<String> displayInfo;
 
@@ -76,7 +75,7 @@ public class VertexInfoController {
     private String buildNodeInfo(Vector3f worldCoord) {
         SortedSet<Pair<Integer, Double>> sortedSet = new TreeSet<>(Comparator.comparing(Pair::getValue));
 
-        for (Map.Entry<Integer, float[]> entry : DataReader.getVertices().entrySet()) {
+        for (Map.Entry<Integer, float[]> entry : modelController.getVertices().entrySet()) {
             float[] vertex = entry.getValue();;
             double xVertex = vertex[0];
             double yVertex = vertex[1];
@@ -91,10 +90,10 @@ public class VertexInfoController {
                 sortedSet.removeLast();
             }
         }
-        Pair<Integer, Double> closestNode = sortedSet.first();
-        float[] vertex = DataReader.getVertices().get(closestNode.getKey());
-        return "Closest node " + closestNode.getKey() + "-> X: " + vertex[0] + ", Y: " + vertex[1] + ", Z: " + vertex[2];
 
-        //return "Clicked coords -> X: " + worldCoord.x + ", Y: " + worldCoord.y + ", Z: " + worldCoord.z + ", depth: " + depth;
+        Pair<Integer, Double> closestNode = sortedSet.first();
+        float[] vertex = modelController.getVertices().get(closestNode.getKey());
+
+        return "Closest node " + closestNode.getKey() + "-> X: " + vertex[0] + ", Y: " + vertex[1] + ", Z: " + vertex[2];
     }
 }

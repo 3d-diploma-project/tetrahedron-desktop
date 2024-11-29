@@ -1,8 +1,8 @@
 package org.cmps.tetrahedron.controller;
 
-import org.cmps.tetrahedron.components.InfoPanel;
-import org.cmps.tetrahedron.components.InstrumentsSidebar;
-import org.cmps.tetrahedron.components.Navbar;
+import org.cmps.tetrahedron.view.InfoPanel;
+import org.cmps.tetrahedron.view.InstrumentsSidebar;
+import org.cmps.tetrahedron.view.Navbar;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;

@@ -1,7 +1,8 @@
-package org.cmps.tetrahedron.components;
+package org.cmps.tetrahedron.view;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import lombok.Getter;
 
 /**
  * A component for displaying a vertex info (number and coordinates).
@@ -11,11 +12,8 @@ import javafx.scene.layout.HBox;
  */
 public class InfoPanel extends HBox {
 
+    @Getter
     private static final InfoPanel instance = new InfoPanel();
-
-    public static InfoPanel getInstance() {
-        return instance;
-    }
 
     Label nodeInfo = new Label("Click on a vertex");
 
