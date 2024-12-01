@@ -1,5 +1,4 @@
 .main {
-    -fx-min-width: 100vh;
 }
 
 .model-view-page {
@@ -59,7 +58,6 @@
 .right-toolbar {
     -fx-min-width: 195px;
     -fx-max-width: 195px;
-    -fx-alignment: center-top;
     -fx-background-radius: 38;
     -fx-border-radius: 38;
     -fx-border-width: 1;

@@ -10,7 +10,7 @@ import static java.util.Locale.US;
 
 public class DataReader {
 
-    private static final boolean WITH_INDICES = true;
+    private static final boolean WITH_INDICES = false;
 
     public static Map<Integer, float[]> readVertices(File coordinatesTableFile) {
         Locale.setDefault(US);

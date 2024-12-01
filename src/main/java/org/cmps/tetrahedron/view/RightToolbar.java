@@ -1,12 +1,19 @@
 package org.cmps.tetrahedron.view;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import org.cmps.tetrahedron.controller.ModelController;
+import org.cmps.tetrahedron.controller.SceneController;
 import org.cmps.tetrahedron.utils.FontUtils;
+
+import java.io.File;
 
 public class RightToolbar extends VBox {
 
@@ -14,10 +21,18 @@ public class RightToolbar extends VBox {
         getStyleClass().add("right-toolbar");
 
         setupColourLayout();
-        setupFileUploadSection("Напруження у вузлах");
-        setupFileUploadSection("Переміщення у вузлах");
-        setupFileUploadSection("Прикладені сили");
-        setupFileUploadSection("Закріплені вузли");
+        setupFileUploadSection("Напруження у вузлах", this::selectStressFile);
+        setupFileUploadSection("Переміщення у вузлах", null);
+        setupFileUploadSection("Прикладені сили", null);
+        setupFileUploadSection("Закріплені вузли", null);
+    }
+
+    private void selectStressFile(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
+        if (file != null) {
+            ModelController.getInstance().initStress(file);
+        }
     }
 
     private void setupLabelAndSwitchLayout() {
@@ -54,13 +69,16 @@ public class RightToolbar extends VBox {
         getChildren().addAll(mainBox);
     }
 
-    private void setupFileUploadSection(String text) {
+    private void setupFileUploadSection(String text, EventHandler<ActionEvent> eventHandler) {
         Label label = new Label(text);
         label.setStyle("-fx-padding: 5 0 0 0;");
         label.setFont(FontUtils.getGeolocicaFont(10));
+
         Button button = new Button("Завантажити файл");
         button.getStyleClass().add("load-button");
         button.setFont(FontUtils.getGeolocicaFont(10));
+        button.setOnAction(eventHandler);
+
         getChildren().addAll(label, button);
     }
 
