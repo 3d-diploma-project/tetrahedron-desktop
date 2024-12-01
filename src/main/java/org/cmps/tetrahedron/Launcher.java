@@ -74,6 +74,12 @@ public class Launcher {
                 fxPanel.setSize(WindowProperties.getLogicalSize());
                 canvas.setSize(CanvasProperties.getWidth(), CanvasProperties.getHeight());
             }
+
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

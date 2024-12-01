@@ -10,7 +10,7 @@ import org.cmps.tetrahedron.utils.Scaler;
  */
 public class CanvasProperties {
 
-    public static final int X_SHIFT = 250;
+    public static final int X_SHIFT = 445;
     public static final int Y_SHIFT = 150;
 
     public static int getWidth() {

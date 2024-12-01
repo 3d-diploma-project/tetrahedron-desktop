@@ -6,6 +6,7 @@ import org.cmps.tetrahedron.view.Navbar;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.cmps.tetrahedron.components.RightToolbar;
 import org.cmps.tetrahedron.config.WindowProperties;
 
 import java.util.Objects;
@@ -44,10 +45,9 @@ public class SceneController {
         VBox instrumentSidebar = new InstrumentsSidebar();
         instrumentSidebar.getStyleClass().add("instrument-sidebar");
 
-        VBox experience = new VBox();
-        experience.getStyleClass().add("experience");
-
-        main.getChildren().addAll(instrumentSidebar, experience);
+        VBox rightToolbar = new RightToolbar();
+        main.getChildren().addAll(instrumentSidebar, rightToolbar);
+        rightToolbar.toFront();
 
         root.getChildren().addAll(navbar, main, InfoPanel.getInstance());
 
