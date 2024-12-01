@@ -1,4 +1,4 @@
-package org.cmps.tetrahedron.components;
+package org.cmps.tetrahedron.view;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;

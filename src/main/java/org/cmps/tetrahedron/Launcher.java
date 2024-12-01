@@ -52,6 +52,10 @@ public class Launcher {
         frame.pack();
         frame.setVisible(true);
         frame.transferFocus();
+
+        WindowProperties.setHeight(frame.getHeight());
+        WindowProperties.setWidth(frame.getWidth());
+
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 Component c = (Component)evt.getSource();
