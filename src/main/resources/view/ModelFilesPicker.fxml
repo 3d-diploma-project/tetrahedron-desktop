@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cmps.tetrahedron.view.ModelFilesPicker"
+            minHeight="366" minWidth="613"
+            maxHeight="366" maxWidth="613"
+            stylesheets="@/style/model-file-picker.css">
+    <children>
+        <VBox>
+            <VBox styleClass="file-selectors-block" minHeight="366">
+                <HBox styleClass="file-selectors-block" minWidth="613">
+                    <fx:include fx:id="nodes" source="../component/FilePicker.fxml"
+                                resources="i18n/node-file-selector"/>
+                    <fx:include fx:id="indices" source="../component/FilePicker.fxml"
+                                resources="i18n/index-file-selector"/>
+                </HBox>
+                <HBox styleClass="file-selectors-block" minWidth="613">
+                    <Button styleClass="create-model-button" text="Створити модель" onMouseClicked="#onClick"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </children>
+    <ButtonType fx:constant="OK"/>
+</DialogPane>

@@ -1,9 +1,11 @@
 package org.cmps.tetrahedron;
 
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import org.cmps.tetrahedron.config.CanvasProperties;
 import org.cmps.tetrahedron.config.WindowProperties;
+import org.cmps.tetrahedron.view.ModelFilesPicker;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.SceneController;
 import org.lwjgl.opengl.awt.GLData;
@@ -50,6 +52,10 @@ public class Launcher {
         frame.pack();
         frame.setVisible(true);
         frame.transferFocus();
+
+        WindowProperties.setHeight(frame.getHeight());
+        WindowProperties.setWidth(frame.getWidth());
+
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 Component c = (Component)evt.getSource();
@@ -59,6 +65,8 @@ public class Launcher {
                 WindowProperties.setHeight((int) size.getHeight());
             }
         });
+
+        Platform.runLater(ModelFilesPicker::openDialogWindow);
 
         while (frame.isEnabled()) {
             if (!canvas.isValid()) {

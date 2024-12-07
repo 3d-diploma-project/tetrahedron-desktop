@@ -1,5 +1,7 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.model.Stress;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -8,28 +10,24 @@ import static java.util.Locale.US;
 
 public class DataReader {
 
-    public static final String COORDINATES_FILE_NAME = "models/Vertices (model 1).txt";
-    public static final String INDEXES_FILE_NAME = "models/Indices (model 1).txt";
+    private static final boolean WITH_INDICES = false;
 
-    private static final Map<Integer, float[]> vertices = readVerticesCoordinates();
-    private static final List<float[][]> faces = readIndexesAndConvertToFaces(vertices);
-
-    public static Map<Integer, float[]> getVertices() {
-        return vertices;
-    }
-
-    public static List<float[][]> getFaces() {
-        return faces;
-    }
-
-    private static Map<Integer, float[]> readVerticesCoordinates() {
+    public static Map<Integer, float[]> readVertices(File coordinatesTableFile) {
         Locale.setDefault(US);
 
-        try (Scanner fid = new Scanner(new File(COORDINATES_FILE_NAME))) {
+        int i = 1;
+        try (Scanner fid = new Scanner(coordinatesTableFile)) {
             Map<Integer, float[]> coordinates = new HashMap<>();
 
             while (fid.hasNext()) {
-                coordinates.put(fid.nextInt(), new float[]{fid.nextFloat(), fid.nextFloat(), fid.nextFloat()});
+                int index;
+                if (WITH_INDICES) {
+                    index = fid.nextInt();
+                } else {
+                    index = i++;
+                }
+
+                coordinates.put(index, new float[]{fid.nextFloat(), fid.nextFloat(), fid.nextFloat()});
             }
 
             return coordinates;
@@ -38,15 +36,18 @@ public class DataReader {
         }
     }
 
-    private static List<float[][]> readIndexesAndConvertToFaces(Map<Integer, float[]> verticesCoordinates) {
+    public static List<float[][]> readIndexesAndConvertToFaces(File indicesMatrix,
+                                                               Map<Integer, float[]> verticesCoordinates) {
         Locale.setDefault(US);
 
-        try (Scanner fid = new Scanner(new File(INDEXES_FILE_NAME))) {
+        try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
 
             while (fid.hasNext()) {
                 // reading index of a tetrahedron
-                fid.nextInt();
+                if (WITH_INDICES) {
+                    fid.nextInt();
+                }
 
                 float[] vertex1 = verticesCoordinates.get(fid.nextInt());
                 float[] vertex2 = verticesCoordinates.get(fid.nextInt());
@@ -60,6 +61,41 @@ public class DataReader {
             }
 
             return faces;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Stress readStress(File stressData) {
+        Locale.setDefault(US);
+
+        Stress stressModel = new Stress();
+
+        try (Scanner fid = new Scanner(stressData)) {
+            List<Float> stress = new ArrayList<>();
+
+            while (fid.hasNext()) {
+                float stressValue;
+                if (WITH_INDICES) {
+                    fid.nextInt();
+                    stressValue = StressUtils.misesStress(fid.nextFloat(),fid.nextFloat(),
+                                                       fid.nextFloat(), fid.nextFloat(),
+                                                       fid.nextFloat(), fid.nextFloat());
+                } else {
+                    stressValue = fid.nextFloat();
+                }
+
+                if (stressValue < stressModel.getMinStress()) {
+                    stressModel.setMinStress(stressValue);
+                } else if (stressValue > stressModel.getMaxStress()) {
+                    stressModel.setMaxStress(stressValue);
+                }
+
+                stress.add(stressValue);
+            }
+
+            stressModel.setStress(stress);
+            return stressModel;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

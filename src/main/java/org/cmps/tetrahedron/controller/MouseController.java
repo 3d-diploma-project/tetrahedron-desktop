@@ -1,6 +1,6 @@
 package org.cmps.tetrahedron.controller;
 
-import org.cmps.tetrahedron.components.InfoPanel;
+import org.cmps.tetrahedron.view.InfoPanel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -54,7 +54,7 @@ public class MouseController extends MouseAdapter {
             return;
         }
         zoomFactor += (float) scrollEvent.getPreciseWheelRotation() / 50;
-        zoomFactor = Math.max(1f, Math.min(zoomFactor, 50.0f));
+        zoomFactor = Math.max(1f, Math.min(zoomFactor, 500.0f));
     }
 
     public float getZoomFactor() {

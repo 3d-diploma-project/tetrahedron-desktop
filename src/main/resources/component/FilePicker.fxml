@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cmps.tetrahedron.view.FilePicker"
+      minWidth="258.0" minHeight="220.0"
+      styleClass="file-selector"
+      stylesheets="@/style/model-file-picker.css">
+
+    <HBox styleClass="centered-box">
+        <fx:include fx:id="icon" source="/icon/FileUpload.fxml"/>
+    </HBox>
+
+    <Label fx:id="label"
+           text="%file-picker-label"
+           wrapText="true"
+           styleClass="label"
+           maxWidth="218"/>
+
+    <HBox styleClass="centered-box">
+        <Button styleClass="plus-button" onMouseClicked="#onClick">
+            <graphic>
+                <fx:include fx:id="indices" source="/icon/Plus.fxml"/>
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>

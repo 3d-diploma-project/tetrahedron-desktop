@@ -1,4 +1,4 @@
-package org.cmps.tetrahedron.components;
+package org.cmps.tetrahedron.view;
 
 import org.cmps.tetrahedron.utils.ResourceReader;
 import javafx.scene.control.Label;

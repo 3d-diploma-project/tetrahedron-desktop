@@ -1,8 +1,4 @@
 .main {
-    -fx-min-width: 100px;
-    -fx-max-width: 1200px;
-    -fx-padding: 20;
-    -fx-spacing: 10;
 }
 
 .model-view-page {
@@ -18,8 +14,6 @@
     -fx-opacity: 0.9;
     -fx-background-radius: 15;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
-    -fx-translate-x: 30px;
-    -fx-translate-y: 60px;
 }
 
 .sidebar-button {
@@ -62,15 +56,13 @@
 }
 
 .right-toolbar {
-    -fx-min-width: 250px;
-    -fx-alignment: center-top;
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
-    -fx-border-width: 2;
+    -fx-min-width: 195px;
+    -fx-max-width: 195px;
+    -fx-background-radius: 38;
+    -fx-border-radius: 38;
+    -fx-border-width: 1;
     -fx-border-color: #C9C9C9;
-    -fx-padding: 15;
-    -fx-translate-x: 1100px;
-    -fx-translate-y: 40px;
+    -fx-padding: 40 16;
     -fx-background-color: #E7EDF2;
     -fx-spacing: 5
 }
@@ -98,13 +90,13 @@
 }
 
 .main-box-switches {
-    -fx-padding: 10 0 0 0;
+    -fx-padding: 0 0 10 0;
 }
 
 .load-button {
     -fx-background-color: #1E0094;
     -fx-text-fill: white;
-    -fx-background-radius: 10;
+    -fx-background-radius: 4;
     -fx-max-width: Infinity;
 }
 

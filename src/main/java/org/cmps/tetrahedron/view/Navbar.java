@@ -1,4 +1,4 @@
-package org.cmps.tetrahedron.components;
+package org.cmps.tetrahedron.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

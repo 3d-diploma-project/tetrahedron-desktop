@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 
 public class CoordinatesConvertor {
 
-    private static volatile CoordinatesConvertor instance;
+    private static CoordinatesConvertor instance;
 
     private final Matrix4f projMatrix;
     private final Matrix4x3f viewMatrix;

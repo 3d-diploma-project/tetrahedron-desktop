@@ -1,12 +1,13 @@
 package org.cmps.tetrahedron.controller;
 
-import org.cmps.tetrahedron.components.InfoPanel;
-import org.cmps.tetrahedron.components.InstrumentsSidebar;
-import org.cmps.tetrahedron.components.Navbar;
+import javafx.scene.layout.AnchorPane;
+import org.cmps.tetrahedron.view.InfoPanel;
+import org.cmps.tetrahedron.view.InstrumentsSidebar;
+import org.cmps.tetrahedron.view.Navbar;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.cmps.tetrahedron.components.RightToolbar;
+import org.cmps.tetrahedron.view.RightToolbar;
 import org.cmps.tetrahedron.config.WindowProperties;
 
 import java.util.Objects;
@@ -39,17 +40,19 @@ public class SceneController {
         scene.getStylesheets().add(Objects.requireNonNull(SceneController.class.getResource("/styles.css")).toExternalForm());
 
         HBox navbar = new Navbar(scene);
-        HBox main = new HBox();
-        main.getStyleClass().add("main");
 
         VBox instrumentSidebar = new InstrumentsSidebar();
         instrumentSidebar.getStyleClass().add("instrument-sidebar");
 
         VBox rightToolbar = new RightToolbar();
-        main.getChildren().addAll(instrumentSidebar, rightToolbar);
-        rightToolbar.toFront();
+        AnchorPane anchorPane = new AnchorPane(instrumentSidebar, rightToolbar);
+        anchorPane.getStyleClass().add("main");
 
-        root.getChildren().addAll(navbar, main, InfoPanel.getInstance());
+        AnchorPane.setLeftAnchor(instrumentSidebar, 30d);
+        AnchorPane.setRightAnchor(rightToolbar, 20d);
+        AnchorPane.setTopAnchor(rightToolbar, 15d);
+
+        root.getChildren().addAll(navbar, anchorPane, InfoPanel.getInstance());
 
         return scene;
     }
