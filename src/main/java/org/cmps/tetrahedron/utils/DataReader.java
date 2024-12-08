@@ -10,7 +10,7 @@ import static java.util.Locale.US;
 
 public class DataReader {
 
-    private static final boolean WITH_INDICES = false;
+    private static final boolean WITH_INDICES = true;
 
     public static Map<Integer, float[]> readVertices(File coordinatesTableFile) {
         Locale.setDefault(US);
@@ -75,15 +75,7 @@ public class DataReader {
             List<Float> stress = new ArrayList<>();
 
             while (fid.hasNext()) {
-                float stressValue;
-                if (WITH_INDICES) {
-                    fid.nextInt();
-                    stressValue = StressUtils.misesStress(fid.nextFloat(),fid.nextFloat(),
-                                                       fid.nextFloat(), fid.nextFloat(),
-                                                       fid.nextFloat(), fid.nextFloat());
-                } else {
-                    stressValue = fid.nextFloat();
-                }
+                float stressValue = fid.nextFloat();
 
                 if (stressValue < stressModel.getMinStress()) {
                     stressModel.setMinStress(stressValue);
