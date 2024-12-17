@@ -56,9 +56,6 @@ public class SceneController {
         AnchorPane.setBottomAnchor(infoPanel, 80d);
         VBox.setVgrow(absolutePane, Priority.ALWAYS);
 
-//        absolutePane.getStyleClass().add("absolute-pane");
-//        infoPanel.getStyleClass().add("info-panel");
-
         root.getChildren().add(absolutePane);
         return scene;
     }
