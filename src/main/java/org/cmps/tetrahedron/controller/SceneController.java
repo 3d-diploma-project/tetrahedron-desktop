@@ -1,12 +1,10 @@
 package org.cmps.tetrahedron.controller;
 
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import org.cmps.tetrahedron.view.InfoPanel;
 import org.cmps.tetrahedron.view.InstrumentsSidebar;
 import org.cmps.tetrahedron.view.Navbar;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import org.cmps.tetrahedron.view.RightToolbar;
 import org.cmps.tetrahedron.config.WindowProperties;
 
@@ -51,9 +49,14 @@ public class SceneController {
         AnchorPane.setLeftAnchor(instrumentSidebar, 30d);
         AnchorPane.setRightAnchor(rightToolbar, 20d);
         AnchorPane.setTopAnchor(rightToolbar, 15d);
+        root.getChildren().addAll(navbar, anchorPane);
 
-        root.getChildren().addAll(navbar, anchorPane, InfoPanel.getInstance());
+        InfoPanel infoPanel = InfoPanel.getInstance();
+        AnchorPane absolutePane = new AnchorPane(infoPanel);
+        AnchorPane.setBottomAnchor(infoPanel, 80d);
+        VBox.setVgrow(absolutePane, Priority.ALWAYS);
 
+        root.getChildren().add(absolutePane);
         return scene;
     }
 }
