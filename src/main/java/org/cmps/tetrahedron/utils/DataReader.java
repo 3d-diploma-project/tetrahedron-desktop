@@ -54,20 +54,18 @@ public class DataReader {
             List<float[][]> faces = new ArrayList<>();
             while (fid.hasNextLine()) {
                 String[] elements = fid.nextLine().trim().split("\\s+");
-                float[] vertex1, vertex2, vertex3, vertex4;
+                float[][] tetrahedron = new float[4][];
+                int startIndex;
 
-                if (elements.length == FACE_WITH_INDICES) {
-                    vertex1 = verticesCoordinates.get(Integer.parseInt(elements[1]));
-                    vertex2 = verticesCoordinates.get(Integer.parseInt(elements[2]));
-                    vertex3 = verticesCoordinates.get(Integer.parseInt(elements[3]));
-                    vertex4 = verticesCoordinates.get(Integer.parseInt(elements[4]));
+                startIndex = elements.length == FACE_WITH_INDICES ? 1 : 0;
+                for (int j = startIndex; j < elements.length; j++){
+                    tetrahedron[j - startIndex] = verticesCoordinates.get(Integer.parseInt(elements[j]));
                 }
-                else {
-                    vertex1 = verticesCoordinates.get(Integer.parseInt(elements[0]));
-                    vertex2 = verticesCoordinates.get(Integer.parseInt(elements[1]));
-                    vertex3 = verticesCoordinates.get(Integer.parseInt(elements[2]));
-                    vertex4 = verticesCoordinates.get(Integer.parseInt(elements[3]));
-                }
+
+                float[] vertex1 = tetrahedron[0];
+                float[] vertex2 = tetrahedron[1];
+                float[] vertex3 = tetrahedron[2];
+                float[] vertex4 = tetrahedron[3];
 
                 faces.add(new float[][]{vertex1, vertex2, vertex3});
                 faces.add(new float[][]{vertex1, vertex2, vertex4});
