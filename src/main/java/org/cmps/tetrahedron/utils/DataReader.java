@@ -9,7 +9,7 @@ import java.util.*;
 import static java.util.Locale.US;
 
 public class DataReader {
-    
+
     private static final int VERTICES_WITH_INDICES = 4;
     private static final int FACE_WITH_INDICES = 5;
 
@@ -22,22 +22,23 @@ public class DataReader {
 
             while (fid.hasNextLine()) {
                 String[] elements = fid.nextLine().trim().split("\\s+");
-                int index;
-                float x, y, z;
+                int index, startIndex;
+                List<Float> vertex = new ArrayList<>();
 
                 if (elements.length == VERTICES_WITH_INDICES) {
                     index = Integer.parseInt(elements[0]);
-                    x = Float.parseFloat(elements[1]);
-                    y = Float.parseFloat(elements[2]);
-                    z = Float.parseFloat(elements[3]);
+                    startIndex = 1;
                 } else {
                     index = i++;
-                    x = Float.parseFloat(elements[0]);
-                    y = Float.parseFloat(elements[1]);
-                    z = Float.parseFloat(elements[2]);
+                    startIndex = 0;
                 }
 
-                coordinates.put(index, new float[]{x, y, z});
+                for (int j = startIndex; j < elements.length; j++) {
+                    vertex.add(Float.parseFloat(elements[j]));
+                }
+
+                coordinates.put(index, convertListToArray(vertex));
+                vertex.clear();
             }
 
             return coordinates;
@@ -52,10 +53,10 @@ public class DataReader {
 
         try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
-
             while (fid.hasNextLine()) {
                 String[] elements = fid.nextLine().trim().split("\\s+");
                 float[] vertex1, vertex2, vertex3, vertex4;
+
                 if (elements.length == FACE_WITH_INDICES) {
                     vertex1 = verticesCoordinates.get(Integer.parseInt(elements[1]));
                     vertex2 = verticesCoordinates.get(Integer.parseInt(elements[2]));
@@ -79,6 +80,15 @@ public class DataReader {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static float[] convertListToArray(List<Float> floatList) {
+        float[] floatArray = new float[floatList.size()];
+        for (int i = 0; i < floatList.size(); i++) {
+            floatArray[i] = floatList.get(i);
+        }
+
+        return floatArray;
     }
 
     public static Stress readStress(File stressData) {
