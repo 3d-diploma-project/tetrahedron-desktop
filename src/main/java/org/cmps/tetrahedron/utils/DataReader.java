@@ -23,7 +23,6 @@ public class DataReader {
             while (fid.hasNextLine()) {
                 String[] elements = fid.nextLine().trim().split("\\s+");
                 int index, startIndex;
-                List<Float> vertex = new ArrayList<>();
 
                 if (elements.length == VERTICES_WITH_INDICES) {
                     index = Integer.parseInt(elements[0]);
@@ -33,12 +32,12 @@ public class DataReader {
                     startIndex = 0;
                 }
 
+                float[] vertex = new float[3];
                 for (int j = startIndex; j < elements.length; j++) {
-                    vertex.add(Float.parseFloat(elements[j]));
+                    vertex[j - startIndex] = Float.parseFloat(elements[j]);
                 }
 
-                coordinates.put(index, convertListToArray(vertex));
-                vertex.clear();
+                coordinates.put(index, vertex);
             }
 
             return coordinates;
@@ -80,15 +79,6 @@ public class DataReader {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static float[] convertListToArray(List<Float> floatList) {
-        float[] floatArray = new float[floatList.size()];
-        for (int i = 0; i < floatList.size(); i++) {
-            floatArray[i] = floatList.get(i);
-        }
-
-        return floatArray;
     }
 
     public static Stress readStress(File stressData) {
