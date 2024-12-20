@@ -10,7 +10,8 @@ import static java.util.Locale.US;
 
 public class DataReader {
 
-    private static final boolean WITH_INDICES = true;
+    private static final int VERTICES_WITH_INDICES = 4;
+    private static final int FACE_WITH_INDICES = 5;
 
     public static Map<Integer, float[]> readVertices(File coordinatesTableFile) {
         Locale.setDefault(US);
@@ -19,15 +20,24 @@ public class DataReader {
         try (Scanner fid = new Scanner(coordinatesTableFile)) {
             Map<Integer, float[]> coordinates = new HashMap<>();
 
-            while (fid.hasNext()) {
-                int index;
-                if (WITH_INDICES) {
-                    index = fid.nextInt();
+            while (fid.hasNextLine()) {
+                String[] elements = fid.nextLine().trim().split("\\s+");
+                int index, startIndex;
+
+                if (elements.length == VERTICES_WITH_INDICES) {
+                    index = Integer.parseInt(elements[0]);
+                    startIndex = 1;
                 } else {
                     index = i++;
+                    startIndex = 0;
                 }
 
-                coordinates.put(index, new float[]{fid.nextFloat(), fid.nextFloat(), fid.nextFloat()});
+                float[] vertex = new float[3];
+                for (int j = startIndex; j < elements.length; j++) {
+                    vertex[j - startIndex] = Float.parseFloat(elements[j]);
+                }
+
+                coordinates.put(index, vertex);
             }
 
             return coordinates;
@@ -42,17 +52,20 @@ public class DataReader {
 
         try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
+            while (fid.hasNextLine()) {
+                String[] elements = fid.nextLine().trim().split("\\s+");
+                float[][] tetrahedron = new float[4][];
+                int startIndex;
 
-            while (fid.hasNext()) {
-                // reading index of a tetrahedron
-                if (WITH_INDICES) {
-                    fid.nextInt();
+                startIndex = elements.length == FACE_WITH_INDICES ? 1 : 0;
+                for (int j = startIndex; j < elements.length; j++){
+                    tetrahedron[j - startIndex] = verticesCoordinates.get(Integer.parseInt(elements[j]));
                 }
 
-                float[] vertex1 = verticesCoordinates.get(fid.nextInt());
-                float[] vertex2 = verticesCoordinates.get(fid.nextInt());
-                float[] vertex3 = verticesCoordinates.get(fid.nextInt());
-                float[] vertex4 = verticesCoordinates.get(fid.nextInt());
+                float[] vertex1 = tetrahedron[0];
+                float[] vertex2 = tetrahedron[1];
+                float[] vertex3 = tetrahedron[2];
+                float[] vertex4 = tetrahedron[3];
 
                 faces.add(new float[][]{vertex1, vertex2, vertex3});
                 faces.add(new float[][]{vertex1, vertex2, vertex4});
