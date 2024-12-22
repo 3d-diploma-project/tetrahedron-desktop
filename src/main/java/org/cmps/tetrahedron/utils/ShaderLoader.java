@@ -3,14 +3,10 @@ package org.cmps.tetrahedron.utils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.nio.channels.FileChannel;
-import java.util.Objects;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -38,14 +34,20 @@ public class ShaderLoader {
         return shader;
     }
 
-    private static ByteBuffer ioResourceToByteBuffer(String resource) {
-        URL url = Thread.currentThread().getContextClassLoader().getResource(resource);
-        File file = new File(Objects.requireNonNull(url).getFile());
+    private static ByteBuffer ioResourceToByteBuffer(String resourcePath) {
+        try (InputStream inputStream = ShaderLoader.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Resource not found: " + resourcePath);
+            }
 
-        try (FileInputStream fis = new FileInputStream(file);
-             FileChannel channel = fis.getChannel()) {
-            return channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-        } catch (Exception e) {
+            byte[] bytes = inputStream.readAllBytes();
+
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(bytes.length);
+            byteBuffer.put(bytes);
+            byteBuffer.flip();
+
+            return byteBuffer;
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
