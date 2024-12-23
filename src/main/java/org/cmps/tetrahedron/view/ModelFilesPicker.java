@@ -4,13 +4,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.Setter;
+import org.cmps.tetrahedron.Tetrahedron;
 import org.cmps.tetrahedron.controller.ModelController;
+import org.cmps.tetrahedron.utils.ResourceReader;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Objects;
 
 public class ModelFilesPicker {
 
@@ -41,6 +47,9 @@ public class ModelFilesPicker {
 
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.setOnCloseRequest(modelFilesPicker::onClose);
+
+        ImageView logo = ResourceReader.imageReader("/logo.png");
+        stage.getIcons().add(logo.getImage());
 
         dialog.setTitle("Select model");
         dialog.show();

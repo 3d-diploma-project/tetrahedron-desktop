@@ -10,9 +10,12 @@ import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.SceneController;
 import org.lwjgl.opengl.awt.GLData;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 
 /**
  * Creates a program window and inits all components (LWJGL and JavaFX parts).
@@ -20,7 +23,7 @@ import java.awt.event.*;
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
  */
-public class Launcher {
+public class Tetrahedron {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Tetrahedron");
@@ -28,6 +31,7 @@ public class Launcher {
         frame.setLayout(new BorderLayout());
         frame.setMinimumSize(new Dimension(WindowProperties.MIN_WIDTH, WindowProperties.MIN_HEIGHT));
         frame.setPreferredSize(WindowProperties.getLogicalSize());
+        setIcon(frame);
 
         final JFXPanel fxPanel = new JFXPanel();
         fxPanel.setSize(WindowProperties.getLogicalSize());
@@ -84,6 +88,18 @@ public class Launcher {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private static void setIcon(JFrame frame) {
+        try {
+            InputStream inputStream = Tetrahedron.class.getClassLoader().getResourceAsStream("logo.png");
+            if (inputStream != null) {
+                BufferedImage iconImage = ImageIO.read(inputStream);
+                frame.setIconImage(iconImage);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
