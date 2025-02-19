@@ -127,8 +127,13 @@ public class ModelCanvas extends AWTGLCanvas {
         }
 
         if (modelController.isStressDataLoaded()) {
-            createColorBuffer();
+            createColorBuffer(modelController.getStress().getColors());
             modelController.setStressDataLoaded(false);
+        }
+
+        if (modelController.isCustomDataLoaded()) {
+            createColorBuffer(modelController.getCustomCharacteristic().getColors());
+            modelController.setCustomDataLoaded(false);
         }
 
         glDrawArrays(GL_TRIANGLES, 0, modelController.getFaces().size() * 3);
@@ -160,15 +165,14 @@ public class ModelCanvas extends AWTGLCanvas {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
     }
 
-    private void createColorBuffer() {
+    private void createColorBuffer(List<float[]> colorsList) {
         int colorBuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 
         FloatBuffer colors = BufferUtils.createFloatBuffer(modelController.getFaces().size() * 3 * 3);
-        List<float[]> stressColors = modelController.getStress().getColors();
         for (int i = 0; i < modelController.getFaces().size() / 4; i++) {
             for (int j = 0; j < 4 * 3; j++) {
-                for (float colorPart : stressColors.get(i)) {
+                for (float colorPart : colorsList.get(i)) {
                     colors.put(colorPart);
                 }
             }

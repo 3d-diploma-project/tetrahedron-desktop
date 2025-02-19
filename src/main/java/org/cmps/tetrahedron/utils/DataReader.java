@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.utils;
 
 import org.cmps.tetrahedron.exception.ModelValidationException;
+import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
 
 import java.io.File;
@@ -52,9 +53,9 @@ public class DataReader {
             return coordinates;
         } catch (FileNotFoundException | NumberFormatException e) {
             throw new ModelValidationException("""
-                            Помилка під час зчитування матриці координат.\s
-                            
-                            Перевірте дані та спробуйте знову""");
+                    Помилка під час зчитування матриці координат.\s
+                                                
+                    Перевірте дані та спробуйте знову""");
         }
     }
 
@@ -97,9 +98,9 @@ public class DataReader {
             return faces;
         } catch (FileNotFoundException | NumberFormatException e) {
             throw new ModelValidationException("""
-                            Помилка під час зчитування матриці індексів.\s
-                            
-                            Перевірте дані та спробуйте знову""");
+                    Помилка під час зчитування матриці індексів.\s
+                                                
+                    Перевірте дані та спробуйте знову""");
         }
     }
 
@@ -125,6 +126,33 @@ public class DataReader {
 
             stressModel.setStress(stress);
             return stressModel;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static CustomCharacteristic readCustomCharacteristic(File customData) {
+        Locale.setDefault(US);
+
+        CustomCharacteristic customModel = new CustomCharacteristic();
+
+        try (Scanner fid = new Scanner(customData)) {
+            List<Float> values = new ArrayList<>();
+
+            while (fid.hasNext()) {
+                float value = fid.nextFloat();
+
+                if (value < customModel.getMinValue()) {
+                    customModel.setMinValue(value);
+                } else if (value > customModel.getMaxValue()) {
+                    customModel.setMaxValue(value);
+                }
+
+                values.add(value);
+            }
+
+            customModel.setValues(values);
+            return customModel;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -2,6 +2,7 @@ package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
@@ -27,6 +28,10 @@ public class ModelController {
     private Stress stress;
     @Setter
     private boolean stressDataLoaded = false;
+    @Getter
+    private CustomCharacteristic customCharacteristic;
+    @Setter
+    private boolean customDataLoaded = false;
 
     private ModelController() {
         model = Model.builder()
@@ -68,6 +73,18 @@ public class ModelController {
                 .toList());
 
         stressDataLoaded = true;
+    }
+
+    public void initCustomCharacteristic(File customDataFile) {
+        customCharacteristic = DataReader.readCustomCharacteristic(customDataFile);
+
+        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());
+        customCharacteristic.setColors(customCharacteristic.getValues()
+                .stream()
+                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
+                .toList());
+
+        customDataLoaded = true;
     }
 
     private void centerModel() {
