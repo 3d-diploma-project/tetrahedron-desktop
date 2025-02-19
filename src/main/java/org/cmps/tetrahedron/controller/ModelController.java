@@ -28,7 +28,6 @@ public class ModelController {
     private Stress stress;
     @Getter
     private CustomCharacteristic customCharacteristic;
-    @Setter
     private List<float[]> modelColors = null;
 
     private ModelController() {
@@ -70,7 +69,7 @@ public class ModelController {
                 .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
                 .toList());
 
-        modelColors = new ArrayList<>(stress.getColors());
+        modelColors = stress.getColors();
     }
 
     public void initCustomCharacteristic(File customDataFile) {
@@ -82,7 +81,7 @@ public class ModelController {
                 .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
                 .toList());
 
-        modelColors = new ArrayList<>(customCharacteristic.getColors());
+        modelColors = customCharacteristic.getColors();
     }
 
     private void centerModel() {
