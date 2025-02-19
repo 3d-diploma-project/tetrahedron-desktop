@@ -26,12 +26,10 @@ public class ModelController {
     private boolean modelReady = false;
     @Getter
     private Stress stress;
-    @Setter
-    private boolean stressDataLoaded = false;
     @Getter
     private CustomCharacteristic customCharacteristic;
     @Setter
-    private boolean customDataLoaded = false;
+    private String modelColors = null;
 
     private ModelController() {
         model = Model.builder()
@@ -72,7 +70,7 @@ public class ModelController {
                 .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
                 .toList());
 
-        stressDataLoaded = true;
+        modelColors = "stress";
     }
 
     public void initCustomCharacteristic(File customDataFile) {
@@ -84,7 +82,7 @@ public class ModelController {
                 .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
                 .toList());
 
-        customDataLoaded = true;
+        modelColors = "customCharacteristic";
     }
 
     private void centerModel() {

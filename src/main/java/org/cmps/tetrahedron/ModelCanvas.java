@@ -16,6 +16,7 @@ import org.lwjgl.opengl.awt.GLData;
 
 import java.nio.FloatBuffer;
 import java.util.List;
+import java.util.Objects;
 
 import static org.cmps.tetrahedron.utils.ShaderLoader.createShader;
 import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
@@ -126,14 +127,14 @@ public class ModelCanvas extends AWTGLCanvas {
             modelController.setModelReady(false);
         }
 
-        if (modelController.isStressDataLoaded()) {
+        if (Objects.equals(modelController.getModelColors(), "stress")) {
             createColorBuffer(modelController.getStress().getColors());
-            modelController.setStressDataLoaded(false);
+            modelController.setModelColors(null);
         }
 
-        if (modelController.isCustomDataLoaded()) {
+        if (Objects.equals(modelController.getModelColors(), "customCharacteristic")) {
             createColorBuffer(modelController.getCustomCharacteristic().getColors());
-            modelController.setCustomDataLoaded(false);
+            modelController.setModelColors(null);
         }
 
         glDrawArrays(GL_TRIANGLES, 0, modelController.getFaces().size() * 3);
