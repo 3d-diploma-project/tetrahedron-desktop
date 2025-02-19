@@ -65,6 +65,7 @@ public class DataReader {
 
         Set<Integer> usedIndices = new HashSet<>();
         Set<Integer> availableVertices = verticesCoordinates.keySet();
+        List<Integer> invalidIndices = new ArrayList<>();
 
         try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
@@ -87,11 +88,10 @@ public class DataReader {
                     usedIndices.add(index);
 
                     if (!verticesCoordinates.containsKey(index)) {
-                        throw new ModelValidationException("""
-                                Матриця індексів використовує неіснуючі координати! 
-                                Завантажте правильні файли.""");
+                        invalidIndices.add(index);
+                    } else {
+                        tetrahedron[j - startIndex] = verticesCoordinates.get(index);
                     }
-                    tetrahedron[j - startIndex] = verticesCoordinates.get(index);
                 }
 
                 float[] vertex1 = tetrahedron[0];
@@ -104,12 +104,18 @@ public class DataReader {
                 faces.add(new float[][]{vertex1, vertex4, vertex3});
                 faces.add(new float[][]{vertex4, vertex2, vertex3});
 
+                if (!invalidIndices.isEmpty()) {
+                    throw new ModelValidationException("Матриця індексів використовує неіснуючі координати!\n" +
+                            "Завантажте правильні файли.\n\n" +
+                            "Неправильні індекси: " + invalidIndices);
+                }
+
                 Set<Integer> unusedVertices = new HashSet<>(availableVertices);
                 unusedVertices.removeAll(usedIndices);
 
                 // Maybe create a new special ModalWindow
                 if (!unusedVertices.isEmpty()) {
-                    System.out.println("Таблиця координат містить точки, які не використовуються в матриці індексів. " +
+                    throw new ModelValidationException("Таблиця координат містить точки, які не використовуються в матриці індексів. " +
                             "Ви впевнені, що хочете продовжити?");
                 }
             }
