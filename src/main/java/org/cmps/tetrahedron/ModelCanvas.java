@@ -97,8 +97,8 @@ public class ModelCanvas extends AWTGLCanvas {
         if (vertexInfoController.isClicked()) {
             float[] depth = new float[1];
             GL11C.glReadPixels(vertexInfoController.getX(),
-                               CanvasProperties.getPhysicalHeight() - vertexInfoController.getY(), 1, 1,
-                               GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
+                    CanvasProperties.getPhysicalHeight() - vertexInfoController.getY(), 1, 1,
+                    GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
             vertexInfoController.updateVertexInfoToDisplay(depth[0]);
         }
     }
@@ -106,20 +106,20 @@ public class ModelCanvas extends AWTGLCanvas {
     private void updateMatrix(float zoomFactor, float x, float y) {
         float fov = (float) Math.toRadians(30 / zoomFactor);
         projMatrix.setPerspective((float) Math.min(fov, Math.PI),
-                                  (float) CanvasProperties.getPhysicalWidth() / CanvasProperties.getPhysicalHeight(),
-                                  0.1f,
-                                  Float.POSITIVE_INFINITY);
+                (float) CanvasProperties.getPhysicalWidth() / CanvasProperties.getPhysicalHeight(),
+                0.1f,
+                Float.POSITIVE_INFINITY);
 
         viewMatrix.setLookAt(0.0f, 2.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
-                  .rotateY(x)
-                  .rotateX(y);
+                .rotateY(x)
+                .rotateX(y);
     }
 
     private void renderModel() {
         glUniformMatrix4fv(viewMatrixUniform, false, viewMatrix.get4x4(matrixBuffer));
         glUniformMatrix4fv(projMatrixUniform, false, projMatrix.get(matrixBuffer));
 
-        glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(),  WindowProperties.getPhysicalHeight());
+        glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(), WindowProperties.getPhysicalHeight());
         glBindVertexArray(vao);
 
         if (modelController.isModelReady()) {
@@ -127,13 +127,8 @@ public class ModelCanvas extends AWTGLCanvas {
             modelController.setModelReady(false);
         }
 
-        if (Objects.equals(modelController.getModelColors(), "stress")) {
-            createColorBuffer(modelController.getStress().getColors());
-            modelController.setModelColors(null);
-        }
-
-        if (Objects.equals(modelController.getModelColors(), "customCharacteristic")) {
-            createColorBuffer(modelController.getCustomCharacteristic().getColors());
+        if (modelController.getModelColors() != null) {
+            createColorBuffer(modelController.getModelColors());
             modelController.setModelColors(null);
         }
 
