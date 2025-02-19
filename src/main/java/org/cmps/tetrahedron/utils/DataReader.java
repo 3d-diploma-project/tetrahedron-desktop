@@ -52,9 +52,9 @@ public class DataReader {
             return coordinates;
         } catch (FileNotFoundException | NumberFormatException e) {
             throw new ModelValidationException("""
-                            Помилка під час зчитування матриці координат.\s
-                            
-                            Перевірте дані та спробуйте знову""");
+                    Помилка під час зчитування матриці координат.\s
+                                                
+                    Перевірте дані та спробуйте знову""");
         }
     }
 
@@ -62,6 +62,9 @@ public class DataReader {
                                                                Map<Integer, float[]> verticesCoordinates)
             throws ModelValidationException {
         Locale.setDefault(US);
+
+        Set<Integer> usedIndices = new HashSet<>();
+        Set<Integer> availableVertices = verticesCoordinates.keySet();
 
         try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
@@ -80,7 +83,15 @@ public class DataReader {
 
                 startIndex = elements.length == FACE_WITH_INDICES ? 1 : 0;
                 for (int j = startIndex; j < elements.length; j++) {
-                    tetrahedron[j - startIndex] = verticesCoordinates.get(Integer.parseInt(elements[j]));
+                    int index = Integer.parseInt(elements[j]);
+                    usedIndices.add(index);
+
+                    if (!verticesCoordinates.containsKey(index)) {
+                        throw new ModelValidationException("""
+                                Матриця індексів використовує неіснуючі координати! 
+                                Завантажте правильні файли.""");
+                    }
+                    tetrahedron[j - startIndex] = verticesCoordinates.get(index);
                 }
 
                 float[] vertex1 = tetrahedron[0];
@@ -92,14 +103,23 @@ public class DataReader {
                 faces.add(new float[][]{vertex1, vertex2, vertex4});
                 faces.add(new float[][]{vertex1, vertex4, vertex3});
                 faces.add(new float[][]{vertex4, vertex2, vertex3});
+
+                Set<Integer> unusedVertices = new HashSet<>(availableVertices);
+                unusedVertices.removeAll(usedIndices);
+
+                // Maybe create a new special ModalWindow
+                if (!unusedVertices.isEmpty()) {
+                    System.out.println("Таблиця координат містить точки, які не використовуються в матриці індексів. " +
+                            "Ви впевнені, що хочете продовжити?");
+                }
             }
 
             return faces;
         } catch (FileNotFoundException | NumberFormatException e) {
             throw new ModelValidationException("""
-                            Помилка під час зчитування матриці індексів.\s
-                            
-                            Перевірте дані та спробуйте знову""");
+                    Помилка під час зчитування матриці індексів.\s
+                                                
+                    Перевірте дані та спробуйте знову""");
         }
     }
 
