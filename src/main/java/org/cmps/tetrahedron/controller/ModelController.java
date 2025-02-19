@@ -28,6 +28,7 @@ public class ModelController {
     private Stress stress;
     @Getter
     private CustomCharacteristic customCharacteristic;
+    @Setter
     private List<float[]> modelColors = null;
 
     private ModelController() {
