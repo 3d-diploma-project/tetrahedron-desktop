@@ -16,6 +16,7 @@ import org.lwjgl.opengl.awt.GLData;
 
 import java.nio.FloatBuffer;
 import java.util.List;
+import java.util.Objects;
 
 import static org.cmps.tetrahedron.utils.ShaderLoader.createShader;
 import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
@@ -96,8 +97,8 @@ public class ModelCanvas extends AWTGLCanvas {
         if (vertexInfoController.isClicked()) {
             float[] depth = new float[1];
             GL11C.glReadPixels(vertexInfoController.getX(),
-                               CanvasProperties.getPhysicalHeight() - vertexInfoController.getY(), 1, 1,
-                               GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
+                    CanvasProperties.getPhysicalHeight() - vertexInfoController.getY(), 1, 1,
+                    GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
             vertexInfoController.updateVertexInfoToDisplay(depth[0]);
         }
     }
@@ -105,20 +106,20 @@ public class ModelCanvas extends AWTGLCanvas {
     private void updateMatrix(float zoomFactor, float x, float y) {
         float fov = (float) Math.toRadians(30 / zoomFactor);
         projMatrix.setPerspective((float) Math.min(fov, Math.PI),
-                                  (float) CanvasProperties.getPhysicalWidth() / CanvasProperties.getPhysicalHeight(),
-                                  0.1f,
-                                  Float.POSITIVE_INFINITY);
+                (float) CanvasProperties.getPhysicalWidth() / CanvasProperties.getPhysicalHeight(),
+                0.1f,
+                Float.POSITIVE_INFINITY);
 
         viewMatrix.setLookAt(0.0f, 2.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f)
-                  .rotateY(x)
-                  .rotateX(y);
+                .rotateY(x)
+                .rotateX(y);
     }
 
     private void renderModel() {
         glUniformMatrix4fv(viewMatrixUniform, false, viewMatrix.get4x4(matrixBuffer));
         glUniformMatrix4fv(projMatrixUniform, false, projMatrix.get(matrixBuffer));
 
-        glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(),  WindowProperties.getPhysicalHeight());
+        glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(), WindowProperties.getPhysicalHeight());
         glBindVertexArray(vao);
 
         if (modelController.isModelReady()) {
@@ -126,9 +127,9 @@ public class ModelCanvas extends AWTGLCanvas {
             modelController.setModelReady(false);
         }
 
-        if (modelController.isStressDataLoaded()) {
-            createColorBuffer();
-            modelController.setStressDataLoaded(false);
+        if (modelController.getModelColors() != null) {
+            createColorBuffer(modelController.getModelColors());
+            modelController.setModelColors(null);
         }
 
         glDrawArrays(GL_TRIANGLES, 0, modelController.getFaces().size() * 3);
@@ -160,15 +161,14 @@ public class ModelCanvas extends AWTGLCanvas {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
     }
 
-    private void createColorBuffer() {
+    private void createColorBuffer(List<float[]> colorsList) {
         int colorBuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 
         FloatBuffer colors = BufferUtils.createFloatBuffer(modelController.getFaces().size() * 3 * 3);
-        List<float[]> stressColors = modelController.getStress().getColors();
         for (int i = 0; i < modelController.getFaces().size() / 4; i++) {
             for (int j = 0; j < 4 * 3; j++) {
-                for (float colorPart : stressColors.get(i)) {
+                for (float colorPart : colorsList.get(i)) {
                     colors.put(colorPart);
                 }
             }
