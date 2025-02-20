@@ -110,15 +110,15 @@ public class DataReader {
                             "Завантажте правильні файли.\n\n" +
                             "Неправильні індекси: " + invalidIndices);
                 }
+            }
 
-                Set<Integer> unusedVertices = new HashSet<>(availableVertices);
-                unusedVertices.removeAll(usedIndices);
+            Set<Integer> unusedVertices = new HashSet<>(availableVertices);
+            unusedVertices.removeAll(usedIndices);
 
-                // Maybe create a new special ModalWindow
-                if (!unusedVertices.isEmpty()) {
-                    throw new ModelValidationException("Таблиця координат містить точки, які не використовуються в матриці індексів. " +
-                            "Ви впевнені, що хочете продовжити?");
-                }
+            // Maybe create a new special ModalWindow
+            if (!unusedVertices.isEmpty()) {
+                throw new ModelValidationException("Таблиця координат містить точки, які не використовуються в матриці індексів. " +
+                        "Ви впевнені, що хочете продовжити?");
             }
 
             return faces;
