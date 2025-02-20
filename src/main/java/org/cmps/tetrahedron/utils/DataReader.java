@@ -64,6 +64,10 @@ public class DataReader {
             throws ModelValidationException {
         Locale.setDefault(US);
 
+        Set<Integer> usedIndices = new HashSet<>();
+        Set<Integer> availableVertices = verticesCoordinates.keySet();
+        List<Integer> invalidIndices = new ArrayList<>();
+
         try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
             while (fid.hasNextLine()) {
@@ -81,7 +85,14 @@ public class DataReader {
 
                 startIndex = elements.length == FACE_WITH_INDICES ? 1 : 0;
                 for (int j = startIndex; j < elements.length; j++) {
-                    tetrahedron[j - startIndex] = verticesCoordinates.get(Integer.parseInt(elements[j]));
+                    int index = Integer.parseInt(elements[j]);
+                    usedIndices.add(index);
+
+                    if (!verticesCoordinates.containsKey(index)) {
+                        invalidIndices.add(index);
+                    } else {
+                        tetrahedron[j - startIndex] = verticesCoordinates.get(index);
+                    }
                 }
 
                 float[] vertex1 = tetrahedron[0];
@@ -93,6 +104,21 @@ public class DataReader {
                 faces.add(new float[][]{vertex1, vertex2, vertex4});
                 faces.add(new float[][]{vertex1, vertex4, vertex3});
                 faces.add(new float[][]{vertex4, vertex2, vertex3});
+
+                if (!invalidIndices.isEmpty()) {
+                    throw new ModelValidationException("Матриця індексів використовує неіснуючі координати!\n" +
+                            "Завантажте правильні файли.\n\n" +
+                            "Неправильні індекси: " + invalidIndices);
+                }
+
+                Set<Integer> unusedVertices = new HashSet<>(availableVertices);
+                unusedVertices.removeAll(usedIndices);
+
+                // Maybe create a new special ModalWindow
+                if (!unusedVertices.isEmpty()) {
+                    throw new ModelValidationException("Таблиця координат містить точки, які не використовуються в матриці індексів. " +
+                            "Ви впевнені, що хочете продовжити?");
+                }
             }
 
             return faces;
