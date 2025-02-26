@@ -30,6 +30,8 @@ public class ModelController {
     private CustomCharacteristic customCharacteristic;
     @Setter
     private List<float[]> modelColors = null;
+    @Getter
+    private Map<Integer, float[]> displacements = new HashMap<>();
 
     private ModelController() {
         model = Model.builder()
@@ -95,5 +97,31 @@ public class ModelController {
             vertex[1] -= center.y;
             vertex[2] -= center.z;
         }
+    }
+
+    public void applyDisplacements(File displacementsFile) {
+        this.displacements = DataReader.readDisplacements(displacementsFile);
+        updateModelWithDisplacements();
+    }
+
+    public void updateModelWithDisplacements() {
+        if (displacements.isEmpty()) {
+            return;
+        }
+
+        Map<Integer, float[]> vertices = model.getVertices();
+        for (Map.Entry<Integer, float[]> entry : displacements.entrySet()) {
+            int index = entry.getKey();
+            float[] displacement = entry.getValue();
+
+            if (vertices.containsKey(index)) {
+                float[] vertex = vertices.get(index);
+                vertex[0] += displacement[0];
+                vertex[1] += displacement[1];
+                vertex[2] += displacement[2];
+            }
+        }
+
+        modelReady = true;
     }
 }

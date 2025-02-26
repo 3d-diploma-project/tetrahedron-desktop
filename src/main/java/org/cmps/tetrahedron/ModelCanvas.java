@@ -123,6 +123,7 @@ public class ModelCanvas extends AWTGLCanvas {
         glBindVertexArray(vao);
 
         if (modelController.isModelReady()) {
+            modelController.updateModelWithDisplacements();
             initVao();
             modelController.setModelReady(false);
         }

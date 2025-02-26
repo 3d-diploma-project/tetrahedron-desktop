@@ -9,6 +9,7 @@ import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
+
 import java.io.File;
 
 public class RightToolbar {
@@ -41,5 +42,15 @@ public class RightToolbar {
         }
     }
 
+    @FXML
+    private void selectDisplacementFile(MouseEvent mouseEvent) {
+        FileChooserController fileChooserController = FileChooserController.getInstance();
+        FileChooser fileChooser = fileChooserController.createFileChooser();
+        File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
+        if (file != null) {
+            fileChooserController.saveLastUsedDirectory(file);
+            ModelController.getInstance().applyDisplacements(file);
+        }
+    }
 }

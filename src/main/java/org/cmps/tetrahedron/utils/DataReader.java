@@ -183,4 +183,29 @@ public class DataReader {
             throw new RuntimeException(e);
         }
     }
+
+    public static Map<Integer, float[]> readDisplacements(File displacementsFile) {
+        Locale.setDefault(US);
+
+        Map<Integer, float[]> displacements = new HashMap<>();
+        try (Scanner scanner = new Scanner(displacementsFile)) {
+            while (scanner.hasNextLine()) {
+                String[] elements = scanner.nextLine().trim().split("\\s+");
+                if (elements.length != 4) {
+                    throw new RuntimeException("There is an error in the offset file format. Expect 4 value per line (index + 3 coordinates)");
+                }
+
+                int index = Integer.parseInt(elements[0]);
+                float dx = Float.parseFloat(elements[1]);
+                float dy = Float.parseFloat(elements[2]);
+                float dz = Float.parseFloat(elements[3]);
+
+                displacements.put(index, new float[]{dx, dy, dz});
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File was not found", e);
+        }
+
+        return displacements;
+    }
 }
