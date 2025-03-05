@@ -14,6 +14,7 @@ public class DataReader {
 
     private static final int VERTICES_WITH_INDICES = 4;
     private static final int FACE_WITH_INDICES = 5;
+    private static final int STRESS_WITH_INDICES = 7;
 
     public static Map<Integer, float[]> readVertices(File coordinatesTableFile)
             throws ModelValidationException {
@@ -134,12 +135,32 @@ public class DataReader {
         Locale.setDefault(US);
 
         Stress stressModel = new Stress();
+        int i = 1, index, startIndex;
 
         try (Scanner fid = new Scanner(stressData)) {
             List<Float> stress = new ArrayList<>();
+            Map<Integer, float[]> stressOneElement = new HashMap<>();
 
-            while (fid.hasNext()) {
-                float stressValue = fid.nextFloat();
+            while (fid.hasNextLine()) {
+                String[] elements = fid.nextLine().trim().split("\\s+");
+                float[] stressValues = new float[6];
+
+                if (elements.length == STRESS_WITH_INDICES) {
+                    index = Integer.parseInt(elements[0]);
+                    startIndex = 1;
+                } else {
+                    index = i++;
+                    startIndex = 0;
+                }
+
+                for (int j = startIndex; j < elements.length; j++) {
+                    stressValues[j - startIndex] = Float.parseFloat(elements[j]);;
+                }
+                stressOneElement.put(index, stressValues);
+
+
+                float stressValue = StressUtils.misesStress(stressValues[0], stressValues[1], stressValues[2],
+                                                            stressValues[3], stressValues[4], stressValues[5]);
 
                 if (stressValue < stressModel.getMinStress()) {
                     stressModel.setMinStress(stressValue);
@@ -150,7 +171,8 @@ public class DataReader {
                 stress.add(stressValue);
             }
 
-            stressModel.setStress(stress);
+            stressModel.setMisesStress(stress);
+            stressModel.setStress(stressOneElement);
             return stressModel;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

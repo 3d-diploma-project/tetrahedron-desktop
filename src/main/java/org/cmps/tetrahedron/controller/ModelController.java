@@ -65,7 +65,7 @@ public class ModelController {
         stress = DataReader.readStress(stressData);
 
         TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
-        stress.setColors(stress.getStress()
+        stress.setColors(stress.getMisesStress()
                 .stream()
                 .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
                 .toList());
