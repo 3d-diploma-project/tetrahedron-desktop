@@ -75,10 +75,10 @@ public class VertexInfoController {
             }
         }
 
-        float[] vertex = moveToOriginal(modelController.getVertices().get(closestNode));
+        float[] orig = modelController.getOriginalVertices().get(closestNode);
 
-        return "Closest node " + closestNode + "-> X: " + vertex[0]
-                + ", Y: " + vertex[1] + ", Z: " + vertex[2];
+        return "Closest node " + closestNode + "-> X: " + orig[0]
+                + ", Y: " + orig[1] + ", Z: " + orig[2];
     }
 
     private float[] moveToOriginal(float[] vertex) {

@@ -103,8 +103,11 @@ public class ModelController {
             current[2] = orig[2] + def[2];
         }
 
+        recenterModel();
+
         modelReady = true;
     }
+
 
     private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
         Map<Integer, float[]> copy = new HashMap<>();
@@ -127,11 +130,24 @@ public class ModelController {
             vertex[2] -= center.z;
         }
 
-        for (Map.Entry<Integer, float[]> entry : originalVertices.entrySet()) {
-            float[] vertex = entry.getValue();
-            vertex[0] -= center.x;
-            vertex[1] -= center.y;
-            vertex[2] -= center.z;
+    }
+
+    private void recenterModel() {
+        model = Model.builder()
+                .vertices(model.getVertices())
+                .faces(model.getFaces())
+                .build();
+
+        Vector3f center = model.getCenter();
+        if (center == null) {
+            return;
+        }
+
+        for (float[] v : model.getVertices().values()) {
+            v[0] -= center.x;
+            v[1] -= center.y;
+            v[2] -= center.z;
         }
     }
+
 }
