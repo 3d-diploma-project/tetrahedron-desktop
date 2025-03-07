@@ -10,7 +10,6 @@ public class Model {
 
     private final Map<Integer, float[]> vertices;
     private final List<float[][]> faces;
-    @Setter
     private Vector3f center;
 
     @Builder
@@ -35,7 +34,6 @@ public class Model {
         }
 
         System.out.println("Model Center: " + sumX / vertexCount + ", " + sumY / vertexCount + ", " + sumZ / vertexCount);
-        setCenter(new Vector3f(sumX / vertexCount, sumY / vertexCount, sumZ / vertexCount));
+        this.center = new Vector3f(sumX / vertexCount, sumY / vertexCount, sumZ / vertexCount);
     }
-
 }
