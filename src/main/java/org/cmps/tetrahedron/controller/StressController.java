@@ -5,7 +5,6 @@ import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.LegendUtils;
-import org.cmps.tetrahedron.utils.StressUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,12 +55,20 @@ public class StressController {
         stress.setStress(stressDataWithIndex);
     }
 
-    private static float calculateStress(float[] stressValues, StressDisplayOption option) {
+    private float calculateStress(float[] stressValues, StressDisplayOption option) {
         return switch (option) {
-            case MISES -> StressUtils.misesStress(stressValues[0], stressValues[1], stressValues[2],
+            case MISES -> misesStress(stressValues[0], stressValues[1], stressValues[2],
                     stressValues[3], stressValues[4], stressValues[5]);
             default -> throw new IllegalArgumentException("Unsupported stress display option: " + option);
         };
+    }
+
+    public static float misesStress(double qx, double txy, double tzx, double qy, double tyz, double qz) {
+        return (float) (1 / Math.sqrt(2)
+                * Math.sqrt(Math.pow(qx - qy, 2)
+                + Math.pow(qy - qz, 2)
+                + Math.pow(qz - qx, 2)
+                + 6 * (Math.pow(txy, 2) + Math.pow(tyz, 2) + Math.pow(tzx, 2))));
     }
 
 }
