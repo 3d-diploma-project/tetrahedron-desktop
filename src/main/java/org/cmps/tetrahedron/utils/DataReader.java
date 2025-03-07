@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
@@ -14,6 +15,7 @@ public class DataReader {
 
     private static final int VERTICES_WITH_INDICES = 4;
     private static final int FACE_WITH_INDICES = 5;
+    private static final int STRESS_WITH_INDICES = 7;
 
     public static Map<Integer, float[]> readVertices(File coordinatesTableFile)
             throws ModelValidationException {
@@ -130,28 +132,32 @@ public class DataReader {
         }
     }
 
-    public static Stress readStress(File stressData) {
+    public static Map<Integer, float[]> readStress(File stressData) {
         Locale.setDefault(US);
 
-        Stress stressModel = new Stress();
-
+        int i = 1, index, startIndex;
         try (Scanner fid = new Scanner(stressData)) {
-            List<Float> stress = new ArrayList<>();
+            Map<Integer, float[]> stressOneElement = new HashMap<>();
 
-            while (fid.hasNext()) {
-                float stressValue = fid.nextFloat();
+            while (fid.hasNextLine()) {
+                String[] elements = fid.nextLine().trim().split("\\s+");
+                float[] stressValues = new float[6];
 
-                if (stressValue < stressModel.getMinStress()) {
-                    stressModel.setMinStress(stressValue);
-                } else if (stressValue > stressModel.getMaxStress()) {
-                    stressModel.setMaxStress(stressValue);
+                if (elements.length == STRESS_WITH_INDICES) {
+                    index = Integer.parseInt(elements[0]);
+                    startIndex = 1;
+                } else {
+                    index = i++;
+                    startIndex = 0;
                 }
 
-                stress.add(stressValue);
+                for (int j = startIndex; j < elements.length; j++) {
+                    stressValues[j - startIndex] = Float.parseFloat(elements[j]);;
+                }
+                stressOneElement.put(index, stressValues);
             }
 
-            stressModel.setStress(stress);
-            return stressModel;
+            return stressOneElement;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

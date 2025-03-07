@@ -2,6 +2,7 @@ package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.model.Stress;
@@ -24,8 +25,6 @@ public class ModelController {
     private Model model;
     @Setter
     private boolean modelReady = false;
-    @Getter
-    private Stress stress;
     @Getter
     private CustomCharacteristic customCharacteristic;
     @Setter
@@ -59,18 +58,6 @@ public class ModelController {
             throw new RuntimeException("Model is not initialized");
         }
         return model.getVertices();
-    }
-
-    public void initStress(File stressData) {
-        stress = DataReader.readStress(stressData);
-
-        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
-        stress.setColors(stress.getStress()
-                .stream()
-                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
-                .toList());
-
-        modelColors = stress.getColors();
     }
 
     public void initCustomCharacteristic(File customDataFile) {
