@@ -95,7 +95,7 @@ public class ModelController {
 
         modelReady = true;
     }
-
+  
     private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
         Map<Integer, float[]> copy = new HashMap<>();
         for (Map.Entry<Integer, float[]> e : source.entrySet()) {
@@ -104,7 +104,7 @@ public class ModelController {
         }
         return copy;
     }
-
+  
     private void centerModel() {
         Vector3f center = model.getCenter();
 
