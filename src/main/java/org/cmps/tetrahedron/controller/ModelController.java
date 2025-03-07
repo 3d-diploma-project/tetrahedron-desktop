@@ -120,12 +120,7 @@ public class ModelController {
     }
 
     private void recenterModel() {
-        model = Model.builder()
-                .vertices(model.getVertices())
-                .faces(model.getFaces())
-                .build();
-
-        Vector3f center = model.getCenter();
+        Vector3f center = model.calculateModelCenter();
         if (center == null) {
             return;
         }

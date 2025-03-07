@@ -19,7 +19,7 @@ public class Model {
         this.center = calculateModelCenter();
     }
 
-    private Vector3f calculateModelCenter() {
+    public Vector3f calculateModelCenter() {
         if (vertices == null || vertices.isEmpty()) {
             System.out.println("Model has no vertices");
             return null;
