@@ -95,18 +95,16 @@ public class ModelController {
 
         modelReady = true;
     }
-
-
+  
     private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
         Map<Integer, float[]> copy = new HashMap<>();
         for (Map.Entry<Integer, float[]> e : source.entrySet()) {
             float[] v = e.getValue();
-            copy.put(e.getKey(), new float[]{ v[0], v[1], v[2] });
+            copy.put(e.getKey(), new float[]{v[0], v[1], v[2]});
         }
         return copy;
     }
-
-
+  
     private void centerModel() {
         Vector3f center = model.getCenter();
 
@@ -117,6 +115,5 @@ public class ModelController {
             vertex[1] -= center.y;
             vertex[2] -= center.z;
         }
-
     }
 }
