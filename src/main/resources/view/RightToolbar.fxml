@@ -18,7 +18,7 @@
 
     <VBox styleClass="vbox-label-button">
         <Label styleClass="data-label" text="Переміщення у вузлах"/>
-        <Button styleClass="load-button" text="Завантажити файл" onMouseClicked="#selectDeformationsFile"/>
+        <Button styleClass="load-button" text="Завантажити файл" onMouseClicked="#selectDisplacementsFile"/>
     </VBox>
 
     <VBox styleClass="vbox-label-button">

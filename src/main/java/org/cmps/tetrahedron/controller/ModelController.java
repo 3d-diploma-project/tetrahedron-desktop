@@ -89,7 +89,7 @@ public class ModelController {
         modelColors = customCharacteristic.getColors();
     }
 
-    public void applyDeformations(File deformationsFile) throws ModelValidationException {
+    public void applyDisplacements(File deformationsFile) throws ModelValidationException {
         List<float[]> deformations = DataReader.readDeformations(deformationsFile, originalVertices.size());
 
         int i = 0;

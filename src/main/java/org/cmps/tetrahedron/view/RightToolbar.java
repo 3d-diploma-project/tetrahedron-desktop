@@ -42,7 +42,7 @@ public class RightToolbar {
     }
 
     @FXML
-    private void selectDeformationsFile(MouseEvent event) {
+    private void selectDisplacementsFile(MouseEvent event) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
@@ -50,7 +50,7 @@ public class RightToolbar {
         if (file != null) {
             fileChooserController.saveLastUsedDirectory(file);
             try {
-                ModelController.getInstance().applyDeformations(file);
+                ModelController.getInstance().applyDisplacements(file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
