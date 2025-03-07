@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.exception.InvalidModelDataException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
@@ -62,7 +63,7 @@ public class DataReader {
 
     public static List<float[][]> readIndexesAndConvertToFaces(File indicesMatrix,
                                                                Map<Integer, float[]> verticesCoordinates)
-            throws ModelValidationException {
+            throws InvalidModelDataException, ModelValidationException {
         Locale.setDefault(US);
 
         Set<Integer> usedIndices = new HashSet<>();
@@ -122,7 +123,7 @@ public class DataReader {
                 boolean userChoice = dialog.showAndWait();
 
                 if (!userChoice) {
-                    throw new ModelValidationException("Користувач відмовився продовжувати завантаження.");
+                    throw new InvalidModelDataException("Користувач відмовився продовжувати завантаження.");
                 }
             }
 
