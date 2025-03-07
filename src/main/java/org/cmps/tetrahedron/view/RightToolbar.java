@@ -5,6 +5,7 @@ import javafx.stage.FileChooser;
 import org.cmps.tetrahedron.controller.FileChooserController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.SceneController;
+import org.cmps.tetrahedron.controller.StressController;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
 
@@ -21,8 +22,8 @@ public class RightToolbar {
 
         if (file != null) {
             fileChooserController.saveLastUsedDirectory(file);
-            ModelController.getInstance().initStress(file);
-            Stress stressModel = ModelController.getInstance().getStress();
+            StressController.getInstance().initStress(file);
+            Stress stressModel = StressController.getInstance().getStress();
             LegendView.getInstance().updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
         }
     }
