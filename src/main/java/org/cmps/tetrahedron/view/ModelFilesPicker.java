@@ -66,11 +66,11 @@ public class ModelFilesPicker {
         try {
             modelController.initModelData(nodesController.getFile(), indicesController.getFile());
         } catch (ModelValidationException e) {
-            new ErrorDialog("Помилка!", e.getMessage()).show();
             return;
         }
 
         if (dialog != null) {
+
             dialog.close();
         }
     }
