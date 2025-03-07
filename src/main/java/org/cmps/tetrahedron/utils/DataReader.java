@@ -15,7 +15,9 @@ public class DataReader {
 
     private static final int VERTICES_WITH_INDICES = 4;
     private static final int FACE_WITH_INDICES = 5;
+    private static final int DEFORMATIONS_WITH_INDEX = 4;
     private static final int STRESS_WITH_INDICES = 7;
+
 
     public static Map<Integer, float[]> readVertices(File coordinatesTableFile)
             throws ModelValidationException {
@@ -188,5 +190,80 @@ public class DataReader {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<float[]> readDeformations(File deformationsFile, int expectedVerticesCount)
+            throws ModelValidationException {
+        Locale.setDefault(US);
+
+        Map<Integer, float[]> deformationsMap = new HashMap<>();
+
+        int autoIndex = 1;
+        try (Scanner fid = new Scanner(deformationsFile)) {
+            while (fid.hasNextLine()) {
+                String line = fid.nextLine().trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
+
+                String[] elements = line.split("\\s+");
+                if (elements.length < 3 || elements.length > 4) {
+                    throw new ModelValidationException(
+                            "У кожному рядку файлу деформацій має бути 3 (dx, dy, dz) чи 4 (index, dx, dy, dz) числа.\n" +
+                                    "Перевірте строку: " + line
+                    );
+                }
+
+                int index;
+                int startIdx;
+
+                if (elements.length == DEFORMATIONS_WITH_INDEX) {
+                    index = Integer.parseInt(elements[0]);
+                    startIdx = 1;
+                } else {
+                    index = autoIndex++;
+                    startIdx = 0;
+                }
+
+                float dx = Float.parseFloat(elements[startIdx]);
+                float dy = Float.parseFloat(elements[startIdx + 1]);
+                float dz = Float.parseFloat(elements[startIdx + 2]);
+
+                if (deformationsMap.containsKey(index)) {
+                    throw new ModelValidationException(
+                            "Файл деформацій містить індекс, що повторюється: " + index
+                    );
+                }
+                deformationsMap.put(index, new float[]{dx, dy, dz});
+            }
+        } catch (FileNotFoundException e) {
+            throw new ModelValidationException(
+                    "Не вдалося знайти файл деформацій: " + deformationsFile.getAbsolutePath());
+        } catch (NumberFormatException e) {
+            throw new ModelValidationException("Помилка перетворення числа у файлі деформацій");
+        }
+
+        if (deformationsMap.size() != expectedVerticesCount) {
+            throw new ModelValidationException(
+                    "Кількість прочитаних деформацій (" + deformationsMap.size() +
+                            ") не збігається з кількістю вершин (" + expectedVerticesCount + ")"
+            );
+        }
+
+        List<float[]> result = new ArrayList<>(Collections.nCopies(expectedVerticesCount, null));
+
+        for (Map.Entry<Integer, float[]> e : deformationsMap.entrySet()) {
+            int idx = e.getKey();
+            float[] def = e.getValue();
+
+            if (idx < 1 || idx > expectedVerticesCount) {
+                throw new ModelValidationException(
+                        "Індекс у файлі деформацій вийшов за межі: " + idx
+                );
+            }
+            result.set(idx - 1, def);
+        }
+
+        return result;
     }
 }
