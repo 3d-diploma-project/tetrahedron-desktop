@@ -90,7 +90,8 @@ public class ModelController {
             current[2] = orig[2] + def[2];
         }
 
-        recenterModel();
+        model.calculateModelCenter();
+        centerModel();
 
         modelReady = true;
     }
@@ -118,18 +119,4 @@ public class ModelController {
         }
 
     }
-
-    private void recenterModel() {
-        Vector3f center = model.calculateModelCenter();
-        if (center == null) {
-            return;
-        }
-
-        for (float[] v : model.getVertices().values()) {
-            v[0] -= center.x;
-            v[1] -= center.y;
-            v[2] -= center.z;
-        }
-    }
-
 }

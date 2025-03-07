@@ -10,19 +10,19 @@ public class Model {
 
     private final Map<Integer, float[]> vertices;
     private final List<float[][]> faces;
-    private final Vector3f center;
+    @Setter
+    private Vector3f center;
 
     @Builder
     public Model(Map<Integer, float[]> vertices, List<float[][]> faces) {
         this.vertices = vertices;
         this.faces = faces;
-        this.center = calculateModelCenter();
+        calculateModelCenter();
     }
 
-    public Vector3f calculateModelCenter() {
+    public void calculateModelCenter() {
         if (vertices == null || vertices.isEmpty()) {
             System.out.println("Model has no vertices");
-            return null;
         }
 
         float sumX = 0, sumY = 0, sumZ = 0;
@@ -35,7 +35,7 @@ public class Model {
         }
 
         System.out.println("Model Center: " + sumX / vertexCount + ", " + sumY / vertexCount + ", " + sumZ / vertexCount);
-        return new Vector3f(sumX / vertexCount, sumY / vertexCount, sumZ / vertexCount);
+        setCenter(new Vector3f(sumX / vertexCount, sumY / vertexCount, sumZ / vertexCount));
     }
 
 }
