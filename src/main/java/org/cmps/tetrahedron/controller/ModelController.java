@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.controller;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.exception.InvalidModelDataException;
+import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.model.Stress;
@@ -26,11 +27,11 @@ public class ModelController {
     @Setter
     private boolean modelReady = false;
     @Getter
-    private Stress stress;
-    @Getter
     private CustomCharacteristic customCharacteristic;
     @Setter
     private List<float[]> modelColors = null;
+
+    private Map<Integer, float[]> originalVertices;
 
     private ModelController() {
         model = Model.builder()
@@ -41,6 +42,8 @@ public class ModelController {
 
     public void initModelData(File nodes, File indices) throws ModelValidationException, InvalidModelDataException {
         Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
+
+        originalVertices = deepCopyVertices(vertices);
 
         model = Model.builder()
                 .vertices(vertices)
@@ -62,18 +65,6 @@ public class ModelController {
         return model.getVertices();
     }
 
-    public void initStress(File stressData) {
-        stress = DataReader.readStress(stressData);
-
-        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
-        stress.setColors(stress.getStress()
-                .stream()
-                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
-                .toList());
-
-        modelColors = stress.getColors();
-    }
-
     public void initCustomCharacteristic(File customDataFile) {
         customCharacteristic = DataReader.readCustomCharacteristic(customDataFile);
 
@@ -86,6 +77,37 @@ public class ModelController {
         modelColors = customCharacteristic.getColors();
     }
 
+    public void applyDisplacements(File deformationsFile) throws ModelValidationException {
+        List<float[]> deformations = DataReader.readDeformations(deformationsFile, originalVertices.size());
+
+        int i = 0;
+        for (Integer idx : originalVertices.keySet()) {
+            float[] orig = originalVertices.get(idx);
+            float[] def = deformations.get(i++);
+
+            float[] current = model.getVertices().get(idx);
+            current[0] = orig[0] + def[0];
+            current[1] = orig[1] + def[1];
+            current[2] = orig[2] + def[2];
+        }
+
+        model.calculateModelCenter();
+        centerModel();
+
+        modelReady = true;
+    }
+
+
+    private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
+        Map<Integer, float[]> copy = new HashMap<>();
+        for (Map.Entry<Integer, float[]> e : source.entrySet()) {
+            float[] v = e.getValue();
+            copy.put(e.getKey(), new float[]{ v[0], v[1], v[2] });
+        }
+        return copy;
+    }
+
+
     private void centerModel() {
         Vector3f center = model.getCenter();
 
@@ -96,5 +118,6 @@ public class ModelController {
             vertex[1] -= center.y;
             vertex[2] -= center.z;
         }
+
     }
 }
