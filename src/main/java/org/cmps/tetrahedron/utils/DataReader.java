@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
@@ -131,7 +132,7 @@ public class DataReader {
         }
     }
 
-    public static Stress readStress(File stressData) {
+    public static Stress readStress(File stressData, StressDisplayOption option) {
         Locale.setDefault(US);
 
         Stress stressModel = new Stress();
@@ -159,8 +160,7 @@ public class DataReader {
                 stressOneElement.put(index, stressValues);
 
 
-                float stressValue = StressUtils.misesStress(stressValues[0], stressValues[1], stressValues[2],
-                                                            stressValues[3], stressValues[4], stressValues[5]);
+                float stressValue = calculateStress(stressValues, option);
 
                 if (stressValue < stressModel.getMinStress()) {
                     stressModel.setMinStress(stressValue);
@@ -171,13 +171,22 @@ public class DataReader {
                 stress.add(stressValue);
             }
 
-            stressModel.setMisesStress(stress);
+            stressModel.setStressToDisplay(stress);
             stressModel.setStress(stressOneElement);
             return stressModel;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+
+    private static float calculateStress(float[] stressValues, StressDisplayOption option) {
+        return switch (option) {
+            case MISES -> StressUtils.misesStress(stressValues[0], stressValues[1], stressValues[2],
+                    stressValues[3], stressValues[4], stressValues[5]);
+            default -> throw new IllegalArgumentException("Unsupported stress display option: " + option);
+        };
+    }
+
 
     public static CustomCharacteristic readCustomCharacteristic(File customData) {
         Locale.setDefault(US);

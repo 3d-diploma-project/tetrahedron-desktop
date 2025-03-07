@@ -2,6 +2,7 @@ package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.model.Stress;
@@ -62,10 +63,10 @@ public class ModelController {
     }
 
     public void initStress(File stressData) {
-        stress = DataReader.readStress(stressData);
+        stress = DataReader.readStress(stressData, StressDisplayOption.MISES);
 
         TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
-        stress.setColors(stress.getMisesStress()
+        stress.setColors(stress.getStressToDisplay()
                 .stream()
                 .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
                 .toList());
