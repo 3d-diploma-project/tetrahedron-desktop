@@ -132,14 +132,11 @@ public class DataReader {
         }
     }
 
-    public static Stress readStress(File stressData, StressDisplayOption option) {
+    public static Map<Integer, float[]> readStress(File stressData) {
         Locale.setDefault(US);
 
-        Stress stressModel = new Stress();
         int i = 1, index, startIndex;
-
         try (Scanner fid = new Scanner(stressData)) {
-            List<Float> stress = new ArrayList<>();
             Map<Integer, float[]> stressOneElement = new HashMap<>();
 
             while (fid.hasNextLine()) {
@@ -158,35 +155,13 @@ public class DataReader {
                     stressValues[j - startIndex] = Float.parseFloat(elements[j]);;
                 }
                 stressOneElement.put(index, stressValues);
-
-
-                float stressValue = calculateStress(stressValues, option);
-
-                if (stressValue < stressModel.getMinStress()) {
-                    stressModel.setMinStress(stressValue);
-                } else if (stressValue > stressModel.getMaxStress()) {
-                    stressModel.setMaxStress(stressValue);
-                }
-
-                stress.add(stressValue);
             }
 
-            stressModel.setStressToDisplay(stress);
-            stressModel.setStress(stressOneElement);
-            return stressModel;
+            return stressOneElement;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
-
-    private static float calculateStress(float[] stressValues, StressDisplayOption option) {
-        return switch (option) {
-            case MISES -> StressUtils.misesStress(stressValues[0], stressValues[1], stressValues[2],
-                    stressValues[3], stressValues[4], stressValues[5]);
-            default -> throw new IllegalArgumentException("Unsupported stress display option: " + option);
-        };
-    }
-
 
     public static CustomCharacteristic readCustomCharacteristic(File customData) {
         Locale.setDefault(US);

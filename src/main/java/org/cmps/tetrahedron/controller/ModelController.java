@@ -26,8 +26,6 @@ public class ModelController {
     @Setter
     private boolean modelReady = false;
     @Getter
-    private Stress stress;
-    @Getter
     private CustomCharacteristic customCharacteristic;
     @Setter
     private List<float[]> modelColors = null;
@@ -60,18 +58,6 @@ public class ModelController {
             throw new RuntimeException("Model is not initialized");
         }
         return model.getVertices();
-    }
-
-    public void initStress(File stressData) {
-        stress = DataReader.readStress(stressData, StressDisplayOption.MISES);
-
-        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
-        stress.setColors(stress.getStressToDisplay()
-                .stream()
-                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
-                .toList());
-
-        modelColors = stress.getColors();
     }
 
     public void initCustomCharacteristic(File customDataFile) {
