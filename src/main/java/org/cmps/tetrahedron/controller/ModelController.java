@@ -2,6 +2,7 @@ package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.cmps.tetrahedron.exception.InvalidModelDataException;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
@@ -39,7 +40,7 @@ public class ModelController {
                 .build();
     }
 
-    public void initModelData(File nodes, File indices) throws ModelValidationException {
+    public void initModelData(File nodes, File indices) throws ModelValidationException, InvalidModelDataException {
         Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
 
         originalVertices = deepCopyVertices(vertices);

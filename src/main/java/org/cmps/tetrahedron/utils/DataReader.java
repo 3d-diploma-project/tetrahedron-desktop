@@ -1,9 +1,11 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.exception.InvalidModelDataException;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
+import org.cmps.tetrahedron.view.WarningDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,7 +67,7 @@ public class DataReader {
 
     public static List<float[][]> readIndexesAndConvertToFaces(File indicesMatrix,
                                                                Map<Integer, float[]> verticesCoordinates)
-            throws ModelValidationException {
+            throws InvalidModelDataException, ModelValidationException {
         Locale.setDefault(US);
 
         Set<Integer> usedIndices = new HashSet<>();
@@ -119,10 +121,14 @@ public class DataReader {
             Set<Integer> unusedVertices = new HashSet<>(availableVertices);
             unusedVertices.removeAll(usedIndices);
 
-            // Maybe create a new special ModalWindow
             if (!unusedVertices.isEmpty()) {
-                throw new ModelValidationException("Таблиця координат містить точки, які не використовуються в матриці індексів. " +
-                        "Ви впевнені, що хочете продовжити?");
+                WarningDialog dialog = new WarningDialog("Увага!",
+                        "Таблиця координат містить точки, які не використовуються в матриці індексів.\n\nВи впевнені, що хочете продовжити?");
+                boolean userChoice = dialog.showAndWait();
+
+                if (!userChoice) {
+                    throw new InvalidModelDataException("Користувач відмовився продовжувати завантаження.");
+                }
             }
 
             return faces;

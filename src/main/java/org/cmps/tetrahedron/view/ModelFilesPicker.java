@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.ModelController;
+import org.cmps.tetrahedron.exception.InvalidModelDataException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.ResourceReader;
@@ -67,6 +68,8 @@ public class ModelFilesPicker {
             modelController.initModelData(nodesController.getFile(), indicesController.getFile());
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();
+            return;
+        } catch (InvalidModelDataException e) {
             return;
         }
 
