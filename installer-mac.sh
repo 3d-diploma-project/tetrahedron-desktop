@@ -1,11 +1,17 @@
+#!/bin/bash
+
+set -e
+
+APP_VERSION="1.1.0"
+
 mkdir tmp tmp/app
-cp target/tetrahedron-desktop-1.0.0-SNAPSHOT-jar-with-dependencies.jar tmp/app/Tetrahedron.jar
+cp target/tetrahedron-desktop-$APP_VERSION-SNAPSHOT-jar-with-dependencies.jar tmp/app/Tetrahedron.jar
 
 jlink --strip-debug --no-man-pages --no-header-files --compress zip-6 \
   --add-modules java.base,java.scripting,java.desktop,jdk.unsupported,jdk.unsupported.desktop --output tmp/jre
 
 jpackage --input tmp/app --main-jar Tetrahedron.jar --main-class org.cmps.tetrahedron.Tetrahedron --runtime-image tmp/jre \
-  --name Tetrahedron --vendor "CMPS, KhPI" --app-version 1.0.0 --icon src/main/resources/logo.icns \
-  --type app-image --dest dist
+  --name Tetrahedron --vendor "CMPS, KhPI" --app-version $APP_VERSION --icon src/main/resources/logo.icns \
+  --mac-package-identifier cmps.tetrahedron --type dmg --dest dist
 
 rm -rf tmp
