@@ -16,18 +16,24 @@
     -fx-max-width: 50px;
     -fx-max-height: 50px;
     -fx-padding: 0;
-
     -fx-stroke: #0E0E0E;
 }
 
 .button:focused {
     -fx-background-color: #1E0094;
+}
+
+.button:focused > .button {
     -fx-stroke: #FAFCFE;
 }
 
 .button:hover {
     -fx-background-color: #FAFCFE;
-    -fx-stroke: #0E0E0E !important;
+    -fx-stroke: #0E0E0E;
+}
+
+.button:hover > .button {
+    -fx-stroke: #0E0E0E;
 }
 
 .button-selected {
@@ -36,6 +42,10 @@
 }
 
 .button-selected:hover {
-    -fx-background-color: #FAFCFE;
-    -fx-stroke: #0E0E0E !important;
+    -fx-background-color: #1E0094;
+    -fx-stroke: #FAFCFE;
+}
+
+.button-selected:hover > .button {
+    -fx-stroke: #FAFCFE;
 }
