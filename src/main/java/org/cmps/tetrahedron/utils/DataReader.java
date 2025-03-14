@@ -1,10 +1,8 @@
 package org.cmps.tetrahedron.utils;
 
 import org.cmps.tetrahedron.exception.InvalidModelDataException;
-import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
-import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.view.WarningDialog;
 
 import java.io.File;
@@ -160,7 +158,7 @@ public class DataReader {
                 }
 
                 for (int j = startIndex; j < elements.length; j++) {
-                    stressValues[j - startIndex] = Float.parseFloat(elements[j]);;
+                    stressValues[j - startIndex] = Float.parseFloat(elements[j]);
                 }
                 stressOneElement.put(index, stressValues);
             }
@@ -171,30 +169,46 @@ public class DataReader {
         }
     }
 
-    public static CustomCharacteristic readCustomCharacteristic(File customData) {
+    public static CustomCharacteristic readCustomCharacteristic(File customData) throws ModelValidationException {
         Locale.setDefault(US);
 
         CustomCharacteristic customModel = new CustomCharacteristic();
+        List<Float> values = new ArrayList<>();
 
         try (Scanner fid = new Scanner(customData)) {
-            List<Float> values = new ArrayList<>();
+            if (!fid.hasNext()) {
+                throw new ModelValidationException("Файл характеристик пустий або недоступний.");
+            }
 
             while (fid.hasNext()) {
-                float value = fid.nextFloat();
+                String token = fid.next();
+                try {
+                    float value = Float.parseFloat(token);
 
-                if (value < customModel.getMinValue()) {
-                    customModel.setMinValue(value);
-                } else if (value > customModel.getMaxValue()) {
-                    customModel.setMaxValue(value);
+                    if (Float.isNaN(value) || Float.isInfinite(value)) {
+                        throw new ModelValidationException("Файл містить некоректні числові значення: " + value);
+                    }
+
+                    if (value < customModel.getMinValue()) {
+                        customModel.setMinValue(value);
+                    } else if (value > customModel.getMaxValue()) {
+                        customModel.setMaxValue(value);
+                    }
+
+                    values.add(value);
+                } catch (NumberFormatException e) {
+                    throw new ModelValidationException("Помилка зчитування значення: " + token);
                 }
+            }
 
-                values.add(value);
+            if (values.isEmpty()) {
+                throw new ModelValidationException("Файл характеристик не містить жодного валідного значення.");
             }
 
             customModel.setValues(values);
             return customModel;
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new ModelValidationException("Файл характеристик не знайдено: " + customData.getAbsolutePath());
         }
     }
 

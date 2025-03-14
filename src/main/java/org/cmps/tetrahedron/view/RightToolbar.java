@@ -6,6 +6,7 @@ import org.cmps.tetrahedron.controller.FileChooserController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.SceneController;
 import org.cmps.tetrahedron.controller.StressController;
+import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
 
@@ -29,7 +30,7 @@ public class RightToolbar {
     }
 
     @FXML
-    private void selectCustomCharacteristicFile(MouseEvent mouseEvent) {
+    private void selectCustomCharacteristicFile(MouseEvent mouseEvent) throws ModelValidationException {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
