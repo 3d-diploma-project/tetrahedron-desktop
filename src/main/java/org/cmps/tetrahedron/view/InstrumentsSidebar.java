@@ -52,13 +52,18 @@ public class InstrumentsSidebar {
 
 
     private void focus(Button button) {
-        button.getStyleClass().add("button-selected");
+        if(!button.getStyleClass().contains("button-selected")) {
+            button.getStyleClass().add("button-selected");
+        }
+
         Node graphic = button.getGraphic();
         if (graphic == null) {
             return;
         }
 
-        graphic.getStyleClass().add("button-selected");
+        if(!graphic.getStyleClass().contains("button-selected")) {
+            graphic.getStyleClass().add("button-selected");
+        }
     }
 
     private void unFocus(Button button) {
@@ -68,6 +73,6 @@ public class InstrumentsSidebar {
             return;
         }
 
-        graphic.getStyleClass().remove("button-selected");
+        graphic.getStyleClass().removeAll("button-selected");
     }
 }
