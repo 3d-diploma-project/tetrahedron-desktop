@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.view;
 
 import org.cmps.tetrahedron.controller.MouseController;
+import org.cmps.tetrahedron.enums.VerticeMoveMode;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -33,13 +34,13 @@ public class InstrumentsSidebar extends VBox {
 
             switch (index) {
                 case 0:
-                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode("cursor"));
+                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode(VerticeMoveMode.CURSOR));
                     break;
                 case 1:
-                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode("upDown"));
+                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode(VerticeMoveMode.UP_DOWN));
                     break;
                 case 2:
-                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode("leftRight"));
+                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode(VerticeMoveMode.LEFT_RIGHT));
                     break;
             }
 
