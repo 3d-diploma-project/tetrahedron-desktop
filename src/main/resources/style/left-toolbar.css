@@ -1,0 +1,41 @@
+
+.instrument-sidebar {
+    -fx-max-height: 0px;
+    -fx-padding: 14;
+    -fx-spacing: 10;
+    -fx-background-color: #ECF4FE;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+}
+
+.button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 50%;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-max-width: 50px;
+    -fx-max-height: 50px;
+    -fx-padding: 0;
+
+    -fx-stroke: #0E0E0E;
+}
+
+.button:focused {
+    -fx-background-color: #1E0094;
+    -fx-stroke: #FAFCFE;
+}
+
+.button:hover {
+    -fx-background-color: #FAFCFE;
+    -fx-stroke: #0E0E0E !important;
+}
+
+.button-selected {
+    -fx-background-color: #1E0094;
+    -fx-stroke: #FAFCFE;
+}
+
+.button-selected:hover {
+    -fx-background-color: #FAFCFE;
+    -fx-stroke: #0E0E0E !important;
+}

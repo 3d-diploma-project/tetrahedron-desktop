@@ -36,8 +36,7 @@ public class SceneController {
 
         HBox navbar = new Navbar();
 
-        VBox instrumentSidebar = new InstrumentsSidebar();
-        instrumentSidebar.getStyleClass().add("instrument-sidebar");
+        VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
 
         VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class);
 

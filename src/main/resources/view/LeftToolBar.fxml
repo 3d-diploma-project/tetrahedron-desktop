@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cmps.tetrahedron.view.InstrumentsSidebar"
+      stylesheets="@/style/left-toolbar.css"
+      styleClass="instrument-sidebar">
+
+    <Button styleClass="button, button-selected" fx:id="cursor" onMouseClicked="#clickOnCursor">
+        <graphic>
+            <fx:include source="/icon/Cursor.fxml"/>
+        </graphic>
+    </Button>
+
+    <Button styleClass="button" fx:id="topBottom" onMouseClicked="#clickOnTopBottom">
+        <graphic>
+            <fx:include source="/icon/TopBottom.fxml"/>
+        </graphic>
+    </Button>
+
+    <Button styleClass="button" fx:id="leftRight" onMouseClicked="#clickOnLeftRight">
+        <graphic>
+            <fx:include source="/icon/LeftRight.fxml"/>
+        </graphic>
+    </Button>
+
+    <Button styleClass="button" onMouseClicked="#clickOnColorPicker">
+        <graphic>
+            <fx:include source="/icon/ColorPicker.fxml"/>
+        </graphic>
+    </Button>
+
+</VBox>

@@ -1,53 +1,73 @@
 package org.cmps.tetrahedron.view;
 
+import javafx.fxml.FXML;
+import javafx.scene.Node;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.enums.VerticeMoveMode;
-import org.cmps.tetrahedron.utils.ResourceReader;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 
+public class InstrumentsSidebar {
 
-public class InstrumentsSidebar extends VBox {
+    private final MouseController mouseController = MouseController.getInstance();
 
-    private Button customButtonWithImage(String filePath) {
-        ImageView customButtonImage = ResourceReader.imageReader(filePath);
-        Button customButton = new Button("", customButtonImage);
-        customButtonImage.setFitWidth(24);
-        customButtonImage.setFitHeight(24);
-        customButton.getStyleClass().add("sidebar-button");
-        customButton.setMinSize(40, 40);
-        customButtonImage.setPickOnBounds(true);
-        customButtonImage.setMouseTransparent(false);
-        return customButton;
+    @FXML
+    private Button cursor;
+
+    @FXML
+    private Button topBottom;
+
+    @FXML
+    private Button leftRight;
+
+    @FXML
+    public void clickOnCursor() {
+        mouseController.setVerticalMoveMode(VerticeMoveMode.CURSOR);
+
+        focus(cursor);
+        unFocus(leftRight);
+        unFocus(topBottom);
     }
 
-    public InstrumentsSidebar() {
-        getStyleClass().add("sidebar");
+    @FXML
+    public void clickOnTopBottom() {
+        mouseController.setVerticalMoveMode(VerticeMoveMode.UP_DOWN);
 
-        String[] iconsFilePaths = {"/icon/cursor.png", "/icon/upDown.png", "/icon/leftRight.png", "/icon/img.png",
-                "/icon/filling.png", "/icon/delete.png"};
+        focus(topBottom);
+        unFocus(leftRight);
+        unFocus(cursor);
+    }
 
-        int index = 0;
-        for (String iconFilePath : iconsFilePaths) {
-            Button customSidebarBtn = customButtonWithImage(iconFilePath);
+    @FXML
+    public void clickOnLeftRight() {
+        mouseController.setVerticalMoveMode(VerticeMoveMode.LEFT_RIGHT);
 
-            switch (index) {
-                case 0:
-                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode(VerticeMoveMode.CURSOR));
-                    break;
-                case 1:
-                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode(VerticeMoveMode.UP_DOWN));
-                    break;
-                case 2:
-                    customSidebarBtn.setOnAction(event -> MouseController.getInstance().setVerticalMoveMode(VerticeMoveMode.LEFT_RIGHT));
-                    break;
-            }
+        focus(leftRight);
+        unFocus(topBottom);
+        unFocus(cursor);
+    }
 
-            getChildren().add(customSidebarBtn);
-            index++;
+    @FXML
+    public void clickOnColorPicker() {
+    }
+
+
+    private void focus(Button button) {
+        button.getStyleClass().add("button-selected");
+        Node graphic = button.getGraphic();
+        if (graphic == null) {
+            return;
         }
+
+        graphic.getStyleClass().add("button-selected");
     }
 
-}
+    private void unFocus(Button button) {
+        button.getStyleClass().remove("button-selected");
+        Node graphic = button.getGraphic();
+        if (graphic == null) {
+            return;
+        }
 
+        graphic.getStyleClass().remove("button-selected");
+    }
+}
