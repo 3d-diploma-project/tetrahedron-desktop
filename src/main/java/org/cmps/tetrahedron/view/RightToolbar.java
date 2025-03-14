@@ -30,16 +30,20 @@ public class RightToolbar {
     }
 
     @FXML
-    private void selectCustomCharacteristicFile(MouseEvent mouseEvent) throws ModelValidationException {
+    private void selectCustomCharacteristicFile(MouseEvent mouseEvent) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
-        if (file != null) {
-            fileChooserController.saveLastUsedDirectory(file);
-            ModelController.getInstance().initCustomCharacteristic(file);
-            CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
-            LegendView.getInstance().updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+        try {
+            if (file != null) {
+                fileChooserController.saveLastUsedDirectory(file);
+                ModelController.getInstance().initCustomCharacteristic(file);
+                CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
+                LegendView.getInstance().updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+            }
+        } catch (ModelValidationException e) {
+            new ErrorDialog("Помилка!", e.getMessage()).show();
         }
     }
 
