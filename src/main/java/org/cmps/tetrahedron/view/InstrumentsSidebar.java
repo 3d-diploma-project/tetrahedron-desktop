@@ -1,31 +1,78 @@
 package org.cmps.tetrahedron.view;
 
-import org.cmps.tetrahedron.utils.ResourceReader;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import org.cmps.tetrahedron.controller.MouseController;
+import org.cmps.tetrahedron.enums.VerticeMoveMode;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 
-public class InstrumentsSidebar extends VBox {
+public class InstrumentsSidebar {
 
-    private Button customButtonWithImage(String filePath) {
-        ImageView customButtonImage = ResourceReader.imageReader(filePath);
-        Button customButton = new Button("", customButtonImage);
-        customButtonImage.setFitWidth(24);
-        customButtonImage.setFitHeight(24);
-        customButton.getStyleClass().add("sidebar-button");
-        return customButton;
+    private final MouseController mouseController = MouseController.getInstance();
+
+    @FXML
+    private Button cursor;
+
+    @FXML
+    private Button topBottom;
+
+    @FXML
+    private Button leftRight;
+
+    @FXML
+    public void clickOnCursor() {
+        mouseController.setVerticalMoveMode(VerticeMoveMode.CURSOR);
+
+        focus(cursor);
+        unFocus(leftRight);
+        unFocus(topBottom);
     }
 
-    public InstrumentsSidebar() {
-        getStyleClass().add("sidebar");
+    @FXML
+    public void clickOnTopBottom() {
+        mouseController.setVerticalMoveMode(VerticeMoveMode.UP_DOWN);
 
-        String[] iconsFilePaths = {"/icon/cursor.png", "/icon/move.png", "/icon/reload.png", "/icon/scale.png",
-                "/icon/copy.png", "/icon/delete.png"};
+        focus(topBottom);
+        unFocus(leftRight);
+        unFocus(cursor);
+    }
 
-        for (String iconFilePath : iconsFilePaths) {
-            Button customSidebarBtn = customButtonWithImage(iconFilePath);
-            getChildren().add(customSidebarBtn);
+    @FXML
+    public void clickOnLeftRight() {
+        mouseController.setVerticalMoveMode(VerticeMoveMode.LEFT_RIGHT);
+
+        focus(leftRight);
+        unFocus(topBottom);
+        unFocus(cursor);
+    }
+
+    @FXML
+    public void clickOnColorPicker() {
+    }
+
+
+    private void focus(Button button) {
+        if(!button.getStyleClass().contains("button-selected")) {
+            button.getStyleClass().add("button-selected");
+        }
+
+        Node graphic = button.getGraphic();
+        if (graphic == null) {
+            return;
+        }
+
+        if(!graphic.getStyleClass().contains("button-selected")) {
+            graphic.getStyleClass().add("button-selected");
         }
     }
-}
 
+    private void unFocus(Button button) {
+        button.getStyleClass().remove("button-selected");
+        Node graphic = button.getGraphic();
+        if (graphic == null) {
+            return;
+        }
+
+        graphic.getStyleClass().removeAll("button-selected");
+    }
+}

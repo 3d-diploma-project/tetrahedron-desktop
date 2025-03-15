@@ -21,7 +21,7 @@ public class Navbar extends HBox {
         languageSelector.getItems().add("UA");
         languageSelector.getItems().add("DE");
         languageSelector.getItems().add("NL");
-        languageSelector.setValue("EN");
+        languageSelector.setValue("UA");
         languageSelector.getStyleClass().add("language-selector");
 
         Region spacer = new Region();
