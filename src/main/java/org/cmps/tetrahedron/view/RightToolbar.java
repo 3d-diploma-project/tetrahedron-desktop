@@ -53,13 +53,13 @@ public class RightToolbar {
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
-        if (file != null) {
-            fileChooserController.saveLastUsedDirectory(file);
-            try {
+        try {
+            if (file != null) {
+                fileChooserController.saveLastUsedDirectory(file);
                 ModelController.getInstance().applyDisplacements(file);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (ModelValidationException e) {
+            new ErrorDialog("Помилка!", e.getMessage()).show();
         }
     }
 }
