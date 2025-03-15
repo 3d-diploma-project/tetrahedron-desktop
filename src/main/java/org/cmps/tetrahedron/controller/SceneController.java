@@ -55,6 +55,7 @@ public class SceneController {
         AnchorPane.setLeftAnchor(legend, 100d);
         AnchorPane.setTopAnchor(legend, 0.0);
         AnchorPane.setBottomAnchor(legend, 0.0);
+        legend.setMouseTransparent(true);
 
         root.getChildren().addAll(navbar, anchorPane);
 
