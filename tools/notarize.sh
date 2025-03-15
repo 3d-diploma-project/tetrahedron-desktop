@@ -3,7 +3,7 @@
 set -e
 
 CERT_NAME=""
-APP_VERSION="1.1.0"
+APP_VERSION="2.0.0"
 
 detach_tetrahedron_volumes() {
   df | grep Tetrahedron | awk '{print $1}' | while read volume; do
@@ -11,11 +11,7 @@ detach_tetrahedron_volumes() {
   done
 }
 
-sign_lib() {
-  codesign -s "$CERT_NAME" --options runtime --force $1
-}
-
-cd dist
+cd ../dist
 
 detach_tetrahedron_volumes
 hdiutil attach Tetrahedron-$APP_VERSION.dmg -nobrowse -quiet
@@ -26,16 +22,15 @@ detach_tetrahedron_volumes
   && cd Tetrahedron.app/Contents/app/Tetrahedron \
   && jar xf ../Tetrahedron.jar > /dev/null)
 
-sign_lib Tetrahedron.app/Contents/app/Tetrahedron/macos/arm64/org/lwjgl/liblwjgl.dylib
-sign_lib Tetrahedron.app/Contents/app/Tetrahedron/macos/arm64/org/lwjgl/opengl/liblwjgl_opengl.dylib
-sign_lib Tetrahedron.app/Contents/app/Tetrahedron/macos/arm64/org/lwjgl/vulkan/libMoltenVK.dylib
+find Tetrahedron.app/Contents/app/Tetrahedron -name "*.dylib" -exec \
+  codesign -s "$CERT_NAME" --force {} \;
 
 rm Tetrahedron.app/Contents/app/Tetrahedron.jar
 jar cf Tetrahedron.app/Contents/app/Tetrahedron.jar -C Tetrahedron.app/Contents/app/Tetrahedron . > /dev/null
 rm -r Tetrahedron.app/Contents/app/Tetrahedron
 
 jpackage --type app-image --app-image Tetrahedron.app \
-  --mac-sign --mac-package-signing-prefix cmps.tetrahedron. --mac-entitlements ../Tetrahedron.entitlements
+  --mac-sign --mac-package-signing-prefix cmps.tetrahedron. --mac-entitlements ../tools/Tetrahedron.entitlements
 
 rm Tetrahedron-$APP_VERSION.dmg
 jpackage --type dmg --app-image Tetrahedron.app --app-version $APP_VERSION --icon ../src/main/resources/logo.icns
