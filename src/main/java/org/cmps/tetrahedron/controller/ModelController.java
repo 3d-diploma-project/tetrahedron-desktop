@@ -138,6 +138,8 @@ public class ModelController {
         stress.setMaxStress(Float.MIN_VALUE);
         stress.setColors(null);
 
+        ColorSettings.getInstance().setColoredInSelectedColor(false);
+
         Platform.runLater(ModelFilesPicker::openDialogWindow);
         LegendView.getInstance().reset();
     }

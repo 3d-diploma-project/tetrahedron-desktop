@@ -21,6 +21,7 @@ public class RightToolbar {
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
+        LegendView legendView = LegendView.getInstance();
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
