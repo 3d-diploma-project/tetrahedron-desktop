@@ -33,4 +33,10 @@
         </graphic>
     </Button>
 
+    <Button styleClass="button" fx:id="deleteModel" onMouseClicked="#clickOnDelete">
+        <graphic>
+            <fx:include source="/icon/Delete.fxml"/>
+        </graphic>
+    </Button>
+
 </VBox>

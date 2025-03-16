@@ -1,10 +1,12 @@
 package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.LegendUtils;
+import org.cmps.tetrahedron.view.LegendView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.TreeMap;
 
 import static org.cmps.tetrahedron.utils.LegendUtils.COLORS;
 
+@Setter
 public class StressController {
 
     @Getter
@@ -33,6 +36,9 @@ public class StressController {
                 .toList());
 
         ModelController.getInstance().setModelColors(stress.getColors());
+
+        LegendView.getInstance().updateLegend(stress.getMinStress(), stress.getMaxStress());
+        LegendView.getInstance().setVisible(true);
     }
 
     private void processStressData(Map<Integer, float[]> stressDataWithIndex, StressDisplayOption option) {

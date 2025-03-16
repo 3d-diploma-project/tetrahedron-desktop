@@ -2,6 +2,7 @@ package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.enums.VerticeMoveMode;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.control.Button;
 public class InstrumentsSidebar {
 
     private final MouseController mouseController = MouseController.getInstance();
+    private final ModelController modelController = ModelController.getInstance();
 
     @FXML
     private Button cursor;
@@ -20,12 +22,16 @@ public class InstrumentsSidebar {
     private Button leftRight;
 
     @FXML
+    private Button deleteModel;
+
+    @FXML
     public void clickOnCursor() {
         mouseController.setVerticalMoveMode(VerticeMoveMode.CURSOR);
 
         focus(cursor);
         unFocus(leftRight);
         unFocus(topBottom);
+        unFocus(deleteModel);
     }
 
     @FXML
@@ -35,6 +41,7 @@ public class InstrumentsSidebar {
         focus(topBottom);
         unFocus(leftRight);
         unFocus(cursor);
+        unFocus(deleteModel);
     }
 
     @FXML
@@ -44,10 +51,26 @@ public class InstrumentsSidebar {
         focus(leftRight);
         unFocus(topBottom);
         unFocus(cursor);
+        unFocus(deleteModel);
     }
 
     @FXML
     public void clickOnColorPicker() {
+    }
+
+    @FXML
+    public void clickOnDelete() {
+        focus(deleteModel);
+        unFocus(cursor);
+        unFocus(leftRight);
+        unFocus(topBottom);
+
+        modelController.clearModel();
+
+        focus(cursor);
+        unFocus(leftRight);
+        unFocus(topBottom);
+        unFocus(deleteModel);
     }
 
 

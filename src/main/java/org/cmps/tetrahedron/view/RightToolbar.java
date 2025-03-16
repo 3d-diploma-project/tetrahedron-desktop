@@ -21,11 +21,14 @@ public class RightToolbar {
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
+        LegendView legendView = LegendView.getInstance();
         if (file != null) {
             fileChooserController.saveLastUsedDirectory(file);
             StressController.getInstance().initStress(file);
             Stress stressModel = StressController.getInstance().getStress();
-            LegendView.getInstance().updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
+
+            legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
+            legendView.setVisible(true);
         }
     }
 
@@ -35,12 +38,15 @@ public class RightToolbar {
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
+        LegendView legendView = LegendView.getInstance();
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
                 ModelController.getInstance().initCustomCharacteristic(file);
                 CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
-                LegendView.getInstance().updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+
+                legendView.updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+                legendView.setVisible(true);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();
