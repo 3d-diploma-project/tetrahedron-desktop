@@ -128,19 +128,13 @@ public class ModelController {
     }
 
     public void clearModel() {
-        modelReady = false;
-        modelColors = null;
+        modelReady = true;
+        model.setVertices(new HashMap<>());
+        model.setFaces(new ArrayList<>());
 
-        Stress stress = StressController.getInstance().getStress();
-        stress.setStress(null);
-        stress.setStressToDisplay(null);
-        stress.setMinStress(Float.MAX_VALUE);
-        stress.setMaxStress(Float.MIN_VALUE);
-        stress.setColors(null);
+        ColorSettings.getInstance().setColoredInSelectedColor(true);
 
-        ColorSettings.getInstance().setColoredInSelectedColor(false);
-
-        Platform.runLater(ModelFilesPicker::openDialogWindow);
         LegendView.getInstance().reset();
+        Platform.runLater(ModelFilesPicker::openDialogWindow);
     }
 }

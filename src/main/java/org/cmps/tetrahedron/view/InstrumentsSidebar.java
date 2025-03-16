@@ -37,7 +37,6 @@ public class InstrumentsSidebar {
         focus(cursor);
         unFocus(leftRight);
         unFocus(topBottom);
-        unFocus(deleteModel);
     }
 
     @FXML
@@ -47,7 +46,6 @@ public class InstrumentsSidebar {
         focus(topBottom);
         unFocus(leftRight);
         unFocus(cursor);
-        unFocus(deleteModel);
     }
 
     @FXML
@@ -57,7 +55,6 @@ public class InstrumentsSidebar {
         focus(leftRight);
         unFocus(topBottom);
         unFocus(cursor);
-        unFocus(deleteModel);
     }
 
     @FXML
@@ -86,17 +83,7 @@ public class InstrumentsSidebar {
 
     @FXML
     public void clickOnDelete() {
-        focus(deleteModel);
-        unFocus(cursor);
-        unFocus(leftRight);
-        unFocus(topBottom);
-
         modelController.clearModel();
-
-        focus(cursor);
-        unFocus(leftRight);
-        unFocus(topBottom);
-        unFocus(deleteModel);
     }
 
 

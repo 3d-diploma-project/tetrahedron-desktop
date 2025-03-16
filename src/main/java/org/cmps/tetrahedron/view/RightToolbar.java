@@ -29,7 +29,6 @@ public class RightToolbar {
                 Stress stressModel = StressController.getInstance().getStress();
 
                 legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
-                legendView.setVisible(true);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();

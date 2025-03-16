@@ -43,6 +43,9 @@ public class StressController {
     }
 
     private void processStressData(Map<Integer, float[]> stressDataWithIndex, StressDisplayOption option) {
+        stress.setMinStress(Float.MAX_VALUE);
+        stress.setMaxStress(Float.MIN_VALUE);
+
         List<Float> stressToDisplay = new ArrayList<>();
 
         for (Map.Entry<Integer, float[]> entry : stressDataWithIndex.entrySet()) {

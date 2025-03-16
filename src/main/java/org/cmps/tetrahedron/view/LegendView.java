@@ -43,6 +43,7 @@ public class LegendView extends HBox {
         Map<Integer, float[]> colors = LegendUtils.COLORS;
         List<String> ranges = generateRangeValues(minValue, maxValue);
 
+        setVisible(true);
         allColorBoxes.getChildren().clear();
         allLabelBoxes.getChildren().clear();
 
