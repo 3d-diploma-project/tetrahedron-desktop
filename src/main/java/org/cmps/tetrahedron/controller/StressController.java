@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.controller;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
+import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.LegendUtils;
@@ -24,7 +25,7 @@ public class StressController {
     @Getter
     private Stress stress = new Stress();
 
-    public void initStress(File stressData) {
+    public void initStress(File stressData) throws ModelValidationException {
         Map<Integer, float[]> stressDataWithIndex= DataReader.readStress(stressData);
 
         processStressData(stressDataWithIndex, StressDisplayOption.MISES);

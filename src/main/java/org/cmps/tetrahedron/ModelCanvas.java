@@ -5,6 +5,7 @@ import org.cmps.tetrahedron.config.WindowProperties;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.VertexInfoController;
+import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.joml.Matrix4f;
 import org.joml.Matrix4x3f;
@@ -16,7 +17,6 @@ import org.lwjgl.opengl.awt.GLData;
 
 import java.nio.FloatBuffer;
 import java.util.List;
-import java.util.Objects;
 
 import static org.cmps.tetrahedron.utils.ShaderLoader.createShader;
 import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
@@ -52,6 +52,9 @@ public class ModelCanvas extends AWTGLCanvas {
     private int viewportSizeUniform;
     private int viewMatrixUniform;
     private int projMatrixUniform;
+
+    private int coloredInSelectedColor;
+    private int modelColor;
 
     private final Matrix4x3f viewMatrix = new Matrix4x3f();
     private final Matrix4f projMatrix = new Matrix4f();
@@ -119,6 +122,8 @@ public class ModelCanvas extends AWTGLCanvas {
         glUniformMatrix4fv(viewMatrixUniform, false, viewMatrix.get4x4(matrixBuffer));
         glUniformMatrix4fv(projMatrixUniform, false, projMatrix.get(matrixBuffer));
 
+        initColors();
+
         glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(), WindowProperties.getPhysicalHeight());
         glBindVertexArray(vao);
 
@@ -161,6 +166,7 @@ public class ModelCanvas extends AWTGLCanvas {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
     }
 
+    //TODO: fix memory leak
     private void createColorBuffer(List<float[]> colorsList) {
         int colorBuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
@@ -204,5 +210,15 @@ public class ModelCanvas extends AWTGLCanvas {
         viewMatrixUniform = glGetUniformLocation(program, "viewMatrix");
         projMatrixUniform = glGetUniformLocation(program, "projMatrix");
         viewportSizeUniform = glGetUniformLocation(program, "viewportSize");
+
+        coloredInSelectedColor = glGetUniformLocation(program, "coloredInSelectedColor");
+        modelColor = glGetUniformLocation(program, "modelColor");
+    }
+
+    private void initColors() {
+        glUniform1i(coloredInSelectedColor, ColorSettings.getInstance().isColoredInSelectedColor() ? 1 : 0);
+
+        float[] modelColorArr = ColorSettings.getInstance().getModelColor();
+        glUniform3f(modelColor, modelColorArr[0], modelColorArr[1], modelColorArr[2]);
     }
 }
