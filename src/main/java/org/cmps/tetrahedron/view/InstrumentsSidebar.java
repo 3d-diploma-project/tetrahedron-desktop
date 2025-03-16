@@ -2,9 +2,15 @@ package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.enums.VerticeMoveMode;
 import javafx.scene.control.Button;
+import org.cmps.tetrahedron.model.ColorSettings;
 
 public class InstrumentsSidebar {
 
@@ -48,6 +54,26 @@ public class InstrumentsSidebar {
 
     @FXML
     public void clickOnColorPicker() {
+        Stage stage = new Stage();
+        ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setOnAction(event -> {
+            Color selectedColor = colorPicker.getValue();
+
+            float[] colorArray = new float[]{
+                    (float) selectedColor.getRed(),
+                    (float) selectedColor.getGreen(),
+                    (float) selectedColor.getBlue()
+            };
+
+            ColorSettings.getInstance().setModelColor(colorArray);
+            ColorSettings.getInstance().setColoredInSelectedColor(true);
+            stage.close();
+        });
+
+        StackPane root = new StackPane(colorPicker);
+        Scene scene = new Scene(root, 100, 40);
+        stage.setScene(scene);
+        stage.show();
     }
 
 

@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.controller;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.exception.InvalidModelDataException;
+import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.utils.DataReader;
@@ -26,7 +27,6 @@ public class ModelController {
     private boolean modelReady = false;
     @Getter
     private CustomCharacteristic customCharacteristic;
-    @Setter
     private List<float[]> modelColors = null;
 
     private Map<Integer, float[]> originalVertices;
@@ -94,7 +94,12 @@ public class ModelController {
 
         modelReady = true;
     }
-  
+
+    public void setModelColors(List<float[]> modelColors) {
+        this.modelColors = modelColors;
+        ColorSettings.getInstance().setColoredInSelectedColor(false);
+    }
+
     private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
         Map<Integer, float[]> copy = new HashMap<>();
         for (Map.Entry<Integer, float[]> e : source.entrySet()) {
