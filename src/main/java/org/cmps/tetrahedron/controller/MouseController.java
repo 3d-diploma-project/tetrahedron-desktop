@@ -1,11 +1,14 @@
 package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
+import lombok.Setter;
+import org.cmps.tetrahedron.enums.VerticeMoveMode;
 import org.cmps.tetrahedron.view.InfoPanel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.Objects;
 
 public class MouseController extends MouseAdapter {
 
@@ -18,6 +21,8 @@ public class MouseController extends MouseAdapter {
     private double lastMouseY = 0;
     private double deltaX = 0;
     private double deltaY = 0;
+    @Setter
+    private VerticeMoveMode verticalMoveMode = VerticeMoveMode.CURSOR;
 
     private MouseController() {
     }
@@ -35,8 +40,18 @@ public class MouseController extends MouseAdapter {
     public void mouseDragged(MouseEvent mouseEvent) {
         int x = mouseEvent.getX();
         int y = mouseEvent.getY();
-        deltaX += (x - lastMouseX);
-        deltaY += (y - lastMouseY);
+        switch (verticalMoveMode) {
+            case UP_DOWN:
+                deltaY += (y - lastMouseY);
+                break;
+            case LEFT_RIGHT:
+                deltaX += (x - lastMouseX);
+                break;
+            default:
+                deltaX += (x - lastMouseX);
+                deltaY += (y - lastMouseY);
+        }
+
         lastMouseX = x;
         lastMouseY = y;
     }
@@ -63,4 +78,5 @@ public class MouseController extends MouseAdapter {
     public float getX() {
         return (float) deltaX * 0.01f;
     }
+
 }

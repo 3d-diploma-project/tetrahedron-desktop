@@ -6,6 +6,7 @@ import org.cmps.tetrahedron.controller.FileChooserController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.SceneController;
 import org.cmps.tetrahedron.controller.StressController;
+import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
 
@@ -34,11 +35,15 @@ public class RightToolbar {
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
-        if (file != null) {
-            fileChooserController.saveLastUsedDirectory(file);
-            ModelController.getInstance().initCustomCharacteristic(file);
-            CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
-            LegendView.getInstance().updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+        try {
+            if (file != null) {
+                fileChooserController.saveLastUsedDirectory(file);
+                ModelController.getInstance().initCustomCharacteristic(file);
+                CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
+                LegendView.getInstance().updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+            }
+        } catch (ModelValidationException e) {
+            new ErrorDialog("Помилка!", e.getMessage()).show();
         }
     }
 
@@ -48,13 +53,13 @@ public class RightToolbar {
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
-        if (file != null) {
-            fileChooserController.saveLastUsedDirectory(file);
-            try {
+        try {
+            if (file != null) {
+                fileChooserController.saveLastUsedDirectory(file);
                 ModelController.getInstance().applyDisplacements(file);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (ModelValidationException e) {
+            new ErrorDialog("Помилка!", e.getMessage()).show();
         }
     }
 }

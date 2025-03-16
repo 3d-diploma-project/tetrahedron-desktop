@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.SVGPath?>
+<SVGPath
+        content="M1.49984 17.5833C1.49984 18.775 2.47484 19.75 3.6665 19.75H12.3332C13.5248 19.75 14.4998 18.775 14.4998 17.5833V4.58333H1.49984V17.5833ZM15.5832 1.33333H11.7915L10.7082 0.25H5.2915L4.20817 1.33333H0.416504V3.5H15.5832V1.33333Z"
+        fill="transparent"
+        strokeLineCap="ROUND"
+        strokeLineJoin="ROUND"
+        styleClass="button"/>

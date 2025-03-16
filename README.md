@@ -27,5 +27,11 @@ Only fo Windows:
     mvn clean package
  ```
 - Run a script
-  - Windows: [installer-win.bat](installer-win.bat)
-  - MacOS: [installer-mac.sh](installer-mac.sh)
+  - Windows: [installer-win.bat](tools/installer-win.bat)
+  - MacOS: [installer-mac.sh](tools/installer-mac.sh)
+
+#### Signing/Notarizing
+- You can sign and notarize macOS bundle if you have an Apple Developer account:
+  - Run script: [notarize.sh](tools/notarize.sh)
+- You can sign Windows installer if you have Azure Trusted Signing Certificate Profile:
+  - - Run script: [sign.bat](tools/sign.bat)

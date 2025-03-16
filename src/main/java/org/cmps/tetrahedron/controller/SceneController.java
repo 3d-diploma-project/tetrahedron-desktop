@@ -36,8 +36,7 @@ public class SceneController {
 
         HBox navbar = new Navbar();
 
-        VBox instrumentSidebar = new InstrumentsSidebar();
-        instrumentSidebar.getStyleClass().add("instrument-sidebar");
+        VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
 
         VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class);
 
@@ -55,6 +54,7 @@ public class SceneController {
         AnchorPane.setLeftAnchor(legend, 100d);
         AnchorPane.setTopAnchor(legend, 0.0);
         AnchorPane.setBottomAnchor(legend, 0.0);
+        legend.setMouseTransparent(true);
 
         root.getChildren().addAll(navbar, anchorPane);
 

@@ -3,10 +3,8 @@ package org.cmps.tetrahedron.controller;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.exception.InvalidModelDataException;
-import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
-import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.exception.ModelValidationException;
@@ -65,7 +63,7 @@ public class ModelController {
         return model.getVertices();
     }
 
-    public void initCustomCharacteristic(File customDataFile) {
+    public void initCustomCharacteristic(File customDataFile) throws ModelValidationException {
         customCharacteristic = DataReader.readCustomCharacteristic(customDataFile);
 
         TreeMap<Float, Integer> legend = LegendUtils.buildLegend(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());

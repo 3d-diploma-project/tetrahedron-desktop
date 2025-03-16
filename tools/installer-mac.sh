@@ -2,7 +2,9 @@
 
 set -e
 
-APP_VERSION="1.1.0"
+APP_VERSION="2.0.0"
+
+cd ..
 
 mkdir tmp tmp/app
 cp target/tetrahedron-desktop-$APP_VERSION-SNAPSHOT-jar-with-dependencies.jar tmp/app/Tetrahedron.jar
