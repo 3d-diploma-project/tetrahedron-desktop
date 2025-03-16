@@ -7,13 +7,10 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.enums.VerticeMoveMode;
 import javafx.scene.control.Button;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.cmps.tetrahedron.model.ColorSettings;
 
 public class InstrumentsSidebar {
 
@@ -57,6 +54,26 @@ public class InstrumentsSidebar {
 
     @FXML
     public void clickOnColorPicker() {
+        Stage stage = new Stage();
+        ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setOnAction(event -> {
+            Color selectedColor = colorPicker.getValue();
+
+            float[] colorArray = new float[]{
+                    (float) selectedColor.getRed(),
+                    (float) selectedColor.getGreen(),
+                    (float) selectedColor.getBlue()
+            };
+
+            ColorSettings.getInstance().setModelColor(colorArray);
+            ColorSettings.getInstance().setColoredInSelectedColor(true);
+            stage.close();
+        });
+
+        StackPane root = new StackPane(colorPicker);
+        Scene scene = new Scene(root, 100, 40);
+        stage.setScene(scene);
+        stage.show();
     }
 
 
@@ -84,35 +101,4 @@ public class InstrumentsSidebar {
 
         graphic.getStyleClass().removeAll("button-selected");
     }
-
-    // TODO: Design to ColorPicker
-    private void openColorPicker() {
-        Stage stage = new Stage();
-        ColorPicker colorPicker = new ColorPicker();
-        colorPicker.setOnAction(event -> {
-            Color selectedColor = colorPicker.getValue();
-
-            float[] colorArray = new float[]{
-                    (float) selectedColor.getRed(),
-                    (float) selectedColor.getGreen(),
-                    (float) selectedColor.getBlue()
-            };
-
-            int faceCount = ModelController.getInstance().getFaces().size();
-            List<float[]> colorsList = new ArrayList<>();
-            for (int i = 0; i < faceCount; i++) {
-                colorsList.add(colorArray);
-            }
-
-            ModelController.getInstance().setModelColors(colorsList);
-
-            stage.close();
-        });
-
-        StackPane root = new StackPane(colorPicker);
-        Scene scene = new Scene(root, 100, 40);
-        stage.setScene(scene);
-        stage.show();
-    }
-
 }
