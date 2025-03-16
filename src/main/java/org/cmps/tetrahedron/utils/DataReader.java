@@ -156,9 +156,10 @@ public class DataReader {
 
                 try {
                     if (elements.length < 6 || elements.length > 7) {
-                        throw new ModelValidationException("У кожному рядку файлу напруження має бути 6 (qx, txy, tzx, qy, tyz, qz) " +
-                                "або 7 (index, qx, txy, tzx, qy, tyz, qz) чисел.\n" +
-                                "Перевірте строку: " + line);
+                        throw new ModelValidationException("У кожному рядку файлу мають бути вказані значення для 6 компонентів напруження:\n"
+                                + "індекс (необовʼязково), x, xy, zx, y, yz, z).\n"
+                                + "Перевірте рядок: " + line
+                                + "\n\nЯкщо у вашому файлі є тільки одне значення для елементу, використовуйте опцію 'Довільна характеристика'.");
                     }
 
                     if (elements.length == STRESS_WITH_INDICES) {
@@ -170,14 +171,15 @@ public class DataReader {
                     }
 
                     if (stressOneElement.containsKey(index)) {
-                        throw new ModelValidationException("Файл напружень містить індекс, що повторюється: " + index);
+                        throw new ModelValidationException("Файл містить індекс, що повторюється: \n" + index);
                     }
 
                     for (int j = startIndex; j < elements.length; j++) {
                         stressValues[j - startIndex] = Float.parseFloat(elements[j]);
                     }
                 } catch (NumberFormatException e) {
-                    throw new ModelValidationException("Помилка перетворення числа у файлі напружень в рядку: " + line);
+                    throw new ModelValidationException("Помилка під час зчитування числа.\n"
+                            + "Перевірте рядок: \n" + line);
                 }
 
                 stressOneElement.put(index, stressValues);
@@ -185,7 +187,7 @@ public class DataReader {
 
             return stressOneElement;
         } catch (FileNotFoundException e) {
-            throw new ModelValidationException("Файл напруження не знайдено: " + stressData.getAbsolutePath());
+            throw new ModelValidationException("Не вдалося знайти обраний файл: " + stressData.getAbsolutePath());
         }
     }
 

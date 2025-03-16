@@ -16,17 +16,22 @@ import java.io.File;
 public class RightToolbar {
 
     @FXML
-    private void selectStressFile(MouseEvent mouseEvent) throws ModelValidationException {
+    private void selectStressFile(MouseEvent mouseEvent) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
-        if (file != null) {
-            fileChooserController.saveLastUsedDirectory(file);
-            StressController.getInstance().initStress(file);
-            Stress stressModel = StressController.getInstance().getStress();
-            LegendView.getInstance().updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
+        try {
+            if (file != null) {
+                fileChooserController.saveLastUsedDirectory(file);
+                StressController.getInstance().initStress(file);
+                Stress stressModel = StressController.getInstance().getStress();
+                LegendView.getInstance().updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
+            }
+        } catch (ModelValidationException e) {
+            new ErrorDialog("Помилка!", e.getMessage()).show();
         }
+
     }
 
     @FXML
