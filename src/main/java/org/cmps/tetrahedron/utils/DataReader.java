@@ -138,34 +138,54 @@ public class DataReader {
         }
     }
 
-    public static Map<Integer, float[]> readStress(File stressData) {
+    public static Map<Integer, float[]> readStress(File stressData) throws ModelValidationException {
         Locale.setDefault(US);
 
         int i = 1, index, startIndex;
-        try (Scanner fid = new Scanner(stressData)) {
-            Map<Integer, float[]> stressOneElement = new HashMap<>();
+        Map<Integer, float[]> stressOneElement = new HashMap<>();
 
+        try (Scanner fid = new Scanner(stressData)) {
             while (fid.hasNextLine()) {
-                String[] elements = fid.nextLine().trim().split("\\s+");
+                String line = fid.nextLine().trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
+
+                String[] elements = line.split("\\s+");
                 float[] stressValues = new float[6];
 
-                if (elements.length == STRESS_WITH_INDICES) {
-                    index = Integer.parseInt(elements[0]);
-                    startIndex = 1;
-                } else {
-                    index = i++;
-                    startIndex = 0;
+                try {
+                    if (elements.length < 6 || elements.length > 7) {
+                        throw new ModelValidationException("У кожному рядку файлу напруження має бути 6 (qx, txy, tzx, qy, tyz, qz) " +
+                                "або 7 (index, qx, txy, tzx, qy, tyz, qz) чисел.\n" +
+                                "Перевірте строку: " + line);
+                    }
+
+                    if (elements.length == STRESS_WITH_INDICES) {
+                        index = Integer.parseInt(elements[0]);
+                        startIndex = 1;
+                    } else {
+                        index = i++;
+                        startIndex = 0;
+                    }
+
+                    if (stressOneElement.containsKey(index)) {
+                        throw new ModelValidationException("Файл напружень містить індекс, що повторюється: " + index);
+                    }
+
+                    for (int j = startIndex; j < elements.length; j++) {
+                        stressValues[j - startIndex] = Float.parseFloat(elements[j]);
+                    }
+                } catch (NumberFormatException e) {
+                    throw new ModelValidationException("Помилка перетворення числа у файлі напружень в рядку: " + line);
                 }
 
-                for (int j = startIndex; j < elements.length; j++) {
-                    stressValues[j - startIndex] = Float.parseFloat(elements[j]);
-                }
                 stressOneElement.put(index, stressValues);
             }
 
             return stressOneElement;
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new ModelValidationException("Файл напруження не знайдено: " + stressData.getAbsolutePath());
         }
     }
 

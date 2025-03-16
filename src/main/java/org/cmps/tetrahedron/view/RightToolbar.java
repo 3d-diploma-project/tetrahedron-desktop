@@ -16,7 +16,7 @@ import java.io.File;
 public class RightToolbar {
 
     @FXML
-    private void selectStressFile(MouseEvent mouseEvent) {
+    private void selectStressFile(MouseEvent mouseEvent) throws ModelValidationException {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
