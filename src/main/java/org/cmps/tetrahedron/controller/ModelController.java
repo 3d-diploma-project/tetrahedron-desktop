@@ -133,8 +133,8 @@ public class ModelController {
         model.setFaces(new ArrayList<>());
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
-
         LegendView.getInstance().reset();
+
         Platform.runLater(ModelFilesPicker::openDialogWindow);
     }
 }

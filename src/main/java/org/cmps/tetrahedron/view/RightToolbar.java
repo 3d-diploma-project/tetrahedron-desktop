@@ -49,7 +49,6 @@ public class RightToolbar {
                 CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
 
                 legendView.updateLegend(customModel.getMinValue(), customModel.getMaxValue());
-                legendView.setVisible(true);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();
