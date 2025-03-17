@@ -6,10 +6,11 @@ import org.joml.Vector3f;
 import java.util.*;
 
 @Getter
+@Setter
 public class Model {
 
-    private final Map<Integer, float[]> vertices;
-    private final List<float[][]> faces;
+    private Map<Integer, float[]> vertices;
+    private List<float[][]> faces;
     private Vector3f center;
 
     @Builder

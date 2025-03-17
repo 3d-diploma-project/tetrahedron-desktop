@@ -43,6 +43,7 @@ public class LegendView extends HBox {
         Map<Integer, float[]> colors = LegendUtils.COLORS;
         List<String> ranges = generateRangeValues(minValue, maxValue);
 
+        setVisible(true);
         allColorBoxes.getChildren().clear();
         allLabelBoxes.getChildren().clear();
 
@@ -104,5 +105,11 @@ public class LegendView extends HBox {
 
     private String toHex(float red, float green, float blue) {
         return String.format("#%02X%02X%02X", (int) (red * 255), (int) (green * 255), (int) (blue * 255));
+    }
+
+    public void reset() {
+        allColorBoxes.getChildren().clear();
+        allLabelBoxes.getChildren().clear();
+        setVisible(false);
     }
 }

@@ -21,17 +21,18 @@ public class RightToolbar {
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
+        LegendView legendView = LegendView.getInstance();
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
                 StressController.getInstance().initStress(file);
                 Stress stressModel = StressController.getInstance().getStress();
-                LegendView.getInstance().updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
+
+                legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();
         }
-
     }
 
     @FXML
@@ -40,12 +41,14 @@ public class RightToolbar {
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
+        LegendView legendView = LegendView.getInstance();
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
                 ModelController.getInstance().initCustomCharacteristic(file);
                 CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
-                LegendView.getInstance().updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+
+                legendView.updateLegend(customModel.getMinValue(), customModel.getMaxValue());
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();

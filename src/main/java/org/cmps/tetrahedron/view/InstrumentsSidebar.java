@@ -2,6 +2,7 @@ package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import org.cmps.tetrahedron.controller.ModelController;
 import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.StackPane;
@@ -15,6 +16,7 @@ import org.cmps.tetrahedron.model.ColorSettings;
 public class InstrumentsSidebar {
 
     private final MouseController mouseController = MouseController.getInstance();
+    private final ModelController modelController = ModelController.getInstance();
 
     @FXML
     private Button cursor;
@@ -24,6 +26,9 @@ public class InstrumentsSidebar {
 
     @FXML
     private Button leftRight;
+
+    @FXML
+    private Button deleteModel;
 
     @FXML
     public void clickOnCursor() {
@@ -74,6 +79,11 @@ public class InstrumentsSidebar {
         Scene scene = new Scene(root, 100, 40);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    public void clickOnDelete() {
+        modelController.clearModel();
     }
 
 
