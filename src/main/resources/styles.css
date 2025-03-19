@@ -44,27 +44,6 @@
     -fx-background-color: #FAFCFE;
 }
 
-.navbar {
-    -fx-alignment: center;
-    -fx-padding: 50;
-}
-
-.logo-text {
-    -fx-font-size: 18;
-    -fx-text-fill: #1B018E;
-    -fx-font-weight: bold;
-}
-
-.language-selector {
-    -fx-background-color: rgba(255, 255, 255, 0.0);
-    -fx-background-radius: 15;
-    -fx-padding: 4;
-}
-
-.language-selector:hover {
-    -fx-border-color: #C4C8CE;
-}
-
 .info-text {
     -fx-font-size: 18;
     -fx-text-fill: #1B018E;

@@ -1,19 +1,49 @@
 package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
-import org.cmps.tetrahedron.controller.FileChooserController;
-import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.controller.SceneController;
-import org.cmps.tetrahedron.controller.StressController;
+import lombok.Getter;
+import org.cmps.tetrahedron.controller.*;
+import org.cmps.tetrahedron.enums.LocalizationListener;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
 import java.io.File;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-public class RightToolbar {
+public class RightToolbar implements LocalizationListener {
+
+    @FXML
+    private Label stressLabel, stressSecondaryLabel, displacementLabel, characteristicLabel;
+
+    @FXML
+    private Button stressButton, displacementButton, characteristicButton;
+
+    private ResourceBundle bundle;
+
+    public void initialize() {
+        LocalizationController.getInstance().registerListener(this);
+    }
+
+    @Override
+    public void onUpdateLanguage(ResourceBundle bundle) {
+        this.bundle = bundle;
+
+        stressLabel.setText(bundle.getString("stress.label"));
+        stressSecondaryLabel.setText(bundle.getString("stress.secondaryLabel"));
+        stressButton.setText(bundle.getString("stress.button"));
+
+        displacementLabel.setText(bundle.getString("displacement.label"));
+        displacementButton.setText(bundle.getString("displacement.button"));
+
+        characteristicLabel.setText(bundle.getString("characteristic.label"));
+        characteristicButton.setText(bundle.getString("characteristic.button"));
+    }
 
     @FXML
     private void selectStressFile(MouseEvent mouseEvent) {
@@ -31,7 +61,7 @@ public class RightToolbar {
                 legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog("Помилка!", e.getMessage()).show();
+            new ErrorDialog(bundle.getString("error.title"), e.getMessage()).show();
         }
     }
 
@@ -51,7 +81,7 @@ public class RightToolbar {
                 legendView.updateLegend(customModel.getMinValue(), customModel.getMaxValue());
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog("Помилка!", e.getMessage()).show();
+            new ErrorDialog(bundle.getString("error.title"), e.getMessage()).show();
         }
     }
 
@@ -67,7 +97,7 @@ public class RightToolbar {
                 ModelController.getInstance().applyDisplacements(file);
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog("Помилка!", e.getMessage()).show();
+            new ErrorDialog(bundle.getString("error.title"), e.getMessage()).show();
         }
     }
 }

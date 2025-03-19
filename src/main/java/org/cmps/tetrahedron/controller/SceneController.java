@@ -34,7 +34,7 @@ public class SceneController {
         Scene scene = new Scene(root, WindowProperties.getLogicalWidth(), WindowProperties.getLogicalHeight());
         scene.getStylesheets().add(Objects.requireNonNull(SceneController.class.getResource("/styles.css")).toExternalForm());
 
-        HBox navbar = new Navbar();
+        HBox navbar = ResourceReader.readComponent("/view/Navbar.fxml", HBox.class);
 
         VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
 
