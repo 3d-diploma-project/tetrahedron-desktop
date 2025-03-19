@@ -25,7 +25,7 @@ public class RightToolbar {
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
-                StressController.getInstance().initStress(file);
+                ModelController.getInstance().applyStress(file);
                 Stress stressModel = StressController.getInstance().getStress();
 
                 legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
