@@ -12,7 +12,7 @@
 
     <VBox styleClass="vbox-label-button">
         <Label styleClass="data-label" text="Напруження у вузлах"/>
-        <Label styleClass="secondary-label" text="(напруження по мізесу)"/>
+        <Label styleClass="secondary-label" text="(напруження по Мізесу)"/>
         <Button styleClass="load-button" text="Завантажити файл" onMouseClicked="#selectStressFile"/>
     </VBox>
 
