@@ -4,16 +4,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
-import lombok.Getter;
 import org.cmps.tetrahedron.controller.*;
-import org.cmps.tetrahedron.enums.LocalizationListener;
+import org.cmps.tetrahedron.interfaces.LocalizationListener;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
 import java.io.File;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class RightToolbar implements LocalizationListener {

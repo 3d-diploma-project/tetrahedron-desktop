@@ -1,7 +1,7 @@
 package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
-import org.cmps.tetrahedron.enums.LocalizationListener;
+import org.cmps.tetrahedron.interfaces.LocalizationListener;
 
 import java.util.ArrayList;
 import java.util.List;

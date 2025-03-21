@@ -1,4 +1,4 @@
-package org.cmps.tetrahedron.enums;
+package org.cmps.tetrahedron.interfaces;
 
 import java.util.ResourceBundle;
 
