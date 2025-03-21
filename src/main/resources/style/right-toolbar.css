@@ -42,3 +42,11 @@
     -fx-font-size: 10;
     -fx-translate-y: -5;
 }
+
+.small-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #000;
+    -fx-border-radius: 5;
+    -fx-padding: 3;
+}
+

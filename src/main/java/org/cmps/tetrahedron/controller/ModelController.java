@@ -36,6 +36,8 @@ public class ModelController {
     private List<float[]> modelColors = null;
 
     private Map<Integer, float[]> originalVertices;
+    private List<float[]> lastAppliedDeformations;
+    private float currentScale = 1.0f;
 
     private ModelController() {
         model = Model.builder()
@@ -81,26 +83,27 @@ public class ModelController {
         modelColors = customCharacteristic.getColors();
     }
 
-    public void applyDisplacements(File deformationsFile) throws ModelValidationException {
-        ColorSettings.getInstance().setColoredInSelectedColor(true);
-        LegendView.getInstance().reset();
+    public void applyDisplacements(File deformationsFile, float scale) throws ModelValidationException {
+        lastAppliedDeformations = DataReader.readDeformations(deformationsFile, originalVertices.size());
+        currentScale = scale;
+        applyDeformationScale(scale);
+    }
 
-        List<float[]> deformations = DataReader.readDeformations(deformationsFile, originalVertices.size());
+    public void applyDeformationScale(float scale) {
+        if (lastAppliedDeformations == null) return;
 
         int i = 0;
         for (Integer idx : originalVertices.keySet()) {
             float[] orig = originalVertices.get(idx);
-            float[] def = deformations.get(i++);
-
+            float[] def = lastAppliedDeformations.get(i++);
             float[] current = model.getVertices().get(idx);
-            current[0] = orig[0] + def[0];
-            current[1] = orig[1] + def[1];
-            current[2] = orig[2] + def[2];
+            current[0] = orig[0] + def[0] * scale;
+            current[1] = orig[1] + def[1] * scale;
+            current[2] = orig[2] + def[2] * scale;
         }
 
         model.calculateModelCenter();
         centerModel();
-
         modelReady = true;
     }
 

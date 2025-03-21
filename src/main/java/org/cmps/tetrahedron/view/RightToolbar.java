@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import org.cmps.tetrahedron.controller.FileChooserController;
 import org.cmps.tetrahedron.controller.ModelController;
@@ -12,8 +13,10 @@ import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
 import java.io.File;
+import java.util.Optional;
 
 public class RightToolbar {
+    private float deformationScale = 1.0f;
 
     @FXML
     private void selectStressFile(MouseEvent mouseEvent) {
@@ -56,6 +59,11 @@ public class RightToolbar {
     }
 
     @FXML
+    private void openDeformationScaleDialog() {
+        DeformationScaleDialog.showDialog();
+    }
+
+    @FXML
     private void selectDisplacementsFile(MouseEvent event) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
@@ -64,7 +72,7 @@ public class RightToolbar {
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
-                ModelController.getInstance().applyDisplacements(file);
+                ModelController.getInstance().applyDisplacements(file, deformationScale);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();
