@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
@@ -20,12 +21,13 @@ public class Navbar {
     @FXML
     public void initialize() {
         languageSelector.setValue("UA");
+    }
 
-        languageSelector.setOnAction(event -> {
-            String selectedLanguage = languageSelector.getValue();
+    @FXML
+    public void changeLanguage(ActionEvent event) {
+        String selectedLanguage = languageSelector.getValue();
 
-            Locale newLocale = selectedLanguage.equals("EN") ? new Locale("en") : new Locale("uk");
-            LocalizationController.getInstance().setLocale(newLocale);
-        });
+        Locale newLocale = selectedLanguage.equals("EN") ? new Locale("en") : new Locale("uk");
+        LocalizationController.getInstance().setLocale(newLocale);
     }
 }

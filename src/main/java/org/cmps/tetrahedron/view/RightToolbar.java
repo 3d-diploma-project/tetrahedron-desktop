@@ -22,25 +22,23 @@ public class RightToolbar implements LocalizationListener {
     @FXML
     private Button stressButton, displacementButton, characteristicButton;
 
-    private ResourceBundle bundle;
-
     public void initialize() {
         LocalizationController.getInstance().registerListener(this);
     }
 
     @Override
-    public void onUpdateLanguage(ResourceBundle bundle) {
-        this.bundle = bundle;
+    public void onUpdateLanguage() {
+        LocalizationController localization = LocalizationController.getInstance();
 
-        stressLabel.setText(bundle.getString("stress.label"));
-        stressSecondaryLabel.setText(bundle.getString("stress.secondaryLabel"));
-        stressButton.setText(bundle.getString("stress.button"));
+        stressLabel.setText(localization.getString("right-toolbar", "stress-label"));
+        stressSecondaryLabel.setText(localization.getString("right-toolbar", "stress-secondaryLabel"));
+        stressButton.setText(localization.getString("right-toolbar", "load-button"));
 
-        displacementLabel.setText(bundle.getString("displacement.label"));
-        displacementButton.setText(bundle.getString("displacement.button"));
+        displacementLabel.setText(localization.getString("right-toolbar", "displacement-label"));
+        displacementButton.setText(localization.getString("right-toolbar", "load-button"));
 
-        characteristicLabel.setText(bundle.getString("characteristic.label"));
-        characteristicButton.setText(bundle.getString("characteristic.button"));
+        characteristicLabel.setText(localization.getString("right-toolbar", "characteristic-label"));
+        characteristicButton.setText(localization.getString("right-toolbar", "load-button"));
     }
 
     @FXML
@@ -59,7 +57,7 @@ public class RightToolbar implements LocalizationListener {
                 legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(bundle.getString("error.title"), e.getMessage()).show();
+            new ErrorDialog("Помилка!", e.getMessage()).show();
         }
     }
 
@@ -79,7 +77,7 @@ public class RightToolbar implements LocalizationListener {
                 legendView.updateLegend(customModel.getMinValue(), customModel.getMaxValue());
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(bundle.getString("error.title"), e.getMessage()).show();
+            new ErrorDialog("Помилка!", e.getMessage()).show();
         }
     }
 
@@ -95,7 +93,7 @@ public class RightToolbar implements LocalizationListener {
                 ModelController.getInstance().applyDisplacements(file);
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(bundle.getString("error.title"), e.getMessage()).show();
+            new ErrorDialog("Помилка!", e.getMessage()).show();
         }
     }
 }

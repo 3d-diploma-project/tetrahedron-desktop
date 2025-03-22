@@ -11,19 +11,19 @@
       styleClass="root-box">
 
     <VBox styleClass="vbox-label-button">
-        <Label fx:id="stressLabel" styleClass="data-label" text="Напруження у вузлах"/>
-        <Label fx:id="stressSecondaryLabel" styleClass="secondary-label" text="(напруження по мізесу)"/>
-        <Button fx:id="stressButton" styleClass="load-button" text="Завантажити файл" onMouseClicked="#selectStressFile"/>
+        <Label fx:id="stressLabel" styleClass="data-label" text="%stress-label"/>
+        <Label fx:id="stressSecondaryLabel" styleClass="secondary-label" text="%stress-secondaryLabel"/>
+        <Button fx:id="stressButton" styleClass="load-button" text="%load-button" onMouseClicked="#selectStressFile"/>
     </VBox>
 
     <VBox styleClass="vbox-label-button">
-        <Label fx:id="displacementLabel" styleClass="data-label" text="Переміщення у вузлах"/>
-        <Button fx:id="displacementButton" styleClass="load-button" text="Завантажити файл" onMouseClicked="#selectDisplacementsFile"/>
+        <Label fx:id="displacementLabel" styleClass="data-label" text="%displacement-label"/>
+        <Button fx:id="displacementButton" styleClass="load-button" text="%load-button" onMouseClicked="#selectDisplacementsFile"/>
     </VBox>
 
     <VBox styleClass="vbox-label-button">
-        <Label fx:id="characteristicLabel" styleClass="data-label" text="Довільна характеристика"/>
-        <Button fx:id="characteristicButton" styleClass="load-button" text="Завантажити файл" onMouseClicked="#selectCustomCharacteristicFile"/>
+        <Label fx:id="characteristicLabel" styleClass="data-label" text="%characteristic-label"/>
+        <Button fx:id="characteristicButton" styleClass="load-button" text="%load-button" onMouseClicked="#selectCustomCharacteristicFile"/>
     </VBox>
 
 </VBox>

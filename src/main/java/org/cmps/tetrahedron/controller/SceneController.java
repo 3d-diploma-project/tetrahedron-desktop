@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import org.cmps.tetrahedron.config.WindowProperties;
 
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * Builds scene and adds to it all mouse event listeners.
@@ -38,7 +39,7 @@ public class SceneController {
 
         VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
 
-        VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class);
+        VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class, ResourceBundle.getBundle("i18n.right-toolbar"));
 
         AnchorPane anchorPane = new AnchorPane(instrumentSidebar, rightToolbar);
         anchorPane.getStyleClass().add("main");
