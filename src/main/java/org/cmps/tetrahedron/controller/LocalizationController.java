@@ -1,7 +1,7 @@
 package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
-import org.cmps.tetrahedron.interfaces.LocalizationListener;
+import org.cmps.tetrahedron.i18n.LocalizationListener;
 
 import java.util.*;
 
@@ -14,6 +14,10 @@ public class LocalizationController {
     private final Map<String, ResourceBundle> bundles = new HashMap<>();
     private final List<LocalizationListener> listeners = new ArrayList<>();
 
+    public static final String RIGHT_TOOLBAR_BUNDLE = "i18n.right-toolbar";
+    public static final String INDEX_FILE_SELECTOR_BUNDLE = "i18n.index-file-selector";
+    public static final String NODE_FILE_SELECTOR_BUNDLE = "i18n.node-file-selector";
+
 
     private LocalizationController() {
         currentLocale = Locale.getDefault();
@@ -21,9 +25,9 @@ public class LocalizationController {
     }
 
     private void loadBundles() {
-        bundles.put("right-toolbar", ResourceBundle.getBundle("i18n.right-toolbar", currentLocale));
-        bundles.put("index-file-selector", ResourceBundle.getBundle("i18n.index-file-selector", currentLocale));
-        bundles.put("node-file-selector", ResourceBundle.getBundle("i18n.node-file-selector", currentLocale));
+        bundles.put(RIGHT_TOOLBAR_BUNDLE, ResourceBundle.getBundle(RIGHT_TOOLBAR_BUNDLE, currentLocale));
+        bundles.put(INDEX_FILE_SELECTOR_BUNDLE, ResourceBundle.getBundle(INDEX_FILE_SELECTOR_BUNDLE, currentLocale));
+        bundles.put(NODE_FILE_SELECTOR_BUNDLE, ResourceBundle.getBundle(NODE_FILE_SELECTOR_BUNDLE, currentLocale));
     }
 
     public ResourceBundle getBundle(String name) {

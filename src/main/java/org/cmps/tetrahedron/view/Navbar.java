@@ -27,7 +27,7 @@ public class Navbar {
     public void changeLanguage(ActionEvent event) {
         String selectedLanguage = languageSelector.getValue();
 
-        Locale newLocale = selectedLanguage.equals("EN") ? new Locale("en") : new Locale("uk");
+        Locale newLocale = selectedLanguage.equals("EN") ? Locale.of("en") : Locale.of("uk");
         LocalizationController.getInstance().setLocale(newLocale);
     }
 }
