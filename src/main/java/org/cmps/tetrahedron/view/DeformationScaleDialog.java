@@ -18,6 +18,12 @@ public class DeformationScaleDialog {
 
     private Stage dialogStage;
 
+    private static float currentScaleValue = ModelController.DEFAULT_SCALE;
+
+    public static void updateCurrentScale(float scale) {
+        currentScaleValue = scale;
+    }
+
     public static void showDialog() {
         try {
             URL fxmlPath = DeformationScaleDialog.class.getClassLoader().getResource("view/DeformationScaleDialog.fxml");

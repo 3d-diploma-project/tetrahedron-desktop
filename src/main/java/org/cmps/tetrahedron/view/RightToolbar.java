@@ -70,7 +70,11 @@ public class RightToolbar {
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
-                ModelController.getInstance().applyDisplacements(file, ModelController.getInstance().getCurrentScale());
+
+                float defaultScale = ModelController.DEFAULT_SCALE;
+                ModelController.getInstance().applyDisplacements(file, defaultScale);
+
+                DeformationScaleDialog.updateCurrentScale(defaultScale);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();

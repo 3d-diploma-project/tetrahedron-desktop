@@ -39,6 +39,8 @@ public class ModelController {
     private List<float[]> lastAppliedDeformations;
     private float currentScale = 1.0f;
 
+    public static final float DEFAULT_SCALE = 1.0f;
+
     private ModelController() {
         model = Model.builder()
                 .vertices(new HashMap<>())
