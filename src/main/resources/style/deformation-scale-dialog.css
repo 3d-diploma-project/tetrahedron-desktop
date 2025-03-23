@@ -1,4 +1,8 @@
-.dialog-container {
+#rootPane {
+    -fx-background-color: transparent;
+}
+
+.dialog-pane {
     -fx-background-color: #E7EDF2;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;

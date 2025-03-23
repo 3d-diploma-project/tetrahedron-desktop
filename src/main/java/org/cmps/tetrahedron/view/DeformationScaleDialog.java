@@ -1,41 +1,31 @@
 package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.cmps.tetrahedron.controller.ModelController;
-
-import java.io.IOException;
-import java.net.URL;
+import org.cmps.tetrahedron.utils.DialogUtils;
 
 public class DeformationScaleDialog {
+
     @FXML
     private TextField scaleInput;
     @FXML
     private Button saveButton;
 
-    private Stage dialogStage;
+    public Stage dialogStage;
 
     public static void showDialog() {
-        try {
-            URL fxmlPath = DeformationScaleDialog.class.getClassLoader().getResource("view/DeformationScaleDialog.fxml");
-            FXMLLoader loader = new FXMLLoader(fxmlPath);
+        DeformationScaleDialog controller = DialogUtils.openModal(
+                "view/DeformationScaleDialog.fxml",
+                javafx.stage.StageStyle.TRANSPARENT,
+                true
+        );
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle(null);
-            stage.initStyle(javafx.stage.StageStyle.UNDECORATED);
-            stage.setScene(new Scene(loader.load()));
-
-            DeformationScaleDialog controller = loader.getController();
-            controller.dialogStage = stage;
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (controller != null) {
+            float currentScale = ModelController.getInstance().getCurrentScale();
+            controller.setScaleValue(currentScale);
         }
     }
 
@@ -52,5 +42,9 @@ public class DeformationScaleDialog {
         } catch (NumberFormatException e) {
             scaleInput.setStyle("-fx-border-color: red;");
         }
+    }
+
+    public void setScaleValue(float scale) {
+        scaleInput.setText(String.valueOf(scale));
     }
 }

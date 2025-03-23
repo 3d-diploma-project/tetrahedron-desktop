@@ -16,8 +16,6 @@ import java.io.File;
 import java.util.Optional;
 
 public class RightToolbar {
-    private float deformationScale = 1.0f;
-
     @FXML
     private void selectStressFile(MouseEvent mouseEvent) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
@@ -72,7 +70,7 @@ public class RightToolbar {
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
-                ModelController.getInstance().applyDisplacements(file, deformationScale);
+                ModelController.getInstance().applyDisplacements(file, ModelController.getInstance().getCurrentScale());
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();

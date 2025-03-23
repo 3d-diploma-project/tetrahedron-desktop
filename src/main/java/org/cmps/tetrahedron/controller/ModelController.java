@@ -90,7 +90,9 @@ public class ModelController {
     }
 
     public void applyDeformationScale(float scale) {
-        if (lastAppliedDeformations == null) return;
+        if (lastAppliedDeformations == null) {
+            return;
+        }
 
         int i = 0;
         for (Integer idx : originalVertices.keySet()) {
@@ -101,6 +103,8 @@ public class ModelController {
             current[1] = orig[1] + def[1] * scale;
             current[2] = orig[2] + def[2] * scale;
         }
+
+        currentScale = scale;
 
         model.calculateModelCenter();
         centerModel();
