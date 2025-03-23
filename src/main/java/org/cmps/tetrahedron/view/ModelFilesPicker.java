@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.view;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -30,6 +31,9 @@ public class ModelFilesPicker {
 
     @Setter
     private Dialog<Scene> dialog;
+
+    @FXML
+    private Button createModelButton;
 
     public static void openDialogWindow() {
         Dialog<Scene> dialog = new Dialog<>();
@@ -90,5 +94,17 @@ public class ModelFilesPicker {
         }
 
         return true;
+    }
+
+    @FXML
+    public void initialize() {
+        nodesController.setOnFileSelectedCallback(this::updateCreateButtonState);
+        indicesController.setOnFileSelectedCallback(this::updateCreateButtonState);
+        updateCreateButtonState();
+    }
+
+    private void updateCreateButtonState() {
+        boolean bothFilesSelected = nodesController.getFile() != null && indicesController.getFile() != null;
+        createModelButton.setDisable(!bothFilesSelected);
     }
 }

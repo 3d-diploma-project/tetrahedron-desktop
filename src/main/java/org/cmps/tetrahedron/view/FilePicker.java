@@ -29,6 +29,12 @@ public class FilePicker {
     private static final String LAST_USED_DIRECTORY_KEY = "last_used_directory";
     private static final Preferences prefs = Preferences.userNodeForPackage(FilePicker.class);
 
+    private Runnable onFileSelectedCallback;
+
+    public void setOnFileSelectedCallback(Runnable callback) {
+        this.onFileSelectedCallback = callback;
+    }
+
     @FXML
     public void onClick() {
         FileChooserController fileChooserController = FileChooserController.getInstance();
@@ -38,6 +44,9 @@ public class FilePicker {
         if (file != null) {
             fileChooserController.saveLastUsedDirectory(file);
             label.setText(resources.getString("file-type") + ": " + file.getName());
+            if (onFileSelectedCallback != null) {
+                onFileSelectedCallback.run();
+            }
         }
     }
 
