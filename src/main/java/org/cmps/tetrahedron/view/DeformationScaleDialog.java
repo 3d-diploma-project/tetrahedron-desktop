@@ -35,12 +35,17 @@ public class DeformationScaleDialog {
 
             DeformationScaleDialog controller = loader.getController();
             controller.dialogStage = stage;
-            float currentScale = ModelController.getInstance().getCurrentScale();
-            controller.setScaleValue(currentScale);
+
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void initialize() {
+        float currentScale = ModelController.getInstance().getCurrentScale();
+        setScaleValue(currentScale);
     }
 
     @FXML

@@ -19,6 +19,7 @@
     <VBox styleClass="vbox-label-button">
         <HBox spacing="5" alignment="CENTER_LEFT">
             <Label styleClass="data-label" text="Переміщення у вузлах"/>
+            <Pane HBox.hgrow="ALWAYS"/>
             <Button text="⋯" onAction="#openDeformationScaleDialog" styleClass="small-button"/>
         </HBox>
         <Button styleClass="load-button" text="Завантажити файл" onMouseClicked="#selectDisplacementsFile"/>
