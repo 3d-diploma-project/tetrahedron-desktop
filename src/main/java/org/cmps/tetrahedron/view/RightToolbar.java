@@ -1,12 +1,12 @@
 package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
-import org.cmps.tetrahedron.controller.FileChooserController;
-import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.controller.SceneController;
-import org.cmps.tetrahedron.controller.StressController;
+import org.cmps.tetrahedron.controller.*;
+import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
@@ -15,7 +15,33 @@ import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.util.Optional;
 
-public class RightToolbar {
+public class RightToolbar implements LocalizationListener {
+
+    @FXML
+    private Label stressLabel, stressSecondaryLabel, displacementLabel, characteristicLabel;
+
+    @FXML
+    private Button stressButton, displacementButton, characteristicButton;
+
+    public void initialize() {
+        LocalizationController.getInstance().registerListener(this);
+    }
+
+    @Override
+    public void onUpdateLanguage() {
+        LocalizationController localization = LocalizationController.getInstance();
+
+        stressLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-label"));
+        stressSecondaryLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-secondaryLabel"));
+        stressButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
+
+        displacementLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "displacement-label"));
+        displacementButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
+
+        characteristicLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "characteristic-label"));
+        characteristicButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
+    }
+
     @FXML
     private void selectStressFile(MouseEvent mouseEvent) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
