@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.view;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -15,8 +16,9 @@ import java.net.URL;
 public class DeformationScaleDialog {
     @FXML
     private TextField scaleInput;
-
-    private Stage dialogStage;
+    
+    @FXML
+    private Button saveButton;
 
     private static float currentScaleValue = ModelController.DEFAULT_SCALE;
 
@@ -32,9 +34,6 @@ public class DeformationScaleDialog {
             Scene scene = new Scene(loader.load());
             scene.setFill(Color.TRANSPARENT);
             Stage stage = DialogUtils.createModalWindow(scene);
-
-            DeformationScaleDialog controller = loader.getController();
-            controller.dialogStage = stage;
 
             stage.showAndWait();
         } catch (IOException e) {
@@ -54,7 +53,8 @@ public class DeformationScaleDialog {
             float scale = Float.parseFloat(scaleInput.getText());
             if (scale > 0) {
                 ModelController.getInstance().applyDeformationScale(scale);
-                dialogStage.close();
+                Stage stage = (Stage) saveButton.getScene().getWindow();
+                stage.close();
             } else {
                 scaleInput.setStyle("-fx-border-color: red;");
             }
