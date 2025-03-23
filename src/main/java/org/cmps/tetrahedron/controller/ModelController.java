@@ -36,8 +36,7 @@ public class ModelController {
     private List<float[]> modelColors = null;
 
     private Map<Integer, float[]> originalVertices;
-    private List<float[]> lastAppliedDeformations;
-    private float currentScale = 1.0f;
+    private final DeformationController deformationController = new DeformationController();
 
     public static final float DEFAULT_SCALE = 1.0f;
 
@@ -52,6 +51,7 @@ public class ModelController {
         Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
 
         originalVertices = deepCopyVertices(vertices);
+        deformationController.setOriginalVertices(vertices);
 
         model = Model.builder()
                 .vertices(vertices)
@@ -85,32 +85,20 @@ public class ModelController {
         modelColors = customCharacteristic.getColors();
     }
 
-    public void applyDisplacements(File deformationsFile, float scale) throws ModelValidationException {
-        lastAppliedDeformations = DataReader.readDeformations(deformationsFile, originalVertices.size());
-        currentScale = scale;
-        applyDeformationScale(scale);
+    public void applyDisplacements(File file, float scale) throws ModelValidationException {
+        deformationController.applyDisplacements(file, scale, model);
+        centerModel();
+        modelReady = true;
     }
 
     public void applyDeformationScale(float scale) {
-        if (lastAppliedDeformations == null) {
-            return;
-        }
-
-        int i = 0;
-        for (Integer idx : originalVertices.keySet()) {
-            float[] orig = originalVertices.get(idx);
-            float[] def = lastAppliedDeformations.get(i++);
-            float[] current = model.getVertices().get(idx);
-            current[0] = orig[0] + def[0] * scale;
-            current[1] = orig[1] + def[1] * scale;
-            current[2] = orig[2] + def[2] * scale;
-        }
-
-        currentScale = scale;
-
-        model.calculateModelCenter();
+        deformationController.applyDeformationScale(scale, model);
         centerModel();
         modelReady = true;
+    }
+
+    public float getCurrentScale() {
+        return deformationController.getCurrentScale();
     }
 
     public void applyStress(File stressData) throws ModelValidationException {
