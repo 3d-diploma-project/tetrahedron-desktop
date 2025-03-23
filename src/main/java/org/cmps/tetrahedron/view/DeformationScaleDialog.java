@@ -3,7 +3,6 @@ package org.cmps.tetrahedron.view;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -16,8 +15,6 @@ import java.net.URL;
 public class DeformationScaleDialog {
     @FXML
     private TextField scaleInput;
-    @FXML
-    private Button saveButton;
 
     private Stage dialogStage;
 

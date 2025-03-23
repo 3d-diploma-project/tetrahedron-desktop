@@ -2,28 +2,28 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane xmlns="http://javafx.com/javafx"
+<DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cmps.tetrahedron.view.DeformationScaleDialog"
             stylesheets="@/style/deformation-scale-dialog.css">
+    <content>
+        <VBox spacing="14">
+            <HBox alignment="CENTER">
+                <Label text="Переміщення у вузлах" styleClass="dialog-title"/>
+            </HBox>
 
-    <VBox spacing="15" prefWidth="350" prefHeight="180" styleClass="dialog-container">
-        <HBox alignment="CENTER" styleClass="center-box">
-            <Label text="Переміщення у вузлах" styleClass="dialog-title"/>
-        </HBox>
+            <HBox spacing="10" styleClass="label-input-container">
+                <VBox alignment="CENTER_LEFT">
+                    <Label text="Масштаб відображення" styleClass="dialog-label-bold"/>
+                    <Label text="деформацій моделі" styleClass="dialog-label-bold"/>
+                </VBox>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="scaleInput" text="1.0" styleClass="input-field"/>
+            </HBox>
 
-        <HBox spacing="10" styleClass="label-input-container">
-            <VBox alignment="CENTER_LEFT">
-                <Label text="Масштаб відображення" styleClass="dialog-label-bold"/>
-                <Label text="деформацій моделі" styleClass="dialog-label-bold"/>
-            </VBox>
-            <Pane HBox.hgrow="ALWAYS"/>
-            <TextField fx:id="scaleInput" text="1.0" styleClass="input-field"/>
-        </HBox>
-
-        <HBox alignment="CENTER" styleClass="button-box">
-            <Button text="Зберегти" fx:id="saveButton" styleClass="save-button" onAction="#applyChanges"/>
-        </HBox>
-    </VBox>
-</AnchorPane>
+            <HBox alignment="CENTER" styleClass="button-box">
+                <Button text="Зберегти" fx:id="saveButton" styleClass="save-button" onAction="#applyChanges"/>
+            </HBox>
+        </VBox>
+    </content>
+</DialogPane>

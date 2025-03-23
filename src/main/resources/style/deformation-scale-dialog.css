@@ -1,12 +1,20 @@
-.dialog-container {
+.dialog-pane {
+    -fx-background-color: TRANSPARENT;
+    -fx-padding: 10px 10px;
+}
+
+.content {
     -fx-background-color: #E7EDF2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-padding: 12px 10px 8px 10px;
+    -fx-padding: 12px 10px;
+
+    -fx-font-family: "Geologica Roman";
 }
 
 .dialog-title {
-    -fx-font-size: 18px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #000000;
     -fx-alignment: center;
@@ -38,28 +46,25 @@
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-background-radius: 66px;
-    -fx-padding: 8px 16px;
+    -fx-marging: 8px 16px;
     -fx-pref-width: 92px;
     -fx-pref-height: 32px;
+
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+    -fx-border-width: 1px;
 }
 
 .save-button:hover, .save-button:focused {
     -fx-background-color: #E7EDF2;
     -fx-border-color: #1E0094;
-    -fx-border-width: 1px;
-    -fx-border-radius: 66px;
     -fx-text-fill: #1E0094;
 }
 
 .save-button:pressed {
     -fx-background-color: #1D0070;
+    -fx-border-color: #1D0070;
     -fx-text-fill: white;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 66px;
-    -fx-padding: 8px 16px;
-    -fx-pref-width: 92px;
-    -fx-pref-height: 32px;
 }
 
 .button-box {
