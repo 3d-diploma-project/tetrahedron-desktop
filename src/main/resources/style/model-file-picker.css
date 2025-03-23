@@ -28,3 +28,8 @@
     -fx-background-color: #E5E5E6;
     -fx-padding: 12px 24px;
 }
+
+.create-model-button:pressed {
+    -fx-background-color: #EAF4FF;
+    -fx-background-radius: 66px;
+}
