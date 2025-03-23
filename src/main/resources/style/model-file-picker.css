@@ -25,11 +25,36 @@
 
 .create-model-button {
     -fx-background-radius: 66px;
-    -fx-background-color: #E5E5E6;
+    -fx-background-color: #1E0094;
     -fx-padding: 12px 24px;
+    -fx-text-fill: white;
+    -fx-border-size: 1px;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+}
+
+.create-model-button:hover, .create-model-button:focus {
+    -fx-background-color: white;
+    -fx-border-size: 1px;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+    -fx-text-fill: #1E0094;
 }
 
 .create-model-button:pressed {
-    -fx-background-color: #EAF4FF;
+    -fx-background-color: #1D0070;
     -fx-background-radius: 66px;
+    -fx-text-fill: white;
+    -fx-border-size: 1px;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+}
+
+.create-model-button:disabled {
+    -fx-background-color: #E5E5E6;
+    -fx-background-radius: 66px;
+    -fx-text-fill: #747474;
+    -fx-border-size: 1px;
+    -fx-border-color: #E5E5E6;
+    -fx-border-radius: 66px;
 }
