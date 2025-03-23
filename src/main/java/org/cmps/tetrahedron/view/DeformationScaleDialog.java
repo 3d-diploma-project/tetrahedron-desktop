@@ -1,31 +1,53 @@
 package org.cmps.tetrahedron.view;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.utils.DialogUtils;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class DeformationScaleDialog {
-
     @FXML
     private TextField scaleInput;
     @FXML
     private Button saveButton;
 
-    public Stage dialogStage;
+    private Stage dialogStage;
 
     public static void showDialog() {
-        DeformationScaleDialog controller = DialogUtils.openModal(
-                "view/DeformationScaleDialog.fxml",
-                javafx.stage.StageStyle.TRANSPARENT,
-                true
-        );
+        try {
+            URL fxmlPath = DeformationScaleDialog.class.getClassLoader().getResource("view/DeformationScaleDialog.fxml");
+            FXMLLoader loader = new FXMLLoader(fxmlPath);
 
-        if (controller != null) {
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(loader.load());
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+
+            stage.focusedProperty().addListener((ov, onHidden, onShown) -> {
+                if(!stage.isFocused())
+                    Platform.runLater(stage::close);
+            });
+
+            DeformationScaleDialog controller = loader.getController();
+            controller.dialogStage = stage;
             float currentScale = ModelController.getInstance().getCurrentScale();
             controller.setScaleValue(currentScale);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
