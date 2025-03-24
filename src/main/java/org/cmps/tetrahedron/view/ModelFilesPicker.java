@@ -12,6 +12,7 @@ import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.InvalidModelDataException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.utils.DataReader;
+import org.cmps.tetrahedron.utils.ErrorMessages;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
 import java.io.File;
@@ -60,14 +61,14 @@ public class ModelFilesPicker {
         boolean nodesValidation = validateFileExistence(nodesController);
         boolean indicesValidation = validateFileExistence(indicesController);
         if (!nodesValidation || !indicesValidation) {
-            new ErrorDialog("Помилка!", "Неможливо зчитати матрицю індексів та таблицю координат.\n\nПеревірте дані та спробуйте знову!").show();
+            new ErrorDialog(ErrorMessages.ERROR, ErrorMessages.VERTICES_FACES_READ).show();
             return;
         }
 
         try {
             modelController.initModelData(nodesController.getFile(), indicesController.getFile());
         } catch (ModelValidationException e) {
-            new ErrorDialog("Помилка!", e.getMessage()).show();
+            new ErrorDialog(ErrorMessages.ERROR, e.getMessage()).show();
             return;
         } catch (InvalidModelDataException e) {
             return;

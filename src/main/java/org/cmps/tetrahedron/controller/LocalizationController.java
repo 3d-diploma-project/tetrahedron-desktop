@@ -17,6 +17,7 @@ public class LocalizationController {
     public static final String RIGHT_TOOLBAR_BUNDLE = "i18n.right-toolbar";
     public static final String INDEX_FILE_SELECTOR_BUNDLE = "i18n.index-file-selector";
     public static final String NODE_FILE_SELECTOR_BUNDLE = "i18n.node-file-selector";
+    public static final String ERROR_DIALOG_BUNDLE = "i18n.error-dialog";
 
 
     private LocalizationController() {
@@ -28,6 +29,7 @@ public class LocalizationController {
         bundles.put(RIGHT_TOOLBAR_BUNDLE, ResourceBundle.getBundle(RIGHT_TOOLBAR_BUNDLE, currentLocale));
         bundles.put(INDEX_FILE_SELECTOR_BUNDLE, ResourceBundle.getBundle(INDEX_FILE_SELECTOR_BUNDLE, currentLocale));
         bundles.put(NODE_FILE_SELECTOR_BUNDLE, ResourceBundle.getBundle(NODE_FILE_SELECTOR_BUNDLE, currentLocale));
+        bundles.put(ERROR_DIALOG_BUNDLE, ResourceBundle.getBundle(ERROR_DIALOG_BUNDLE, currentLocale));
     }
 
     public ResourceBundle getBundle(String name) {
