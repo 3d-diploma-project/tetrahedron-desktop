@@ -109,12 +109,12 @@ public class DataReader {
             unusedVertices.removeAll(usedIndices);
 
             if (!unusedVertices.isEmpty()) {
-                WarningDialog dialog = new WarningDialog("Увага!",
-                        "Таблиця координат містить точки, які не використовуються в матриці індексів.\n\nВи впевнені, що хочете продовжити?");
+                WarningDialog dialog = new WarningDialog(WarningMessages.ATTENTION,
+                        WarningMessages.VERTICES_NOT_USED_IN_FACES + "\n\n" + WarningMessages.CONTINUE);
                 boolean userChoice = dialog.showAndWait();
 
                 if (!userChoice) {
-                    throw new InvalidModelDataException("Користувач відмовився продовжувати завантаження.");
+                    throw new InvalidModelDataException(WarningMessages.CANCEL_CONTINUE);
                 }
             }
 

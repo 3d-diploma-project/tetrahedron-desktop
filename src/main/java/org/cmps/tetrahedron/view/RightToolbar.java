@@ -12,6 +12,7 @@ import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
 import org.cmps.tetrahedron.utils.ErrorMessages;
+import org.cmps.tetrahedron.utils.WarningMessages;
 
 import java.io.File;
 
@@ -31,6 +32,7 @@ public class RightToolbar implements LocalizationListener {
     public void onUpdateLanguage() {
         LocalizationController localization = LocalizationController.getInstance();
         ErrorMessages.loadMessages();
+        WarningMessages.loadMessages();
 
         stressLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-label"));
         stressSecondaryLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-secondaryLabel"));
