@@ -3,14 +3,17 @@ package org.cmps.tetrahedron.view;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.Setter;
+import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.InvalidModelDataException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
+import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.ErrorMessages;
 import org.cmps.tetrahedron.utils.ResourceReader;
@@ -19,10 +22,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 
-public class ModelFilesPicker {
+public class ModelFilesPicker implements LocalizationListener {
 
     private final ModelController modelController = ModelController.getInstance();
+
+    @FXML
+    private Button createButton;
 
     @FXML
     private FilePicker nodesController;
@@ -32,11 +39,37 @@ public class ModelFilesPicker {
     @Setter
     private Dialog<Scene> dialog;
 
+    public void initialize() {
+        LocalizationController.getInstance().registerListener(this);
+    }
+
+    @Override
+    public void onUpdateLanguage() {
+        LocalizationController localization = LocalizationController.getInstance();
+
+        ResourceBundle nodeResources = localization.getBundle(LocalizationController.NODE_FILE_SELECTOR_BUNDLE);
+        ResourceBundle indexResources = localization.getBundle(LocalizationController.INDEX_FILE_SELECTOR_BUNDLE);
+        nodesController.updateResources(nodeResources);
+        indicesController.updateResources(indexResources);
+
+        nodesController.updateLabel(
+                localization.getString(LocalizationController.NODE_FILE_SELECTOR_BUNDLE, "file-picker-label")
+        );
+
+        indicesController.updateLabel(
+                localization.getString(LocalizationController.INDEX_FILE_SELECTOR_BUNDLE, "file-picker-label")
+        );
+
+        createButton.setText(
+                localization.getString(LocalizationController.MODEL_FILES_PICKER_BUNDLE, "create-button")
+        );
+    }
+
     public static void openDialogWindow() {
         Dialog<Scene> dialog = new Dialog<>();
 
         URL fxmlUrl = ModelFilesPicker.class.getClassLoader().getResource("view/ModelFilesPicker.fxml");
-        FXMLLoader loader = new FXMLLoader(fxmlUrl);
+        FXMLLoader loader = new FXMLLoader(fxmlUrl, ResourceBundle.getBundle(LocalizationController.MODEL_FILES_PICKER_BUNDLE));
 
         try {
             dialog.setDialogPane(loader.load());
