@@ -34,9 +34,6 @@ public class ModelController {
 
     private Map<Integer, float[]> originalVertices;
 
-    @Getter
-    private final DeformationController deformationController = new DeformationController();
-
     private ModelController() {
         model = Model.builder()
                 .vertices(new HashMap<>())
@@ -82,13 +79,13 @@ public class ModelController {
     }
 
     public void applyDisplacements(File file, float scale) throws ModelValidationException {
-        deformationController.applyDisplacements(file, scale, model, originalVertices);
+        DeformationController.getInstance().applyDisplacements(file, scale, model, originalVertices);
         centerModel();
         modelReady = true;
     }
 
     public void applyDeformationScale(float scale) {
-        deformationController.applyDeformationScale(scale, model, originalVertices);
+        DeformationController.getInstance().applyDeformationScale(scale, model, originalVertices);
         centerModel();
         modelReady = true;
     }

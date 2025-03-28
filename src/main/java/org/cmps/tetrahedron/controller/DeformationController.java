@@ -19,6 +19,11 @@ public class DeformationController {
     @Getter
     private float currentScale = DEFAULT_SCALE;
 
+    @Getter
+    private static final DeformationController instance = new DeformationController();
+
+    private DeformationController() {}
+
     public void applyDisplacements(File file, float scale, Model model, Map<Integer, float[]> originalVertices)
     throws ModelValidationException {
         if (originalVertices == null || model == null) {
