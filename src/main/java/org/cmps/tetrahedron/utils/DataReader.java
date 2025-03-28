@@ -182,28 +182,19 @@ public class DataReader {
 
         CustomCharacteristic customModel = new CustomCharacteristic();
         List<Float> values = new ArrayList<>();
-
         int index = 1;
 
-        try (Scanner fid = new Scanner(customData)) {
-            if (!fid.hasNext()) {
-                throw new ModelValidationException("file-is-empty-or-inaccessible");
-            }
-
+        try {
             List<String> allLines = Files.readAllLines(customData.toPath());
-            boolean isInvalidFormat = allLines.stream()
-                    .anyMatch(line -> {
-                        String[] parts = line.trim().split("\\s+");
-                        return parts.length < 1 || parts.length > 2;
-                    });
-
-            if (isInvalidFormat) {
-                throw new ModelValidationException("characteristic-format");
+            if (allLines.isEmpty()) {
+                throw new ModelValidationException("file-is-empty-or-inaccessible");
             }
 
             for (String line : allLines) {
                 String[] parts = line.trim().split("\\s+");
-                if (parts.length == 0) continue;
+                if (parts.length < 1 || parts.length > 2) {
+                    throw new ModelValidationException("characteristic-format", "check-string", line);
+                }
 
                 String token = parts.length == 1 ? parts[0] : parts[1];
 
