@@ -3,7 +3,6 @@ package org.cmps.tetrahedron.controller;
 import javafx.application.Platform;
 import lombok.Getter;
 import lombok.Setter;
-import org.cmps.tetrahedron.exception.InvalidModelDataException;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
