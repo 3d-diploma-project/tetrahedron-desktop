@@ -72,7 +72,7 @@ public class WarningDialog {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException("ПError happen during component load: " + e.getMessage(), e);
+            throw new RuntimeException("Error happen during component load: " + e.getMessage(), e);
         }
     }
 

@@ -156,7 +156,7 @@ public class DataReader {
                     }
 
                     if (stressOneElement.containsKey(index)) {
-                        throw new ModelValidationException("repeating-index", index);
+                        throw new ModelValidationException("repeating-index", "check", index);
                     }
 
                     for (int j = startIndex; j < elements.length; j++) {
@@ -185,7 +185,7 @@ public class DataReader {
 
         try (Scanner fid = new Scanner(customData)) {
             if (!fid.hasNext()) {
-                throw new ModelValidationException("characteristic-not-found");
+                throw new ModelValidationException("file-is-empty-or-inaccessible");
             }
 
             while (fid.hasNext()) {
@@ -253,7 +253,7 @@ public class DataReader {
                 float dz = Float.parseFloat(elements[startIdx + 2]);
 
                 if (deformationsMap.containsKey(index)) {
-                    throw new ModelValidationException("repeating-index", index);
+                    throw new ModelValidationException("repeating-index", "check", index);
                 }
                 deformationsMap.put(index, new float[]{dx, dy, dz});
             }
@@ -264,7 +264,7 @@ public class DataReader {
         }
 
         if (deformationsMap.size() != expectedVerticesCount) {
-            throw new ModelValidationException("displacements-nodes", deformationsMap.size(), expectedVerticesCount);
+            throw new ModelValidationException("displacements-nodes", "check", deformationsMap.size(), expectedVerticesCount);
         }
 
         List<float[]> result = new ArrayList<>(Collections.nCopies(expectedVerticesCount, null));
@@ -274,7 +274,7 @@ public class DataReader {
             float[] def = e.getValue();
 
             if (idx < 1 || idx > expectedVerticesCount) {
-                throw new ModelValidationException("displacements-out-range", idx);
+                throw new ModelValidationException("displacements-out-range", "check", idx);
             }
             result.set(idx - 1, def);
         }
