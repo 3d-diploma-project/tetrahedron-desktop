@@ -12,14 +12,13 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
-import org.cmps.tetrahedron.utils.ErrorMessages;
-import org.cmps.tetrahedron.utils.WarningMessages;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class WarningDialog implements LocalizationListener {
+public class WarningDialog {
 
     @FXML
     private Label errorTitle;
@@ -33,28 +32,10 @@ public class WarningDialog implements LocalizationListener {
     private Stage stage;
     private boolean result = false;
 
-    private final String originalMessageKey;
-
-    public void initialize() {
-        LocalizationController.getInstance().registerListener(this);
-    }
-
-    @Override
-    public void onUpdateLanguage() {
-        Platform.runLater(() -> {
-            errorTitle.setText(WarningMessages.ATTENTION);
-            yesButton.setText(WarningMessages.YES);
-            noButton.setText(WarningMessages.NO);
-
-            if (originalMessageKey != null) {
-                String translatedMessage = getTranslatedMessage(originalMessageKey);
-                errorMessage.setText(translatedMessage != null ? translatedMessage : originalMessageKey);
-            }
-        });
-    }
-
     public WarningDialog(String title, String message) {
         try {
+            Locale.setDefault(LocalizationController.getInstance().getCurrentLocale());
+
             URL fxmlPath = getClass().getClassLoader().getResource("view/WarningDialog.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlPath, ResourceBundle.getBundle(LocalizationController.WARNING_DIALOG_BUNDLE));
 
@@ -70,9 +51,7 @@ public class WarningDialog implements LocalizationListener {
             stage.setScene(scene);
 
             errorTitle.setText(title);
-            originalMessageKey = message;
-            String translatedMessage = getTranslatedMessage(message);
-            errorMessage.setText(translatedMessage != null ? translatedMessage : message);
+            errorMessage.setText(message);
 
             if (yesButton != null) {
                 yesButton.setOnAction(event -> {
@@ -94,12 +73,8 @@ public class WarningDialog implements LocalizationListener {
         }
     }
 
-    private String getTranslatedMessage(String key) {
-        try {
-            return WarningMessages.class.getField(key).get(null).toString();
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            return null;
-        }
+    public WarningDialog(String title, String message, String continueKey) {
+        this(title, message + "\n\n" + continueKey);
     }
 
     @FXML

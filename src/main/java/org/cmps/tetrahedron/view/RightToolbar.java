@@ -11,8 +11,6 @@ import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
-import org.cmps.tetrahedron.utils.ErrorMessages;
-import org.cmps.tetrahedron.utils.WarningMessages;
 
 import java.io.File;
 
@@ -31,8 +29,6 @@ public class RightToolbar implements LocalizationListener {
     @Override
     public void onUpdateLanguage() {
         LocalizationController localization = LocalizationController.getInstance();
-        ErrorMessages.loadMessages();
-        WarningMessages.loadMessages();
 
         stressLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-label"));
         stressSecondaryLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-secondaryLabel"));
@@ -61,7 +57,7 @@ public class RightToolbar implements LocalizationListener {
                 legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(ErrorMessages.ERROR, e.getMessage()).show();
+            new ErrorDialog(e).show();
         }
     }
 
@@ -81,7 +77,7 @@ public class RightToolbar implements LocalizationListener {
                 legendView.updateLegend(customModel.getMinValue(), customModel.getMaxValue());
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(ErrorMessages.ERROR, e.getMessage()).show();
+            new ErrorDialog(e).show();
         }
     }
 
@@ -97,7 +93,7 @@ public class RightToolbar implements LocalizationListener {
                 ModelController.getInstance().applyDisplacements(file);
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(ErrorMessages.ERROR, e.getMessage()).show();
+            new ErrorDialog(e).show();
         }
     }
 }

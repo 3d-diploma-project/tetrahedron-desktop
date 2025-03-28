@@ -10,6 +10,7 @@ public class LocalizationController {
 
     @Getter
     private static LocalizationController instance = new LocalizationController();
+    @Getter
     private Locale currentLocale;
     private final Map<String, ResourceBundle> bundles = new HashMap<>();
     private final List<LocalizationListener> listeners = new ArrayList<>();

@@ -11,14 +11,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.cmps.tetrahedron.controller.LocalizationController;
-import org.cmps.tetrahedron.i18n.LocalizationListener;
-import org.cmps.tetrahedron.utils.ErrorMessages;
+import org.cmps.tetrahedron.exception.ModelValidationException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class ErrorDialog implements LocalizationListener {
+public class ErrorDialog {
 
     @FXML
     private Label errorTitle;
@@ -31,27 +31,14 @@ public class ErrorDialog implements LocalizationListener {
     private double xOffset = 0;
     private double yOffset = 0;
 
-    private final String originalMessageKey;
+    private ModelValidationException exception;
 
-    public void initialize() {
-        LocalizationController.getInstance().registerListener(this);
-    }
+    public ErrorDialog(ModelValidationException exception) {
+        this.exception = exception;
 
-    @Override
-    public void onUpdateLanguage() {
-        Platform.runLater(() -> {
-            errorTitle.setText(ErrorMessages.ERROR);
-            closeButton.setText(ErrorMessages.OK);
-
-            if (originalMessageKey != null) {
-                String translatedMessage = getTranslatedMessage(originalMessageKey);
-                errorMessage.setText(translatedMessage != null ? translatedMessage : originalMessageKey);
-            }
-        });
-    }
-
-    public ErrorDialog(String title, String message) {
         try {
+            Locale.setDefault(LocalizationController.getInstance().getCurrentLocale());
+
             URL fxmlPath = getClass().getClassLoader().getResource("view/ErrorDialog.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlPath, ResourceBundle.getBundle(LocalizationController.ERROR_DIALOG_BUNDLE));
 
@@ -66,10 +53,7 @@ public class ErrorDialog implements LocalizationListener {
             scene.setFill(null);
             stage.setScene(scene);
 
-            errorTitle.setText(title);
-            originalMessageKey = message;
-            String translatedMessage = getTranslatedMessage(message);
-            errorMessage.setText(translatedMessage != null ? translatedMessage : message);
+            errorMessage.setText(exception.getMessage());
 
             if (closeButton != null) {
                 closeButton.setOnAction(event -> closeDialog());
@@ -87,14 +71,6 @@ public class ErrorDialog implements LocalizationListener {
 
         } catch (IOException e) {
             throw new RuntimeException("Ошибка открытия окна ошибки: " + e.getMessage(), e);
-        }
-    }
-
-    private String getTranslatedMessage(String key) {
-        try {
-            return ErrorMessages.class.getField(key).get(null).toString();
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            return null;
         }
     }
 

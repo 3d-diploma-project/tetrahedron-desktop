@@ -48,12 +48,4 @@ public class FilePicker {
         label.setText(resources.getString("file-is-not-selected"));
     }
 
-    public void updateLabel(String text) {
-        label.setText(text);
-    }
-
-    public void updateResources(ResourceBundle newResources) {
-        this.resources = newResources;
-    }
-
 }
