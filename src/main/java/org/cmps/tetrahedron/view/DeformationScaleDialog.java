@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.cmps.tetrahedron.controller.DeformationController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.utils.DialogUtils;
 
@@ -16,11 +17,11 @@ import java.net.URL;
 public class DeformationScaleDialog {
     @FXML
     private TextField scaleInput;
-    
+
     @FXML
     private Button saveButton;
 
-    private static float currentScaleValue = ModelController.DEFAULT_SCALE;
+    private static float currentScaleValue = DeformationController.DEFAULT_SCALE;
 
     public static void updateCurrentScale(float scale) {
         currentScaleValue = scale;

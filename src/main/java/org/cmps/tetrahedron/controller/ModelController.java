@@ -3,19 +3,16 @@ package org.cmps.tetrahedron.controller;
 import javafx.application.Platform;
 import lombok.Getter;
 import lombok.Setter;
-import org.cmps.tetrahedron.ModelCanvas;
 import org.cmps.tetrahedron.exception.InvalidModelDataException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
-import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.view.LegendView;
 import org.cmps.tetrahedron.view.ModelFilesPicker;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.awt.GLData;
 
 import java.io.File;
 import java.util.*;
@@ -36,9 +33,9 @@ public class ModelController {
     private List<float[]> modelColors = null;
 
     private Map<Integer, float[]> originalVertices;
-    private final DeformationController deformationController = new DeformationController();
 
-    public static final float DEFAULT_SCALE = 1.0f;
+    @Getter
+    private final DeformationController deformationController = new DeformationController();
 
     private ModelController() {
         model = Model.builder()

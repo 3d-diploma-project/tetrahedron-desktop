@@ -13,17 +13,23 @@ import java.util.Map;
 public class DeformationController {
 
     private List<float[]> lastAppliedDeformations;
+
+    public static final float DEFAULT_SCALE = 1.0f;
+
     @Getter
-    private float currentScale = ModelController.DEFAULT_SCALE;
+    private float currentScale = DEFAULT_SCALE;
 
     private Map<Integer, float[]> originalVertices;
+
 
     public void setOriginalVertices(Map<Integer, float[]> vertices) {
         this.originalVertices = deepCopyVertices(vertices);
     }
 
     public void applyDisplacements(File file, float scale, Model model) throws ModelValidationException {
-        if (originalVertices == null || model == null) return;
+        if (originalVertices == null || model == null) {
+            return;
+        }
 
         lastAppliedDeformations = DataReader.readDeformations(file, originalVertices.size());
         currentScale = scale;
@@ -31,7 +37,9 @@ public class DeformationController {
     }
 
     public void applyDeformationScale(float scale, Model model) {
-        if (lastAppliedDeformations == null || originalVertices == null || model == null) return;
+        if (lastAppliedDeformations == null || originalVertices == null || model == null) {
+            return;
+        }
 
         int i = 0;
         Map<Integer, float[]> modelVertices = model.getVertices();
