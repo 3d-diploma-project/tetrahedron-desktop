@@ -19,24 +19,18 @@ public class DeformationController {
     @Getter
     private float currentScale = DEFAULT_SCALE;
 
-    private Map<Integer, float[]> originalVertices;
-
-
-    public void setOriginalVertices(Map<Integer, float[]> vertices) {
-        this.originalVertices = deepCopyVertices(vertices);
-    }
-
-    public void applyDisplacements(File file, float scale, Model model) throws ModelValidationException {
+    public void applyDisplacements(File file, float scale, Model model, Map<Integer, float[]> originalVertices)
+    throws ModelValidationException {
         if (originalVertices == null || model == null) {
             return;
         }
 
         lastAppliedDeformations = DataReader.readDeformations(file, originalVertices.size());
         currentScale = scale;
-        applyDeformationScale(scale, model);
+        applyDeformationScale(scale, model, originalVertices);
     }
 
-    public void applyDeformationScale(float scale, Model model) {
+    public void applyDeformationScale(float scale, Model model, Map<Integer, float[]> originalVertices) {
         if (lastAppliedDeformations == null || originalVertices == null || model == null) {
             return;
         }
@@ -54,14 +48,5 @@ public class DeformationController {
 
         currentScale = scale;
         model.calculateModelCenter();
-    }
-
-    private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
-        Map<Integer, float[]> copy = new HashMap<>();
-        for (Map.Entry<Integer, float[]> e : source.entrySet()) {
-            float[] v = e.getValue();
-            copy.put(e.getKey(), new float[]{v[0], v[1], v[2]});
-        }
-        return copy;
     }
 }

@@ -48,7 +48,6 @@ public class ModelController {
         Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
 
         originalVertices = deepCopyVertices(vertices);
-        deformationController.setOriginalVertices(vertices);
 
         model = Model.builder()
                 .vertices(vertices)
@@ -83,13 +82,13 @@ public class ModelController {
     }
 
     public void applyDisplacements(File file, float scale) throws ModelValidationException {
-        deformationController.applyDisplacements(file, scale, model);
+        deformationController.applyDisplacements(file, scale, model, originalVertices);
         centerModel();
         modelReady = true;
     }
 
     public void applyDeformationScale(float scale) {
-        deformationController.applyDeformationScale(scale, model);
+        deformationController.applyDeformationScale(scale, model, originalVertices);
         centerModel();
         modelReady = true;
     }
