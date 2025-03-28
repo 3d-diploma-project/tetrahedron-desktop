@@ -9,16 +9,16 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.Setter;
+import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.exception.InvalidModelDataException;
+import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
-import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class ModelFilesPicker {
 
@@ -36,10 +36,11 @@ public class ModelFilesPicker {
     private Button createModelButton;
 
     public static void openDialogWindow() {
+        Locale.setDefault(LocalizationController.getInstance().getCurrentLocale());
         Dialog<Scene> dialog = new Dialog<>();
 
         URL fxmlUrl = ModelFilesPicker.class.getClassLoader().getResource("view/ModelFilesPicker.fxml");
-        FXMLLoader loader = new FXMLLoader(fxmlUrl);
+        FXMLLoader loader = new FXMLLoader(fxmlUrl, ResourceBundle.getBundle(LocalizationController.MODEL_FILES_PICKER_BUNDLE));
 
         try {
             dialog.setDialogPane(loader.load());
@@ -63,17 +64,18 @@ public class ModelFilesPicker {
     public void onClick() {
         boolean nodesValidation = validateFileExistence(nodesController);
         boolean indicesValidation = validateFileExistence(indicesController);
+
         if (!nodesValidation || !indicesValidation) {
-            new ErrorDialog("Помилка!", "Неможливо зчитати матрицю індексів та таблицю координат.\n\nПеревірте дані та спробуйте знову!").show();
+            new ErrorDialog(new ModelValidationException("vertices-faces-read"));
             return;
         }
 
         try {
             modelController.initModelData(nodesController.getFile(), indicesController.getFile());
         } catch (ModelValidationException e) {
-            new ErrorDialog("Помилка!", e.getMessage()).show();
+            new ErrorDialog(e);
             return;
-        } catch (InvalidModelDataException e) {
+        } catch (InternalValidationException e) {
             return;
         }
 

@@ -9,9 +9,12 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.cmps.tetrahedron.controller.LocalizationController;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class WarningDialog {
 
@@ -24,18 +27,21 @@ public class WarningDialog {
     @FXML
     private Button noButton;
 
-    private Stage stage;
     private boolean result = false;
 
-    public WarningDialog(String title, String message) {
+    private static final LocalizationController local = LocalizationController.getInstance();
+
+    public WarningDialog(String title, String message, String continueKey) {
         try {
+            Locale.setDefault(local.getCurrentLocale());
+
             URL fxmlPath = getClass().getClassLoader().getResource("view/WarningDialog.fxml");
-            FXMLLoader loader = new FXMLLoader(fxmlPath);
+            FXMLLoader loader = new FXMLLoader(fxmlPath, ResourceBundle.getBundle(LocalizationController.WARNING_DIALOG_BUNDLE));
 
             loader.setController(this);
             Pane root = loader.load();
 
-            stage = new Stage();
+            Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.TRANSPARENT);
@@ -43,8 +49,12 @@ public class WarningDialog {
             scene.setFill(null);
             stage.setScene(scene);
 
-            errorTitle.setText(title);
-            errorMessage.setText(message);
+            errorTitle.setText(local.getString(LocalizationController.WARNING_DIALOG_BUNDLE, title));
+            String translatedMessage = local.getString(LocalizationController.WARNING_DIALOG_BUNDLE, message);
+            if (continueKey != null) {
+                translatedMessage += "\n\n" + local.getString(LocalizationController.WARNING_DIALOG_BUNDLE, continueKey);
+            }
+            errorMessage.setText(translatedMessage);
 
             if (yesButton != null) {
                 yesButton.setOnAction(event -> {
@@ -62,18 +72,18 @@ public class WarningDialog {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException("Помилка відкриття вікна попередження: " + e.getMessage(), e);
+            throw new RuntimeException("Error happen during component load: " + e.getMessage(), e);
         }
     }
 
     @FXML
     private void closeDialog() {
-        if (stage != null) {
-            stage.close();
-        }
+        Stage stage = (Stage) yesButton.getScene().getWindow();
+        stage.close();
     }
 
     public boolean showAndWait() {
+        Stage stage = (Stage) yesButton.getScene().getWindow();
         if (stage != null) {
             stage.showAndWait();
         }

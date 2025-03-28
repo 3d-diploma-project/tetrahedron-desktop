@@ -4,8 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import lombok.Getter;
+import lombok.Setter;
 import org.cmps.tetrahedron.controller.FileChooserController;
+import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.SceneController;
+import org.cmps.tetrahedron.i18n.LocalizationListener;
 
 import java.io.File;
 import java.util.ResourceBundle;
@@ -53,4 +56,5 @@ public class FilePicker {
     public void showNotSelectedFileError() {
         label.setText(resources.getString("file-is-not-selected"));
     }
+
 }

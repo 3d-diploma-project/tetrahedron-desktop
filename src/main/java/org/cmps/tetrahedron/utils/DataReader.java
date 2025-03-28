@@ -1,6 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
-import org.cmps.tetrahedron.exception.InvalidModelDataException;
+import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.view.WarningDialog;
@@ -18,24 +18,22 @@ public class DataReader {
     private static final int DEFORMATIONS_WITH_INDEX = 4;
     private static final int STRESS_WITH_INDICES = 7;
 
-
     public static Map<Integer, float[]> readVertices(File coordinatesTableFile)
             throws ModelValidationException {
         Locale.setDefault(US);
 
         int i = 1;
+        String line = null;
         try (Scanner fid = new Scanner(coordinatesTableFile)) {
             Map<Integer, float[]> coordinates = new HashMap<>();
 
             while (fid.hasNextLine()) {
-                String[] elements = fid.nextLine().trim().split("\\s+");
+                line = fid.nextLine();
+                String[] elements = line.trim().split("\\s+");
                 int index, startIndex;
 
                 if (elements.length < 3 || elements.length > 4) {
-                    throw new ModelValidationException("""
-                            Для кожної вершини має бути вказано 3 координати.\s
-                                                             
-                            Перевірте дані та спробуйте знову""");
+                    throw new ModelValidationException("vertices-count", "check-string", line);
                 }
 
                 if (elements.length == VERTICES_WITH_INDICES) {
@@ -56,32 +54,28 @@ public class DataReader {
 
             return coordinates;
         } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException("""
-                    Помилка під час зчитування матриці координат.\s
-                                                
-                    Перевірте дані та спробуйте знову""");
+            throw new ModelValidationException("vertices-read", "check-string", line);
         }
     }
 
     public static List<float[][]> readIndexesAndConvertToFaces(File indicesMatrix,
                                                                Map<Integer, float[]> verticesCoordinates)
-            throws InvalidModelDataException, ModelValidationException {
+            throws InternalValidationException, ModelValidationException {
         Locale.setDefault(US);
 
         Set<Integer> usedIndices = new HashSet<>();
         Set<Integer> availableVertices = verticesCoordinates.keySet();
         List<Integer> invalidIndices = new ArrayList<>();
 
+        String line = null;
         try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
             while (fid.hasNextLine()) {
-                String[] elements = fid.nextLine().trim().split("\\s+");
+                line = fid.nextLine();
+                String[] elements = line.trim().split("\\s+");
 
                 if (elements.length < 4 || elements.length > 5) {
-                    throw new ModelValidationException("""
-                            Для кожного елементу має бути вказано 4 індекси координат.\s
-                                                             
-                            Перевірте дані та спробуйте знову""");
+                    throw new ModelValidationException("faces-count", "check-string", line);
                 }
 
                 float[][] tetrahedron = new float[4][];
@@ -110,9 +104,7 @@ public class DataReader {
                 faces.add(new float[][]{vertex4, vertex2, vertex3});
 
                 if (!invalidIndices.isEmpty()) {
-                    throw new ModelValidationException("Матриця індексів використовує неіснуючі координати!\n" +
-                            "Завантажте правильні файли.\n\n" +
-                            "Неправильні індекси: " + invalidIndices);
+                    throw new ModelValidationException("faces-not-exist", invalidIndices);
                 }
             }
 
@@ -120,21 +112,17 @@ public class DataReader {
             unusedVertices.removeAll(usedIndices);
 
             if (!unusedVertices.isEmpty()) {
-                WarningDialog dialog = new WarningDialog("Увага!",
-                        "Таблиця координат містить точки, які не використовуються в матриці індексів.\n\nВи впевнені, що хочете продовжити?");
+                WarningDialog dialog = new WarningDialog("attention", "vertices-not-used-in-faces","continue");
                 boolean userChoice = dialog.showAndWait();
 
                 if (!userChoice) {
-                    throw new InvalidModelDataException("Користувач відмовився продовжувати завантаження.");
+                    throw new InternalValidationException("Stop flow as user decided to select another file");
                 }
             }
 
             return faces;
         } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException("""
-                    Помилка під час зчитування матриці індексів.\s
-                                                
-                    Перевірте дані та спробуйте знову""");
+            throw new ModelValidationException("faces-read", "check-string",line);
         }
     }
 
@@ -156,10 +144,7 @@ public class DataReader {
 
                 try {
                     if (elements.length < 6 || elements.length > 7) {
-                        throw new ModelValidationException("У кожному рядку файлу мають бути вказані значення для 6 компонентів напруження:\n"
-                                + "індекс (необовʼязково), x, xy, zx, y, yz, z).\n"
-                                + "Перевірте рядок: " + line
-                                + "\n\nЯкщо у вашому файлі є тільки одне значення для елементу, використовуйте опцію 'Довільна характеристика'.");
+                        throw new ModelValidationException("stress-format");
                     }
 
                     if (elements.length == STRESS_WITH_INDICES) {
@@ -171,15 +156,14 @@ public class DataReader {
                     }
 
                     if (stressOneElement.containsKey(index)) {
-                        throw new ModelValidationException("Файл містить індекс, що повторюється: \n" + index);
+                        throw new ModelValidationException("repeating-index", "check", index);
                     }
 
                     for (int j = startIndex; j < elements.length; j++) {
                         stressValues[j - startIndex] = Float.parseFloat(elements[j]);
                     }
                 } catch (NumberFormatException e) {
-                    throw new ModelValidationException("Помилка під час зчитування числа.\n"
-                            + "Перевірте рядок: \n" + line);
+                    throw new ModelValidationException("read-number", "check-string", line);
                 }
 
                 stressOneElement.put(index, stressValues);
@@ -187,7 +171,7 @@ public class DataReader {
 
             return stressOneElement;
         } catch (FileNotFoundException e) {
-            throw new ModelValidationException("Не вдалося знайти обраний файл: " + stressData.getAbsolutePath());
+            throw new ModelValidationException("not-found-file");
         }
     }
 
@@ -197,9 +181,11 @@ public class DataReader {
         CustomCharacteristic customModel = new CustomCharacteristic();
         List<Float> values = new ArrayList<>();
 
+        int index = 1;
+
         try (Scanner fid = new Scanner(customData)) {
             if (!fid.hasNext()) {
-                throw new ModelValidationException("Файл характеристик пустий або недоступний.");
+                throw new ModelValidationException("file-is-empty-or-inaccessible");
             }
 
             while (fid.hasNext()) {
@@ -208,7 +194,7 @@ public class DataReader {
                     float value = Float.parseFloat(token);
 
                     if (Float.isNaN(value) || Float.isInfinite(value)) {
-                        throw new ModelValidationException("Файл містить некоректні числові значення: " + value);
+                        throw new ModelValidationException("read-number", "check-string", token);
                     }
 
                     if (value < customModel.getMinValue()) {
@@ -217,20 +203,17 @@ public class DataReader {
                         customModel.setMaxValue(value);
                     }
 
+                    index = index + 1;
                     values.add(value);
                 } catch (NumberFormatException e) {
-                    throw new ModelValidationException("Помилка зчитування значення: " + token);
+                    throw new ModelValidationException("read-number", "check-string", token);
                 }
-            }
-
-            if (values.isEmpty()) {
-                throw new ModelValidationException("Файл характеристик не містить жодного валідного значення.");
             }
 
             customModel.setValues(values);
             return customModel;
         } catch (FileNotFoundException e) {
-            throw new ModelValidationException("Файл характеристик не знайдено: " + customData.getAbsolutePath());
+            throw new ModelValidationException("not-found-file");
         }
     }
 
@@ -241,19 +224,17 @@ public class DataReader {
         Map<Integer, float[]> deformationsMap = new HashMap<>();
 
         int autoIndex = 1;
+        String line = null;
         try (Scanner fid = new Scanner(deformationsFile)) {
             while (fid.hasNextLine()) {
-                String line = fid.nextLine().trim();
+                line = fid.nextLine().trim();
                 if (line.isEmpty()) {
                     continue;
                 }
 
                 String[] elements = line.split("\\s+");
                 if (elements.length < 3 || elements.length > 4) {
-                    throw new ModelValidationException(
-                            "У кожному рядку файлу деформацій має бути 3 (dx, dy, dz) чи 4 (index, dx, dy, dz) числа.\n" +
-                                    "Перевірте строку: " + line
-                    );
+                    throw new ModelValidationException("displacements-format", "check-string", line);
                 }
 
                 int index;
@@ -272,24 +253,18 @@ public class DataReader {
                 float dz = Float.parseFloat(elements[startIdx + 2]);
 
                 if (deformationsMap.containsKey(index)) {
-                    throw new ModelValidationException(
-                            "Файл деформацій містить індекс, що повторюється: " + index
-                    );
+                    throw new ModelValidationException("repeating-index", "check", index);
                 }
                 deformationsMap.put(index, new float[]{dx, dy, dz});
             }
         } catch (FileNotFoundException e) {
-            throw new ModelValidationException(
-                    "Не вдалося знайти файл деформацій: " + deformationsFile.getAbsolutePath());
+            throw new ModelValidationException("not-found-file");
         } catch (NumberFormatException e) {
-            throw new ModelValidationException("Помилка перетворення числа у файлі деформацій");
+            throw new ModelValidationException("read-number", "check-string", line);
         }
 
         if (deformationsMap.size() != expectedVerticesCount) {
-            throw new ModelValidationException(
-                    "Кількість прочитаних деформацій (" + deformationsMap.size() +
-                            ") не збігається з кількістю вершин (" + expectedVerticesCount + ")"
-            );
+            throw new ModelValidationException("displacements-nodes", "check", deformationsMap.size(), expectedVerticesCount);
         }
 
         List<float[]> result = new ArrayList<>(Collections.nCopies(expectedVerticesCount, null));
@@ -299,9 +274,7 @@ public class DataReader {
             float[] def = e.getValue();
 
             if (idx < 1 || idx > expectedVerticesCount) {
-                throw new ModelValidationException(
-                        "Індекс у файлі деформацій вийшов за межі: " + idx
-                );
+                throw new ModelValidationException("displacements-out-range", "check", idx);
             }
             result.set(idx - 1, def);
         }

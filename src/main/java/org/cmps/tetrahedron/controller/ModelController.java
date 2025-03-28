@@ -3,19 +3,16 @@ package org.cmps.tetrahedron.controller;
 import javafx.application.Platform;
 import lombok.Getter;
 import lombok.Setter;
-import org.cmps.tetrahedron.ModelCanvas;
-import org.cmps.tetrahedron.exception.InvalidModelDataException;
+import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
-import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.view.LegendView;
 import org.cmps.tetrahedron.view.ModelFilesPicker;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.awt.GLData;
 
 import java.io.File;
 import java.util.*;
@@ -44,7 +41,7 @@ public class ModelController {
                 .build();
     }
 
-    public void initModelData(File nodes, File indices) throws ModelValidationException, InvalidModelDataException {
+    public void initModelData(File nodes, File indices) throws ModelValidationException, InternalValidationException {
         Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
 
         originalVertices = deepCopyVertices(vertices);
