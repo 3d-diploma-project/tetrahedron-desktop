@@ -10,12 +10,12 @@
     <content>
         <StackPane>
             <VBox alignment="CENTER" spacing="30" maxWidth="291" maxHeight="268">
-                <Label fx:id="errorTitle" styleClass="error-title" text="Увага!" />
+                <Label fx:id="errorTitle" styleClass="error-title" text="%attention" />
                 <Label fx:id="errorMessage" styleClass="error-message" wrapText="true"
-                       text="Таблиця координат містить точки, що не використовуються в матриці індексів. Ви впевнені, що хочете продовжити?" />
+                       text="Опис помилки" />
                 <HBox alignment="CENTER" spacing="15">
-                    <Button fx:id="yesButton" text="Так" styleClass="error-button" />
-                    <Button fx:id="noButton" text="Ні" styleClass="error-button" />
+                    <Button fx:id="yesButton" text="%yes" styleClass="error-button" />
+                    <Button fx:id="noButton" text="%no" styleClass="error-button" />
                 </HBox>
             </VBox>
         </StackPane>

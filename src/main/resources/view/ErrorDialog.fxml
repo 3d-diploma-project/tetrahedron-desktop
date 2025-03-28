@@ -10,9 +10,9 @@
     <content>
         <StackPane>
             <VBox alignment="CENTER" spacing="30" maxWidth="291" maxHeight="268">
-                <Label fx:id="errorTitle" styleClass="error-title" text="Помилка!" />
+                <Label fx:id="errorTitle" styleClass="error-title" text="%error" />
                 <Label fx:id="errorMessage" styleClass="error-message" wrapText="true" text="Опис помилки"/>
-                <Button fx:id="closeButton" text="Ок" styleClass="error-button" onMouseClicked="#closeDialog"/>
+                <Button fx:id="closeButton" styleClass="error-button" text="%ok" onMouseClicked="#closeDialog"/>
             </VBox>
         </StackPane>
     </content>
