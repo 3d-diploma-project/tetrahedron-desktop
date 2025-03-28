@@ -181,6 +181,10 @@ public class DataReader {
         CustomCharacteristic customModel = new CustomCharacteristic();
         List<Float> values = new ArrayList<>();
 
+        if (values.stream().allMatch(v -> v >= 0 && v < 0.01)) {
+            throw new ModelValidationException("Файл схожий на данные напряжения. Пожалуйста, выберите корректный файл для характеристики.");
+        }
+
         int index = 1;
 
         try (Scanner fid = new Scanner(customData)) {
