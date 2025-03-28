@@ -1,7 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
-import org.cmps.tetrahedron.controller.LocalizationController;
-import org.cmps.tetrahedron.exception.InvalidModelDataException;
+import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.view.WarningDialog;
@@ -19,25 +18,22 @@ public class DataReader {
     private static final int DEFORMATIONS_WITH_INDEX = 4;
     private static final int STRESS_WITH_INDICES = 7;
 
-    private static final LocalizationController local = LocalizationController.getInstance();
-    private static String errBundle = LocalizationController.ERROR_DIALOG_BUNDLE;
-    private static String warnBundle = LocalizationController.WARNING_DIALOG_BUNDLE;
-
-
     public static Map<Integer, float[]> readVertices(File coordinatesTableFile)
             throws ModelValidationException {
         Locale.setDefault(US);
 
         int i = 1;
+        String line = null;
         try (Scanner fid = new Scanner(coordinatesTableFile)) {
             Map<Integer, float[]> coordinates = new HashMap<>();
 
             while (fid.hasNextLine()) {
-                String[] elements = fid.nextLine().trim().split("\\s+");
+                line = fid.nextLine();
+                String[] elements = line.trim().split("\\s+");
                 int index, startIndex;
 
                 if (elements.length < 3 || elements.length > 4) {
-                    throw new ModelValidationException("vertices-count", "check-string");
+                    throw new ModelValidationException("vertices-count", "check-string", line);
                 }
 
                 if (elements.length == VERTICES_WITH_INDICES) {
@@ -58,26 +54,28 @@ public class DataReader {
 
             return coordinates;
         } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException("vertices-read", "check-string");
+            throw new ModelValidationException("vertices-read", "check-string", line);
         }
     }
 
     public static List<float[][]> readIndexesAndConvertToFaces(File indicesMatrix,
                                                                Map<Integer, float[]> verticesCoordinates)
-            throws InvalidModelDataException, ModelValidationException {
+            throws InternalValidationException, ModelValidationException {
         Locale.setDefault(US);
 
         Set<Integer> usedIndices = new HashSet<>();
         Set<Integer> availableVertices = verticesCoordinates.keySet();
         List<Integer> invalidIndices = new ArrayList<>();
 
+        String line = null;
         try (Scanner fid = new Scanner(indicesMatrix)) {
             List<float[][]> faces = new ArrayList<>();
             while (fid.hasNextLine()) {
-                String[] elements = fid.nextLine().trim().split("\\s+");
+                line = fid.nextLine();
+                String[] elements = line.trim().split("\\s+");
 
                 if (elements.length < 4 || elements.length > 5) {
-                    throw new ModelValidationException("faces-count", "check-string");
+                    throw new ModelValidationException("faces-count", "check-string", line);
                 }
 
                 float[][] tetrahedron = new float[4][];
@@ -106,8 +104,7 @@ public class DataReader {
                 faces.add(new float[][]{vertex4, vertex2, vertex3});
 
                 if (!invalidIndices.isEmpty()) {
-                    throw new ModelValidationException(local.getString(errBundle, "faces-not-exist") +
-                            " " + invalidIndices);
+                    throw new ModelValidationException("faces-not-exist", invalidIndices);
                 }
             }
 
@@ -119,13 +116,13 @@ public class DataReader {
                 boolean userChoice = dialog.showAndWait();
 
                 if (!userChoice) {
-                    throw new InvalidModelDataException(local.getString(warnBundle, "cancel-continue"));
+                    throw new InternalValidationException("Stop flow as user decided to select another file");
                 }
             }
 
             return faces;
         } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException("faces-read", "check-string");
+            throw new ModelValidationException("faces-read", "check-string",line);
         }
     }
 
@@ -174,7 +171,7 @@ public class DataReader {
 
             return stressOneElement;
         } catch (FileNotFoundException e) {
-            throw new ModelValidationException(local.getString(errBundle, "not-found-file") + stressData.getAbsolutePath());
+            throw new ModelValidationException("not-found-file");
         }
     }
 
@@ -197,8 +194,7 @@ public class DataReader {
                     float value = Float.parseFloat(token);
 
                     if (Float.isNaN(value) || Float.isInfinite(value)) {
-                        throw new ModelValidationException(local.getString(errBundle, "characteristic-read-number") +
-                                " " + value);
+                        throw new ModelValidationException("read-number", "check-string", value);
                     }
 
                     if (value < customModel.getMinValue()) {
@@ -217,7 +213,7 @@ public class DataReader {
             customModel.setValues(values);
             return customModel;
         } catch (FileNotFoundException e) {
-            throw new ModelValidationException(local.getString(errBundle, "not-found-file") + customData.getAbsolutePath());
+            throw new ModelValidationException("not-found-file");
         }
     }
 
@@ -228,9 +224,10 @@ public class DataReader {
         Map<Integer, float[]> deformationsMap = new HashMap<>();
 
         int autoIndex = 1;
+        String line = null;
         try (Scanner fid = new Scanner(deformationsFile)) {
             while (fid.hasNextLine()) {
-                String line = fid.nextLine().trim();
+                line = fid.nextLine().trim();
                 if (line.isEmpty()) {
                     continue;
                 }
@@ -261,17 +258,13 @@ public class DataReader {
                 deformationsMap.put(index, new float[]{dx, dy, dz});
             }
         } catch (FileNotFoundException e) {
-            throw new ModelValidationException(
-                    local.getString(errBundle, "not-found-file") + deformationsFile.getAbsolutePath());
+            throw new ModelValidationException("not-found-file");
         } catch (NumberFormatException e) {
-            throw new ModelValidationException("read-number");
+            throw new ModelValidationException("read-number", "check-string", line);
         }
 
         if (deformationsMap.size() != expectedVerticesCount) {
-            throw new ModelValidationException(
-                    String.format(local.getString(errBundle, "displacements-nodes"),
-                            deformationsMap.size(), expectedVerticesCount)
-            );
+            throw new ModelValidationException("displacements-nodes", deformationsMap.size(), expectedVerticesCount);
         }
 
         List<float[]> result = new ArrayList<>(Collections.nCopies(expectedVerticesCount, null));

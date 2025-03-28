@@ -57,7 +57,7 @@ public class RightToolbar implements LocalizationListener {
                 legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(e).show();
+            new ErrorDialog(e);
         }
     }
 
@@ -77,7 +77,7 @@ public class RightToolbar implements LocalizationListener {
                 legendView.updateLegend(customModel.getMinValue(), customModel.getMaxValue());
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(e).show();
+            new ErrorDialog(e);
         }
     }
 
@@ -93,7 +93,7 @@ public class RightToolbar implements LocalizationListener {
                 ModelController.getInstance().applyDisplacements(file);
             }
         } catch (ModelValidationException e) {
-            new ErrorDialog(e).show();
+            new ErrorDialog(e);
         }
     }
 }

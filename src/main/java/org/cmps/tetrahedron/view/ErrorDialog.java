@@ -1,6 +1,5 @@
 package org.cmps.tetrahedron.view;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,43 +19,42 @@ import java.util.ResourceBundle;
 
 public class ErrorDialog {
 
-    @FXML
-    private Label errorTitle;
+    private static final LocalizationController local = LocalizationController.getInstance();
+
     @FXML
     private Label errorMessage;
     @FXML
     private Button closeButton;
 
-    private Stage stage;
     private double xOffset = 0;
     private double yOffset = 0;
 
-    private static final LocalizationController local = LocalizationController.getInstance();
-    private static String errBundle = LocalizationController.ERROR_DIALOG_BUNDLE;
-
-    private ModelValidationException exception;
-
     public ErrorDialog(ModelValidationException exception) {
-        this.exception = exception;
-
         try {
             Locale.setDefault(local.getCurrentLocale());
 
             URL fxmlPath = getClass().getClassLoader().getResource("view/ErrorDialog.fxml");
-            FXMLLoader loader = new FXMLLoader(fxmlPath, ResourceBundle.getBundle(errBundle));
+            FXMLLoader loader =
+                    new FXMLLoader(fxmlPath, ResourceBundle.getBundle(LocalizationController.ERROR_DIALOG_BUNDLE));
 
             loader.setController(this);
             Pane root = loader.load();
 
-            stage = new Stage();
+            Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.TRANSPARENT);
+
             Scene scene = new Scene(root);
             scene.setFill(null);
             stage.setScene(scene);
 
-            errorMessage.setText(local.getString(errBundle, exception.getMessage()));
+            String message = local.getString(LocalizationController.ERROR_DIALOG_BUNDLE, exception.getMessage());
+            if (exception.getSecondaryMessage() != null) {
+                message += "\n\n"
+                        + local.getString(LocalizationController.ERROR_DIALOG_BUNDLE, exception.getSecondaryMessage());
+            }
+            errorMessage.setText(message.formatted(exception.getParams()));
 
             if (closeButton != null) {
                 closeButton.setOnAction(event -> closeDialog());
@@ -72,21 +70,15 @@ public class ErrorDialog {
                 stage.setY(event.getScreenY() - yOffset);
             });
 
+            stage.showAndWait();
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка открытия окна ошибки: " + e.getMessage(), e);
+            throw new RuntimeException("Error happen during component load: " + e.getMessage(), e);
         }
     }
 
     @FXML
     private void closeDialog() {
-        if (stage != null) {
-            stage.close();
-        }
-    }
-
-    public void show() {
-        if (stage != null) {
-            stage.showAndWait();
-        }
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        stage.close();
     }
 }

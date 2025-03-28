@@ -11,15 +11,13 @@ import javafx.stage.WindowEvent;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.exception.InvalidModelDataException;
+import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ModelFilesPicker {
@@ -66,21 +64,18 @@ public class ModelFilesPicker {
     public void onClick() {
         boolean nodesValidation = validateFileExistence(nodesController);
         boolean indicesValidation = validateFileExistence(indicesController);
-        if (!nodesValidation || !indicesValidation) {
-            LocalizationController localization = LocalizationController.getInstance();
-            ModelValidationException e = new ModelValidationException(
-                    localization.getString(LocalizationController.ERROR_DIALOG_BUNDLE, "vertices-faces-read"));
 
-            new ErrorDialog(e).show();
+        if (!nodesValidation || !indicesValidation) {
+            new ErrorDialog(new ModelValidationException("vertices-faces-read"));
             return;
         }
 
         try {
             modelController.initModelData(nodesController.getFile(), indicesController.getFile());
         } catch (ModelValidationException e) {
-            new ErrorDialog(e).show();
+            new ErrorDialog(e);
             return;
-        } catch (InvalidModelDataException e) {
+        } catch (InternalValidationException e) {
             return;
         }
 
