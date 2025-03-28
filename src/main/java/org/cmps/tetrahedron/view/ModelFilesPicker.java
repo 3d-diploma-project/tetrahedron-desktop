@@ -34,6 +34,9 @@ public class ModelFilesPicker {
     @Setter
     private Dialog<Scene> dialog;
 
+    @FXML
+    private Button createModelButton;
+
     public static void openDialogWindow() {
         Locale.setDefault(LocalizationController.getInstance().getCurrentLocale());
         Dialog<Scene> dialog = new Dialog<>();
@@ -98,5 +101,17 @@ public class ModelFilesPicker {
         }
 
         return true;
+    }
+
+    @FXML
+    public void initialize() {
+        nodesController.setOnFileSelectedCallback(this::updateCreateButtonState);
+        indicesController.setOnFileSelectedCallback(this::updateCreateButtonState);
+        updateCreateButtonState();
+    }
+
+    private void updateCreateButtonState() {
+        boolean bothFilesSelected = nodesController.getFile() != null && indicesController.getFile() != null;
+        createModelButton.setDisable(!bothFilesSelected);
     }
 }
