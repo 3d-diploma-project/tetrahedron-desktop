@@ -94,10 +94,6 @@ public class ModelController {
         modelReady = true;
     }
 
-    public float getCurrentScale() {
-        return deformationController.getCurrentScale();
-    }
-
     public void applyStress(File stressData) throws ModelValidationException {
         for (Integer idx : originalVertices.keySet()) {
             float[] orig = originalVertices.get(idx);

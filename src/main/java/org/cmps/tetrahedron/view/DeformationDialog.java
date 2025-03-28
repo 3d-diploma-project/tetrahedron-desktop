@@ -44,7 +44,7 @@ public class DeformationDialog {
 
     @FXML
     public void initialize() {
-        float currentScale = ModelController.getInstance().getCurrentScale();
+        float currentScale = ModelController.getInstance().getDeformationController().getCurrentScale();
         setScaleValue(currentScale);
     }
 
