@@ -21,12 +21,6 @@ public class DeformationDialog {
     @FXML
     private Button saveButton;
 
-    private static float currentScaleValue = DeformationController.DEFAULT_SCALE;
-
-    public static void updateCurrentScale(float scale) {
-        currentScaleValue = scale;
-    }
-
     public static void showDialog() {
         try {
             URL fxmlPath = DeformationDialog.class.getClassLoader().getResource("view/DeformationScaleDialog.fxml");
@@ -53,11 +47,9 @@ public class DeformationDialog {
         try {
             float scale = Float.parseFloat(scaleInput.getText());
             if (scale > 0) {
-                DeformationController.getInstance().applyDeformationScale(
-                        scale,
-                        ModelController.getInstance().getModel(),
-                        ModelController.getInstance().getOriginalVertices()
-                );
+                DeformationController.getInstance().applyDeformationScale(scale);
+                ModelController.getInstance().centerModel();
+                ModelController.getInstance().setModelReady(true);
                 Stage stage = (Stage) saveButton.getScene().getWindow();
                 stage.close();
             } else {

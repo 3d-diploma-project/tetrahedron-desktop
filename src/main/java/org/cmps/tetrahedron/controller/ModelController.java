@@ -78,18 +78,6 @@ public class ModelController {
         modelColors = customCharacteristic.getColors();
     }
 
-    public void applyDisplacements(File file, float scale) throws ModelValidationException {
-        DeformationController.getInstance().applyDisplacements(file, scale, model, originalVertices);
-        centerModel();
-        modelReady = true;
-    }
-
-    public void applyDeformationScale(float scale) {
-        DeformationController.getInstance().applyDeformationScale(scale, model, originalVertices);
-        centerModel();
-        modelReady = true;
-    }
-
     public void applyStress(File stressData) throws ModelValidationException {
         for (Integer idx : originalVertices.keySet()) {
             float[] orig = originalVertices.get(idx);
@@ -121,7 +109,7 @@ public class ModelController {
         return copy;
     }
 
-    private void centerModel() {
+    public void centerModel() {
         Vector3f center = model.getCenter();
 
         Map<Integer, float[]> vertices = getVertices();

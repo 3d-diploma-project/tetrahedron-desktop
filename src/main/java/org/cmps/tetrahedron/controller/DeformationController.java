@@ -6,7 +6,6 @@ import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.utils.DataReader;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,18 +23,24 @@ public class DeformationController {
 
     private DeformationController() {}
 
-    public void applyDisplacements(File file, float scale, Model model, Map<Integer, float[]> originalVertices)
-    throws ModelValidationException {
+    public void applyDisplacements(File file, float scale) throws ModelValidationException {
+        Model model = ModelController.getInstance().getModel();
+        Map<Integer, float[]> originalVertices = ModelController.getInstance().getOriginalVertices();
+
         if (originalVertices == null || model == null) {
             return;
         }
 
         lastAppliedDeformations = DataReader.readDeformations(file, originalVertices.size());
+        System.out.println("[DEBUG] Deformations loaded: " + lastAppliedDeformations.size());
         currentScale = scale;
-        applyDeformationScale(scale, model, originalVertices);
+        applyDeformationScale(scale);
     }
 
-    public void applyDeformationScale(float scale, Model model, Map<Integer, float[]> originalVertices) {
+    public void applyDeformationScale(float scale) {
+        Model model = ModelController.getInstance().getModel();
+        Map<Integer, float[]> originalVertices = ModelController.getInstance().getOriginalVertices();
+
         if (lastAppliedDeformations == null || originalVertices == null || model == null) {
             return;
         }

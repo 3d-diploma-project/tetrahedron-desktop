@@ -96,10 +96,9 @@ public class RightToolbar implements LocalizationListener {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
 
-                float defaultScale = DeformationController.DEFAULT_SCALE;
-                ModelController.getInstance().applyDisplacements(file, defaultScale);
-
-                DeformationDialog.updateCurrentScale(defaultScale);
+                DeformationController.getInstance().applyDisplacements(file, DeformationController.DEFAULT_SCALE);
+                ModelController.getInstance().centerModel();
+                ModelController.getInstance().setModelReady(true);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog(e);
