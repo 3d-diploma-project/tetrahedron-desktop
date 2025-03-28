@@ -31,16 +31,19 @@ public class ErrorDialog {
     private double xOffset = 0;
     private double yOffset = 0;
 
+    private static final LocalizationController local = LocalizationController.getInstance();
+    private static String errBundle = LocalizationController.ERROR_DIALOG_BUNDLE;
+
     private ModelValidationException exception;
 
     public ErrorDialog(ModelValidationException exception) {
         this.exception = exception;
 
         try {
-            Locale.setDefault(LocalizationController.getInstance().getCurrentLocale());
+            Locale.setDefault(local.getCurrentLocale());
 
             URL fxmlPath = getClass().getClassLoader().getResource("view/ErrorDialog.fxml");
-            FXMLLoader loader = new FXMLLoader(fxmlPath, ResourceBundle.getBundle(LocalizationController.ERROR_DIALOG_BUNDLE));
+            FXMLLoader loader = new FXMLLoader(fxmlPath, ResourceBundle.getBundle(errBundle));
 
             loader.setController(this);
             Pane root = loader.load();
@@ -53,7 +56,7 @@ public class ErrorDialog {
             scene.setFill(null);
             stage.setScene(scene);
 
-            errorMessage.setText(exception.getMessage());
+            errorMessage.setText(local.getString(errBundle, exception.getMessage()));
 
             if (closeButton != null) {
                 closeButton.setOnAction(event -> closeDialog());

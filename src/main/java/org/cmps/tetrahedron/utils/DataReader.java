@@ -37,8 +37,7 @@ public class DataReader {
                 int index, startIndex;
 
                 if (elements.length < 3 || elements.length > 4) {
-                    throw new ModelValidationException(local.getString(errBundle, "vertices-count") +
-                            "\n\n" + local.getString(errBundle, "check-string"));
+                    throw new ModelValidationException("vertices-count", "check-string");
                 }
 
                 if (elements.length == VERTICES_WITH_INDICES) {
@@ -59,8 +58,7 @@ public class DataReader {
 
             return coordinates;
         } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException(local.getString(errBundle, "vertices-read") +
-                    "\n\n" + local.getString(errBundle, "check-string"));
+            throw new ModelValidationException("vertices-read", "check-string");
         }
     }
 
@@ -79,8 +77,7 @@ public class DataReader {
                 String[] elements = fid.nextLine().trim().split("\\s+");
 
                 if (elements.length < 4 || elements.length > 5) {
-                    throw new ModelValidationException(local.getString(errBundle, "faces-count") +
-                            "\n\n" + local.getString(errBundle, "check-string"));
+                    throw new ModelValidationException("faces-count", "check-string");
                 }
 
                 float[][] tetrahedron = new float[4][];
@@ -118,9 +115,7 @@ public class DataReader {
             unusedVertices.removeAll(usedIndices);
 
             if (!unusedVertices.isEmpty()) {
-                WarningDialog dialog = new WarningDialog(local.getString(warnBundle, "attention"),
-                        local.getString(warnBundle, "vertices-not-used-in-faces"),
-                        local.getString(warnBundle, "continue"));
+                WarningDialog dialog = new WarningDialog("attention", "vertices-not-used-in-faces","continue");
                 boolean userChoice = dialog.showAndWait();
 
                 if (!userChoice) {
@@ -130,8 +125,7 @@ public class DataReader {
 
             return faces;
         } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException(local.getString(errBundle, "faces-read") +
-                    "\n\n" + local.getString(errBundle, "check-string"));
+            throw new ModelValidationException("faces-read", "check-string");
         }
     }
 
@@ -153,7 +147,7 @@ public class DataReader {
 
                 try {
                     if (elements.length < 6 || elements.length > 7) {
-                        throw new ModelValidationException(local.getString(errBundle, "stress-format"));
+                        throw new ModelValidationException("stress-format");
                     }
 
                     if (elements.length == STRESS_WITH_INDICES) {
@@ -165,15 +159,14 @@ public class DataReader {
                     }
 
                     if (stressOneElement.containsKey(index)) {
-                        throw new ModelValidationException(local.getString(errBundle, "repeating-index") + " \n" + index);
+                        throw new ModelValidationException("repeating-index", index);
                     }
 
                     for (int j = startIndex; j < elements.length; j++) {
                         stressValues[j - startIndex] = Float.parseFloat(elements[j]);
                     }
                 } catch (NumberFormatException e) {
-                    throw new ModelValidationException(local.getString(errBundle, "read-number") +
-                            "\n\n" + local.getString(errBundle, "check-string") + " " + line);
+                    throw new ModelValidationException("read-number", "check-string", line);
                 }
 
                 stressOneElement.put(index, stressValues);
@@ -191,9 +184,11 @@ public class DataReader {
         CustomCharacteristic customModel = new CustomCharacteristic();
         List<Float> values = new ArrayList<>();
 
+        int index = 1;
+
         try (Scanner fid = new Scanner(customData)) {
             if (!fid.hasNext()) {
-                throw new ModelValidationException(local.getString(errBundle, "characteristic-not-found"));
+                throw new ModelValidationException("characteristic-not-found");
             }
 
             while (fid.hasNext()) {
@@ -212,14 +207,11 @@ public class DataReader {
                         customModel.setMaxValue(value);
                     }
 
+                    index = index + 1;
                     values.add(value);
                 } catch (NumberFormatException e) {
-                    throw new ModelValidationException(local.getString(errBundle, "read-number") + " " + token);
+                    throw new ModelValidationException("read-number", "check-string", index);
                 }
-            }
-
-            if (values.isEmpty()) {
-                throw new ModelValidationException(local.getString(errBundle, "characteristic-is-empty"));
             }
 
             customModel.setValues(values);
@@ -245,8 +237,7 @@ public class DataReader {
 
                 String[] elements = line.split("\\s+");
                 if (elements.length < 3 || elements.length > 4) {
-                    throw new ModelValidationException(local.getString(errBundle, "displacements-format") + "\n\n" +
-                            local.getString(errBundle, "check-string") + " " + line);
+                    throw new ModelValidationException("displacements-format", "check-string", line);
                 }
 
                 int index;
@@ -265,7 +256,7 @@ public class DataReader {
                 float dz = Float.parseFloat(elements[startIdx + 2]);
 
                 if (deformationsMap.containsKey(index)) {
-                    throw new ModelValidationException(local.getString(errBundle, "repeating-index") + " \n" + index);
+                    throw new ModelValidationException("repeating-index", index);
                 }
                 deformationsMap.put(index, new float[]{dx, dy, dz});
             }
@@ -273,7 +264,7 @@ public class DataReader {
             throw new ModelValidationException(
                     local.getString(errBundle, "not-found-file") + deformationsFile.getAbsolutePath());
         } catch (NumberFormatException e) {
-            throw new ModelValidationException(local.getString(errBundle, "read-number"));
+            throw new ModelValidationException("read-number");
         }
 
         if (deformationsMap.size() != expectedVerticesCount) {
@@ -290,9 +281,7 @@ public class DataReader {
             float[] def = e.getValue();
 
             if (idx < 1 || idx > expectedVerticesCount) {
-                throw new ModelValidationException(
-                        local.getString(errBundle, "displacements-out-range") + " " + idx
-                );
+                throw new ModelValidationException("displacements-out-range", idx);
             }
             result.set(idx - 1, def);
         }

@@ -32,12 +32,15 @@ public class WarningDialog {
     private Stage stage;
     private boolean result = false;
 
+    private static final LocalizationController local = LocalizationController.getInstance();
+    private static String warnBundle = LocalizationController.WARNING_DIALOG_BUNDLE;
+
     public WarningDialog(String title, String message) {
         try {
-            Locale.setDefault(LocalizationController.getInstance().getCurrentLocale());
+            Locale.setDefault(local.getCurrentLocale());
 
             URL fxmlPath = getClass().getClassLoader().getResource("view/WarningDialog.fxml");
-            FXMLLoader loader = new FXMLLoader(fxmlPath, ResourceBundle.getBundle(LocalizationController.WARNING_DIALOG_BUNDLE));
+            FXMLLoader loader = new FXMLLoader(fxmlPath, ResourceBundle.getBundle(warnBundle));
 
             loader.setController(this);
             Pane root = loader.load();
@@ -73,8 +76,9 @@ public class WarningDialog {
         }
     }
 
-    public WarningDialog(String title, String message, String continueKey) {
-        this(title, message + "\n\n" + continueKey);
+    public WarningDialog(String titleKey, String messageKey, String continueKey) {
+        this(local.getString(warnBundle, titleKey),
+                local.getString(warnBundle, messageKey) + "\n\n" + local.getString(warnBundle, continueKey));
     }
 
     @FXML

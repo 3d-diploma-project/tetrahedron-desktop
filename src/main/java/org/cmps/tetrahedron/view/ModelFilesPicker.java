@@ -18,15 +18,13 @@ import org.cmps.tetrahedron.utils.ResourceReader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ModelFilesPicker {
 
     private final ModelController modelController = ModelController.getInstance();
-
-    @FXML
-    private Button createModelButton;
 
     @FXML
     private FilePicker nodesController;
@@ -37,6 +35,7 @@ public class ModelFilesPicker {
     private Dialog<Scene> dialog;
 
     public static void openDialogWindow() {
+        Locale.setDefault(LocalizationController.getInstance().getCurrentLocale());
         Dialog<Scene> dialog = new Dialog<>();
 
         URL fxmlUrl = ModelFilesPicker.class.getClassLoader().getResource("view/ModelFilesPicker.fxml");
