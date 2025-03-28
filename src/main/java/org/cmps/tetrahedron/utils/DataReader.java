@@ -7,6 +7,8 @@ import org.cmps.tetrahedron.view.WarningDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 import static java.util.Locale.US;
@@ -176,14 +178,10 @@ public class DataReader {
     }
 
     public static CustomCharacteristic readCustomCharacteristic(File customData) throws ModelValidationException {
-        Locale.setDefault(US);
+        Locale.setDefault(Locale.US);
 
         CustomCharacteristic customModel = new CustomCharacteristic();
         List<Float> values = new ArrayList<>();
-
-        if (values.stream().allMatch(v -> v >= 0 && v < 0.01)) {
-            throw new ModelValidationException("Файл схожий на данные напряжения. Пожалуйста, выберите корректный файл для характеристики.");
-        }
 
         int index = 1;
 
@@ -192,8 +190,23 @@ public class DataReader {
                 throw new ModelValidationException("file-is-empty-or-inaccessible");
             }
 
-            while (fid.hasNext()) {
-                String token = fid.next();
+            List<String> allLines = Files.readAllLines(customData.toPath());
+            boolean isInvalidFormat = allLines.stream()
+                    .anyMatch(line -> {
+                        String[] parts = line.trim().split("\\s+");
+                        return parts.length < 1 || parts.length > 2;
+                    });
+
+            if (isInvalidFormat) {
+                throw new ModelValidationException("characteristic-format");
+            }
+
+            for (String line : allLines) {
+                String[] parts = line.trim().split("\\s+");
+                if (parts.length == 0) continue;
+
+                String token = parts.length == 1 ? parts[0] : parts[1];
+
                 try {
                     float value = Float.parseFloat(token);
 
@@ -207,7 +220,7 @@ public class DataReader {
                         customModel.setMaxValue(value);
                     }
 
-                    index = index + 1;
+                    index++;
                     values.add(value);
                 } catch (NumberFormatException e) {
                     throw new ModelValidationException("read-number", "check-string", token);
@@ -216,7 +229,8 @@ public class DataReader {
 
             customModel.setValues(values);
             return customModel;
-        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
             throw new ModelValidationException("not-found-file");
         }
     }
