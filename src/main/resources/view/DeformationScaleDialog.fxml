@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.cmps.tetrahedron.view.DeformationScaleDialog"
+            fx:controller="org.cmps.tetrahedron.view.DeformationDialog"
             stylesheets="@/style/deformation-scale-dialog.css">
     <content>
         <VBox spacing="14">

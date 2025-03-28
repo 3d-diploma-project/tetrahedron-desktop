@@ -14,7 +14,7 @@ import org.cmps.tetrahedron.utils.DialogUtils;
 import java.io.IOException;
 import java.net.URL;
 
-public class DeformationScaleDialog {
+public class DeformationDialog {
     @FXML
     private TextField scaleInput;
 
@@ -29,7 +29,7 @@ public class DeformationScaleDialog {
 
     public static void showDialog() {
         try {
-            URL fxmlPath = DeformationScaleDialog.class.getClassLoader().getResource("view/DeformationScaleDialog.fxml");
+            URL fxmlPath = DeformationDialog.class.getClassLoader().getResource("view/DeformationScaleDialog.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlPath);
 
             Scene scene = new Scene(loader.load());

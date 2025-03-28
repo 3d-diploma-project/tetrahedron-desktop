@@ -3,7 +3,6 @@ package org.cmps.tetrahedron.view;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import org.cmps.tetrahedron.controller.*;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
@@ -13,7 +12,6 @@ import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
 import java.io.File;
-import java.util.Optional;
 
 public class RightToolbar implements LocalizationListener {
 
@@ -84,7 +82,7 @@ public class RightToolbar implements LocalizationListener {
 
     @FXML
     private void openDeformationScaleDialog() {
-        DeformationScaleDialog.showDialog();
+        DeformationDialog.showDialog();
     }
 
     @FXML
@@ -100,7 +98,7 @@ public class RightToolbar implements LocalizationListener {
                 float defaultScale = DeformationController.DEFAULT_SCALE;
                 ModelController.getInstance().applyDisplacements(file, defaultScale);
 
-                DeformationScaleDialog.updateCurrentScale(defaultScale);
+                DeformationDialog.updateCurrentScale(defaultScale);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog("Помилка!", e.getMessage()).show();
