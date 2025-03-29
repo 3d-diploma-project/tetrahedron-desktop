@@ -23,7 +23,7 @@ public class DeformationController {
 
     private DeformationController() {}
 
-    public void applyDisplacements(File file, float scale) throws ModelValidationException {
+    public void applyDisplacements(File file) throws ModelValidationException {
         Model model = ModelController.getInstance().getModel();
         Map<Integer, float[]> originalVertices = ModelController.getInstance().getOriginalVertices();
 
@@ -33,8 +33,8 @@ public class DeformationController {
 
         lastAppliedDeformations = DataReader.readDeformations(file, originalVertices.size());
         System.out.println("[DEBUG] Deformations loaded: " + lastAppliedDeformations.size());
-        currentScale = scale;
-        applyDeformationScale(scale);
+
+        applyDeformationScale(DEFAULT_SCALE);
     }
 
     public void applyDeformationScale(float scale) {
@@ -57,6 +57,8 @@ public class DeformationController {
         }
 
         currentScale = scale;
-        model.calculateModelCenter();
+
+        ModelController.getInstance().centerModel();
+        ModelController.getInstance().setModelReady(true);
     }
 }

@@ -45,8 +45,11 @@
 
 .small-button {
     -fx-background-color: transparent;
+    -fx-border-width: 0.3;
     -fx-border-color: #000;
     -fx-border-radius: 5;
-    -fx-padding: 3;
+    -fx-padding: 0 2;
+    -fx-pref-height: 5px;
+    -fx-max-height: 5px;
 }
 

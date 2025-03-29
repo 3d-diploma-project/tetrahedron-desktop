@@ -96,7 +96,7 @@ public class RightToolbar implements LocalizationListener {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
 
-                DeformationController.getInstance().applyDisplacements(file, DeformationController.DEFAULT_SCALE);
+                DeformationController.getInstance().applyDisplacements(file);
                 ModelController.getInstance().centerModel();
                 ModelController.getInstance().setModelReady(true);
             }

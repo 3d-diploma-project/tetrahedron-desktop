@@ -9,20 +9,19 @@
     <content>
         <VBox spacing="14">
             <HBox alignment="CENTER">
-                <Label text="Переміщення у вузлах" styleClass="dialog-title"/>
+                <Label text="%displacement-label" styleClass="dialog-title"/>
             </HBox>
 
             <HBox spacing="10" styleClass="label-input-container">
                 <VBox alignment="CENTER_LEFT">
-                    <Label text="Масштаб відображення" styleClass="dialog-label-bold"/>
-                    <Label text="деформацій моделі" styleClass="dialog-label-bold"/>
+                    <Label text="%scale" styleClass="dialog-label-bold"/>
                 </VBox>
                 <Pane HBox.hgrow="ALWAYS"/>
                 <TextField fx:id="scaleInput" text="1.0" styleClass="input-field"/>
             </HBox>
 
             <HBox alignment="CENTER" styleClass="button-box">
-                <Button text="Зберегти" fx:id="saveButton" styleClass="save-button" onAction="#applyChanges"/>
+                <Button text="%save" fx:id="saveButton" styleClass="save-button" onAction="#applyChanges"/>
             </HBox>
         </VBox>
     </content>
