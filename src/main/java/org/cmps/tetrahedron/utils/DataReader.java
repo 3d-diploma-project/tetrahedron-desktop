@@ -7,6 +7,8 @@ import org.cmps.tetrahedron.view.WarningDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 import static java.util.Locale.US;
@@ -176,20 +178,26 @@ public class DataReader {
     }
 
     public static CustomCharacteristic readCustomCharacteristic(File customData) throws ModelValidationException {
-        Locale.setDefault(US);
+        Locale.setDefault(Locale.US);
 
         CustomCharacteristic customModel = new CustomCharacteristic();
         List<Float> values = new ArrayList<>();
-
         int index = 1;
 
-        try (Scanner fid = new Scanner(customData)) {
-            if (!fid.hasNext()) {
+        try {
+            List<String> allLines = Files.readAllLines(customData.toPath());
+            if (allLines.isEmpty()) {
                 throw new ModelValidationException("file-is-empty-or-inaccessible");
             }
 
-            while (fid.hasNext()) {
-                String token = fid.next();
+            for (String line : allLines) {
+                String[] parts = line.trim().split("\\s+");
+                if (parts.length < 1 || parts.length > 2) {
+                    throw new ModelValidationException("characteristic-format", "check-string", line);
+                }
+
+                String token = parts.length == 1 ? parts[0] : parts[1];
+
                 try {
                     float value = Float.parseFloat(token);
 
@@ -203,7 +211,7 @@ public class DataReader {
                         customModel.setMaxValue(value);
                     }
 
-                    index = index + 1;
+                    index++;
                     values.add(value);
                 } catch (NumberFormatException e) {
                     throw new ModelValidationException("read-number", "check-string", token);
@@ -212,7 +220,8 @@ public class DataReader {
 
             customModel.setValues(values);
             return customModel;
-        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
             throw new ModelValidationException("not-found-file");
         }
     }
