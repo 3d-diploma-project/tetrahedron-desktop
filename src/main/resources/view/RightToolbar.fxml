@@ -17,7 +17,15 @@
     </VBox>
 
     <VBox styleClass="vbox-label-button">
-        <Label fx:id="displacementLabel" styleClass="data-label" text="%displacement-label"/>
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label fx:id="displacementLabel" styleClass="data-label" text="%displacement-label"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button onAction="#openDeformationScaleDialog" styleClass="small-button">
+                <graphic>
+                    <fx:include source="/icon/SmallButton.fxml"/>
+                </graphic>
+            </Button>
+        </HBox>
         <Button fx:id="displacementButton" styleClass="load-button" text="%load-button" onMouseClicked="#selectDisplacementsFile"/>
     </VBox>
 
@@ -25,5 +33,4 @@
         <Label fx:id="characteristicLabel" styleClass="data-label" text="%characteristic-label"/>
         <Button fx:id="characteristicButton" styleClass="load-button" text="%load-button" onMouseClicked="#selectCustomCharacteristicFile"/>
     </VBox>
-
 </VBox>

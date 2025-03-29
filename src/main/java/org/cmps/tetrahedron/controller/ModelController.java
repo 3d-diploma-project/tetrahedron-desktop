@@ -78,29 +78,6 @@ public class ModelController {
         modelColors = customCharacteristic.getColors();
     }
 
-    public void applyDisplacements(File deformationsFile) throws ModelValidationException {
-        ColorSettings.getInstance().setColoredInSelectedColor(true);
-        LegendView.getInstance().reset();
-
-        List<float[]> deformations = DataReader.readDeformations(deformationsFile, originalVertices.size());
-
-        int i = 0;
-        for (Integer idx : originalVertices.keySet()) {
-            float[] orig = originalVertices.get(idx);
-            float[] def = deformations.get(i++);
-
-            float[] current = model.getVertices().get(idx);
-            current[0] = orig[0] + def[0];
-            current[1] = orig[1] + def[1];
-            current[2] = orig[2] + def[2];
-        }
-
-        model.calculateModelCenter();
-        centerModel();
-
-        modelReady = true;
-    }
-
     public void applyStress(File stressData) throws ModelValidationException {
         for (Integer idx : originalVertices.keySet()) {
             float[] orig = originalVertices.get(idx);
@@ -132,7 +109,7 @@ public class ModelController {
         return copy;
     }
 
-    private void centerModel() {
+    public void centerModel() {
         Vector3f center = model.getCenter();
 
         Map<Integer, float[]> vertices = getVertices();

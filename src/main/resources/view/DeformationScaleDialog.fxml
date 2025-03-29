@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cmps.tetrahedron.view.DeformationDialog"
+            stylesheets="@/style/deformation-scale-dialog.css">
+    <content>
+        <VBox spacing="14">
+            <HBox alignment="CENTER">
+                <Label text="%displacement-label" styleClass="dialog-title"/>
+            </HBox>
+
+            <HBox spacing="10" styleClass="label-input-container">
+                <VBox alignment="CENTER_LEFT">
+                    <Label text="%scale" styleClass="dialog-label-bold"/>
+                </VBox>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="scaleInput" text="1.0" styleClass="input-field"/>
+            </HBox>
+
+            <HBox alignment="CENTER" styleClass="button-box">
+                <Button text="%save" fx:id="saveButton" styleClass="save-button" onAction="#applyChanges"/>
+            </HBox>
+        </VBox>
+    </content>
+</DialogPane>

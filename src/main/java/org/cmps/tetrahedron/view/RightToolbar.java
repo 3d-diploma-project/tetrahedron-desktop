@@ -82,6 +82,11 @@ public class RightToolbar implements LocalizationListener {
     }
 
     @FXML
+    private void openDeformationScaleDialog() {
+        DeformationDialog.showDialog();
+    }
+
+    @FXML
     private void selectDisplacementsFile(MouseEvent event) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
@@ -90,7 +95,10 @@ public class RightToolbar implements LocalizationListener {
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
-                ModelController.getInstance().applyDisplacements(file);
+
+                DeformationController.getInstance().applyDisplacements(file);
+                ModelController.getInstance().centerModel();
+                ModelController.getInstance().setModelReady(true);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog(e);

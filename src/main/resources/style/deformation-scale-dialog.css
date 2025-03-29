@@ -1,0 +1,77 @@
+.dialog-pane {
+    -fx-background-color: TRANSPARENT;
+    -fx-padding: 10px 10px;
+}
+
+.content {
+    -fx-background-color: #E7EDF2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 12px 10px;
+
+    -fx-font-family: "Geologica Roman";
+}
+
+.dialog-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+    -fx-alignment: center;
+}
+
+.dialog-label-bold {
+    -fx-max-width: 168px;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0E0E0E;
+    -fx-wrap-text: true;
+}
+
+.label-input-container {
+    -fx-alignment: center-left;
+}
+
+.input-field {
+    -fx-pref-width: 70px;
+    -fx-pref-height: 25px;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 4px;
+    -fx-padding: 6px;
+    -fx-background-color: white;
+}
+
+.input-field:hover {
+    -fx-background-color: #E5E5E6;
+}
+
+.save-button {
+    -fx-background-color: #1E0094;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 66px;
+    -fx-marging: 8px 16px;
+    -fx-pref-width: 92px;
+    -fx-pref-height: 32px;
+
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+    -fx-border-width: 1px;
+}
+
+.save-button:hover, .save-button:focused {
+    -fx-background-color: #E7EDF2;
+    -fx-border-color: #1E0094;
+    -fx-text-fill: #1E0094;
+}
+
+.save-button:pressed {
+    -fx-background-color: #1D0070;
+    -fx-border-color: #1D0070;
+    -fx-text-fill: white;
+}
+
+.button-box {
+    -fx-alignment: center;
+}
