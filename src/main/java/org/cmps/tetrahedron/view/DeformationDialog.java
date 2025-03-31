@@ -1,12 +1,7 @@
 package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.cmps.tetrahedron.controller.DeformationController;
 import org.cmps.tetrahedron.controller.LocalizationController;
@@ -26,13 +21,11 @@ public class DeformationDialog {
     @FXML
     private Button saveButton;
 
-    public static void showDialog() {
+    public static void showDialog(double x, double y) {
         Locale.setDefault(local.getCurrentLocale());
-        Pane pane = ResourceReader.readComponent("/view/DeformationScaleDialog.fxml", Pane.class,
+        DialogPane pane = ResourceReader.readComponent("/view/DeformationScaleDialog.fxml", DialogPane.class,
                                                        ResourceBundle.getBundle("i18n.deformation-dialog"));
-
-        Stage stage = DialogUtils.createModalWindow(pane);
-        stage.showAndWait();
+        DialogUtils.displayDialogWindow(pane, x, y);
     }
 
     @FXML
