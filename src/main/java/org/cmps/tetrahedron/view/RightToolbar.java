@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
@@ -83,7 +84,8 @@ public class RightToolbar implements LocalizationListener {
 
     @FXML
     private void openDeformationScaleDialog() {
-        DeformationDialog.showDialog();
+        Bounds bounds = displacementButton.localToScreen(displacementButton.getBoundsInParent());
+        DeformationDialog.showDialog(bounds.getMinX(), bounds.getMinY());
     }
 
     @FXML
