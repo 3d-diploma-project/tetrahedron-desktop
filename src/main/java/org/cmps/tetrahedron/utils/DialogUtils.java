@@ -26,7 +26,7 @@ public class DialogUtils {
         });
 
         stage.show();
-        stage.setX(x - content.getWidth() - 20);
+        stage.setX(x - content.getWidth());
         stage.setY(y - content.getHeight() / 3);
     }
 }
