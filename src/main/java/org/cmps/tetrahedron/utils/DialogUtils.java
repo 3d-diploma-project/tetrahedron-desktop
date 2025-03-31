@@ -10,7 +10,25 @@ import javafx.stage.StageStyle;
 
 public class DialogUtils {
 
-    public static void displayDialogWindow(Pane content, double x, double y) {
+    public static void displayDialogOnLeft(Pane content, double x, double y) {
+        Stage dialog = buildDialogWindow(content);
+
+        dialog.show();
+        // -20 is a shift to have space between windows
+        dialog.setX(x - content.getWidth() - 20);
+        dialog.setY(y - content.getHeight() / 3);
+    }
+
+    public static void displayDialogOnRight(Pane content, double x, double y) {
+        Stage dialog = buildDialogWindow(content);
+
+        dialog.show();
+        // +20 is a shift to have space between windows
+        dialog.setX(x + 20);
+        dialog.setY(y - content.getHeight() / 3);
+    }
+
+    private static Stage buildDialogWindow(Pane content) {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -25,8 +43,6 @@ public class DialogUtils {
             }
         });
 
-        stage.show();
-        stage.setX(x - content.getWidth());
-        stage.setY(y - content.getHeight() / 3);
+        return stage;
     }
 }

@@ -25,8 +25,8 @@ public class DeformationDialog {
         Locale.setDefault(local.getCurrentLocale());
         DialogPane pane = ResourceReader.readComponent("/view/DeformationScaleDialog.fxml", DialogPane.class,
                                                        ResourceBundle.getBundle("i18n.deformation-dialog"));
-        // -20 is a shift to have space between windows
-        DialogUtils.displayDialogWindow(pane, x - 20, y);
+
+        DialogUtils.displayDialogOnLeft(pane, x, y);
     }
 
     @FXML
