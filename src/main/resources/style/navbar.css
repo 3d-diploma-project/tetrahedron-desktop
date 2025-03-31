@@ -1,4 +1,5 @@
 .navbar {
+    -fx-background-color: #CF1A23;
     -fx-alignment: center;
     -fx-padding: 50;
 }
@@ -10,9 +11,28 @@
 }
 
 .language-selector {
-    -fx-background-color: rgba(255, 255, 255, 0.0);
-    -fx-background-radius: 15;
-    -fx-padding: 4;
+    -fx-background-color: #EAF4FF;
+    -fx-min-width: 70px;
+    -fx-min-height: 30px;
+    -fx-max-width: 70px;
+    -fx-max-height: 30px;
+    -fx-background-radius: 2;
+}
+
+.language-selector .list-cell {
+    -fx-font-size: 13px;
+
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+
+    -fx-min-width: 70px;
+    -fx-min-height: 30px;
+    -fx-max-width: 70px;
+    -fx-max-height: 30px;
+}
+
+.language-selector .list-cell:selected {
+    -fx-font-weight: bold;
 }
 
 .language-selector:hover {
