@@ -7,7 +7,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.cmps.tetrahedron.view.FilePicker"
+      fx:controller="org.cmps.tetrahedron.view.component.FilePicker"
       minWidth="258.0" minHeight="220.0"
       styleClass="file-selector"
       stylesheets="@/style/model-file-picker.css">
