@@ -6,6 +6,7 @@ import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.VertexInfoController;
 import org.cmps.tetrahedron.model.ColorSettings;
+import org.cmps.tetrahedron.model.ModelSettings;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.joml.Matrix4f;
 import org.joml.Matrix4x3f;
@@ -55,6 +56,7 @@ public class ModelCanvas extends AWTGLCanvas {
 
     private int coloredInSelectedColor;
     private int modelColor;
+    private int showElementMesh;
 
     private final Matrix4x3f viewMatrix = new Matrix4x3f();
     private final Matrix4f projMatrix = new Matrix4f();
@@ -123,6 +125,7 @@ public class ModelCanvas extends AWTGLCanvas {
         glUniformMatrix4fv(projMatrixUniform, false, projMatrix.get(matrixBuffer));
 
         initColors();
+        initModelSettings();
 
         glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(), WindowProperties.getPhysicalHeight());
         glBindVertexArray(vao);
@@ -213,6 +216,7 @@ public class ModelCanvas extends AWTGLCanvas {
 
         coloredInSelectedColor = glGetUniformLocation(program, "coloredInSelectedColor");
         modelColor = glGetUniformLocation(program, "modelColor");
+        showElementMesh = glGetUniformLocation(program, "showElementMesh");
     }
 
     private void initColors() {
@@ -220,5 +224,9 @@ public class ModelCanvas extends AWTGLCanvas {
 
         float[] modelColorArr = ColorSettings.getInstance().getModelColor();
         glUniform3f(modelColor, modelColorArr[0], modelColorArr[1], modelColorArr[2]);
+    }
+
+    private void initModelSettings() {
+        glUniform1i(showElementMesh, ModelSettings.getInstance().isShowElementMesh() ? 1 : 0);
     }
 }

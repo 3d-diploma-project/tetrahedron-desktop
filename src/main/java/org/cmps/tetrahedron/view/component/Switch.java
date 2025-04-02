@@ -30,8 +30,10 @@ public class Switch {
     }
 
     public void setInitialState(String text, Boolean state, Consumer<Boolean> updateState) {
-        setLabel(text);
         this.state = state;
+        this.updateState = updateState;
+
+        setLabel(text);
         updateStyle();
     }
 
