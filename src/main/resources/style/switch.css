@@ -1,0 +1,28 @@
+.switch {
+    -fx-min-width: 34px;
+    -fx-max-width: 34px;
+    -fx-pref-width: 34px;
+    -fx-min-height: 16px;
+    -fx-max-height: 16px;
+    -fx-pref-height: 16px;
+    -fx-background-radius: 60;
+    -fx-border-radius: 60;
+    -fx-padding: 2;
+}
+
+.switch-on {
+    -fx-background-color: #1E0094;
+    -fx-border-color: #1E0094;
+    -fx-alignment: center-right;
+}
+
+.switch-off {
+    -fx-background-color: black;
+    -fx-border-color: black;
+    -fx-alignment: center-left;
+}
+
+.data-label {
+    -fx-font-family: "Geologica Roman";
+    -fx-font-size: 12;
+}
