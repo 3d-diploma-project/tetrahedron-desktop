@@ -1,5 +1,4 @@
 .navbar {
-    -fx-background-color: #CF1A23;
     -fx-alignment: center;
     -fx-padding: 50;
 }
@@ -24,12 +23,9 @@
 
 .language-selector .list-cell {
     -fx-font-size: 13px;
-
-    -fx-font-weight: bold;
     -fx-alignment: center-left;
     -fx-background-color: #EAF4FF;
     -fx-text-fill: #0E0E0E;
-
     -fx-min-width: 50px;
     -fx-min-height: 20px;
     -fx-max-width: 50px;
