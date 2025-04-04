@@ -12,12 +12,12 @@
 
 .language-selector {
     -fx-background-color: #EAF4FF;
+    -fx-text-fill: #0E0E0E;
     -fx-min-width: 50px;
     -fx-min-height: 20px;
     -fx-max-width: 50px;
     -fx-max-height: 20px;
     -fx-background-radius: 2;
-
     -fx-alignment: center-left;
     -fx-padding: 0 0 0 1;
 }
@@ -27,6 +27,8 @@
 
     -fx-font-weight: bold;
     -fx-alignment: center-left;
+    -fx-background-color: #EAF4FF;
+    -fx-text-fill: #0E0E0E;
 
     -fx-min-width: 50px;
     -fx-min-height: 20px;
@@ -35,8 +37,12 @@
     -fx-padding: 0 0 0 1;
 }
 
-.language-selector .list-cell:selected {
-    -fx-font-weight: bold;
+.language-selector .list-cell:hover{
+    -fx-background-color: #E5E5E5;
+}
+
+.language-selector .list-cell:hover:selected {
+    -fx-background-color: #EAF4FF;
 }
 
 .list-view {

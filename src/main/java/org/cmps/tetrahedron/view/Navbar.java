@@ -36,6 +36,8 @@ public class Navbar {
                 } else {
                     HBox container = new HBox();
                     Label languageText = new Label(item);
+                    languageText.setStyle("-fx-text-fill: #0E0E0E;");
+
                     Pane pane = new Pane();
                     HBox.setHgrow(pane, Priority.ALWAYS);
                     container.setAlignment(Pos.CENTER_LEFT);
