@@ -6,7 +6,7 @@ import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.VertexInfoController;
 import org.cmps.tetrahedron.model.ColorSettings;
-import org.cmps.tetrahedron.model.ModelSettings;
+import org.cmps.tetrahedron.model.ModelViewSettings;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.joml.Matrix4f;
 import org.joml.Matrix4x3f;
@@ -227,6 +227,6 @@ public class ModelCanvas extends AWTGLCanvas {
     }
 
     private void initModelSettings() {
-        glUniform1i(showElementMesh, ModelSettings.getInstance().isShowElementMesh() ? 1 : 0);
+        glUniform1i(showElementMesh, ModelViewSettings.getInstance().isShowElementMesh() ? 1 : 0);
     }
 }

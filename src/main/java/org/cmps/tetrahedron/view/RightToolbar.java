@@ -8,7 +8,7 @@ import org.cmps.tetrahedron.controller.*;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
-import org.cmps.tetrahedron.model.ModelSettings;
+import org.cmps.tetrahedron.model.ModelViewSettings;
 import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
@@ -29,12 +29,12 @@ public class RightToolbar implements LocalizationListener {
 
     public void initialize() {
         LocalizationController localization = LocalizationController.getInstance();
-        ModelSettings modelSettings = ModelSettings.getInstance();
+        ModelViewSettings modelViewSettings = ModelViewSettings.getInstance();
 
         localization.registerListener(this);
         elementGridController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"),
-                                              modelSettings.isShowElementMesh(),
-                                              modelSettings::setShowElementMesh);
+                                              modelViewSettings.isShowElementMesh(),
+                                              modelViewSettings::setShowElementMesh);
     }
 
     @Override
