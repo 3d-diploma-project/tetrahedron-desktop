@@ -12,11 +12,14 @@
 
 .language-selector {
     -fx-background-color: #EAF4FF;
-    -fx-min-width: 70px;
-    -fx-min-height: 30px;
-    -fx-max-width: 70px;
-    -fx-max-height: 30px;
+    -fx-min-width: 50px;
+    -fx-min-height: 20px;
+    -fx-max-width: 50px;
+    -fx-max-height: 20px;
     -fx-background-radius: 2;
+
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 1;
 }
 
 .language-selector .list-cell {
@@ -25,16 +28,22 @@
     -fx-font-weight: bold;
     -fx-alignment: center-left;
 
-    -fx-min-width: 70px;
-    -fx-min-height: 30px;
-    -fx-max-width: 70px;
-    -fx-max-height: 30px;
+    -fx-min-width: 50px;
+    -fx-min-height: 20px;
+    -fx-max-width: 50px;
+    -fx-max-height: 20px;
+    -fx-padding: 0 0 0 1;
 }
 
 .language-selector .list-cell:selected {
     -fx-font-weight: bold;
 }
 
-.language-selector:hover {
-    -fx-border-color: #C4C8CE;
+.list-view {
+    -fx-background-color: #EAF4FF;
+    -fx-alignment: center-left;
+    -fx-pref-width: 50px;
+    -fx-min-width: 50px;
+    -fx-max-width: 50px;
+    -fx-padding: 0 0 0 1;
 }

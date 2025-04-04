@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.shape.SVGPath?>
 
-<HBox xmlns="http://javafx.com/javafx/8.0"
-      xmlns:fx="http://javafx.com/fxml/1"
-      spacing="8" alignment="CENTER_LEFT">
-    <Label fx:id="languageText" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-    <SVGPath fx:id="checkMark" content="M9.5 0.5L3.3125 7.5L0.5 4.31818" fill="none" stroke="green" strokeWidth="0.8" visible="false" />
-</HBox>
+<SVGPath content="M9.5 0.5L3.3125 7.5L0.5 4.31818"
+         fill="transparent"
+         stroke="#0E0E0E"
+         strokeWidth="0.8"
+         visible="false" />
