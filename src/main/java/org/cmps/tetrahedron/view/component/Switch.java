@@ -6,12 +6,6 @@ import javafx.scene.control.Label;
 
 import java.util.function.Consumer;
 
-/**
- * TODO: add description.
- *
- * @author Mariia Borodin (HappyMary16)
- * @since 1.0
- */
 public class Switch {
 
     @FXML
