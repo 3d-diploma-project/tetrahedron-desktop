@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.SVGPath?>
+<SVGPath
+        content="M0,6a6,6 0 1,0 12,0a6,6 0 1,0 -12,0"
+        fill="#FAFAFA"
+        strokeLineCap="ROUND"
+        strokeLineJoin="ROUND">
+</SVGPath>

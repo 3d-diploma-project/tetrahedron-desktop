@@ -9,9 +9,11 @@ import org.cmps.tetrahedron.controller.*;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
+import org.cmps.tetrahedron.model.ModelViewSettings;
 import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
+import org.cmps.tetrahedron.view.component.Switch;
 
 import java.io.File;
 
@@ -23,8 +25,17 @@ public class RightToolbar implements LocalizationListener {
     @FXML
     private Button stressButton, displacementButton, characteristicButton;
 
+    @FXML
+    private Switch elementGridController;
+
     public void initialize() {
-        LocalizationController.getInstance().registerListener(this);
+        LocalizationController localization = LocalizationController.getInstance();
+        ModelViewSettings modelViewSettings = ModelViewSettings.getInstance();
+
+        localization.registerListener(this);
+        elementGridController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"),
+                                              modelViewSettings.isShowElementMesh(),
+                                              modelViewSettings::setShowElementMesh);
     }
 
     @Override
@@ -40,6 +51,8 @@ public class RightToolbar implements LocalizationListener {
 
         characteristicLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "characteristic-label"));
         characteristicButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
+
+        elementGridController.setLabel(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"));
     }
 
     @FXML

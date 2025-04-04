@@ -13,9 +13,9 @@
         <VBox>
             <VBox styleClass="file-selectors-block" minHeight="366">
                 <HBox styleClass="file-selectors-block" minWidth="613">
-                    <fx:include fx:id="nodes" source="../component/FilePicker.fxml"
+                    <fx:include fx:id="nodes" source="./component/FilePicker.fxml"
                                 resources="i18n/node-file-selector"/>
-                    <fx:include fx:id="indices" source="../component/FilePicker.fxml"
+                    <fx:include fx:id="indices" source="./component/FilePicker.fxml"
                                 resources="i18n/index-file-selector"/>
                 </HBox>
                 <HBox styleClass="file-selectors-block" minWidth="613">

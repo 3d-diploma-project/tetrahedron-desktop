@@ -14,6 +14,7 @@ import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.utils.ResourceReader;
+import org.cmps.tetrahedron.view.component.FilePicker;
 
 import java.io.IOException;
 import java.net.URL;
