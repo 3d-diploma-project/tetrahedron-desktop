@@ -45,7 +45,22 @@
 }
 
 .load-button:hover {
-    -fx-background-color: #1E00AA;
+    -fx-background-color: #E7EDF2;
+    -fx-border-color: #1E0094;
+    -fx-text-fill: #1E0094;
+    -fx-border-radius: 4;
+}
+
+.load-button:pressed {
+    -fx-background-color: #130452;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+}
+
+.load-button:disabled {
+    -fx-background-color: #E5E5E6;
+    -fx-text-fill: #727272;
+    -fx-background-radius: 4;
 }
 
 .small-button {

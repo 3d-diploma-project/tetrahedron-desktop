@@ -8,7 +8,7 @@
       stylesheets="@/style/right-toolbar.css"
       styleClass="root-box">
 
-    <VBox>
+    <VBox styleClass="data-section-container">
         <fx:include fx:id="elementGrid" source="./component/Switch.fxml"/>
     </VBox>
 
