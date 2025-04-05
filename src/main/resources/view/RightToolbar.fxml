@@ -6,16 +6,23 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.cmps.tetrahedron.view.RightToolbar"
       stylesheets="@/style/right-toolbar.css"
-      prefWidth="195" prefHeight="413"
       styleClass="root-box">
 
     <VBox>
         <fx:include fx:id="elementGrid" source="./component/Switch.fxml"/>
     </VBox>
 
-    <VBox>
+    <VBox styleClass="data-section-container">
         <VBox styleClass="vbox-label-button">
-            <Label fx:id="stressLabel" styleClass="data-label" text="%stress-label"/>
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Label fx:id="stressLabel" styleClass="data-label" text="%stress-label"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button styleClass="small-button">
+                    <graphic>
+                        <fx:include source="/icon/SmallButton.fxml"/>
+                    </graphic>
+                </Button>
+            </HBox>
             <Label fx:id="stressSecondaryLabel" styleClass="secondary-label" text="%stress-secondaryLabel"/>
             <Button fx:id="stressButton" styleClass="load-button" text="%load-button"
                     onMouseClicked="#selectStressFile"/>
@@ -31,6 +38,7 @@
                     </graphic>
                 </Button>
             </HBox>
+            <Label fx:id="displacementSecondaryLabel" styleClass="secondary-label" text="%displacement-secondaryLabel"/>
             <Button fx:id="displacementButton" styleClass="load-button" text="%load-button"
                     onMouseClicked="#selectDisplacementsFile"/>
         </VBox>

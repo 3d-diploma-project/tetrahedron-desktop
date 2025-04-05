@@ -1,55 +1,63 @@
 .root-box {
-    -fx-min-width: 195px;
-    -fx-max-width: 195px;
-    -fx-min-height: 413px;
-    -fx-max-height: 413px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
     -fx-alignment: CENTER_LEFT;
     -fx-background-radius: 38;
     -fx-border-radius: 38;
     -fx-border-width: 1;
     -fx-border-color: #CACACA;
-    -fx-padding: 40 16;
+    -fx-padding: 32 20;
     -fx-background-color: #E7EDF2;
-    -fx-spacing: 10
+    -fx-spacing: 22;
 }
 
-.data-label {
-    -fx-font-family: "Geologica Roman";
-    -fx-font-size: 12;
-}
-
-.load-button {
-    -fx-font-family: "Geologica Roman Light";
-    -fx-font-size: 12;
-    -fx-background-color: #1E0094;
-    -fx-text-fill: white;
-    -fx-background-radius: 4;
-    -fx-max-width: Infinity;
-}
-
-.load-button:hover {
-    -fx-background-color: #1E00AA;
+.data-section-container {
+    -fx-max-width: 183px;
+    -fx-spacing: 10;
 }
 
 .vbox-label-button {
+    -fx-max-width: 183px;
+    -fx-padding: 0;
     -fx-spacing: 2;
+}
+
+.vbox-label-button .data-label {
+    -fx-font-family: "Geologica Roman";
+    -fx-font-size: 12;
+    -fx-padding: 0;
 }
 
 .vbox-label-button .secondary-label {
     -fx-font-family: "Geologica Roman Light";
     -fx-text-fill: #727272;
     -fx-font-size: 10;
-    -fx-translate-y: -5;
+    -fx-padding: 0;
+    -fx-translate-y: -3;
+}
+
+.load-button {
+    -fx-font-family: "Geologica Roman Light";
+    -fx-max-width: 183px;
+    -fx-font-size: 10;
+    -fx-background-color: #1E0094;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+}
+
+.load-button:hover {
+    -fx-background-color: #1E00AA;
 }
 
 .small-button {
     -fx-background-color: transparent;
     -fx-border-width: 0.3;
-    -fx-border-color: #000;
-    -fx-border-radius: 5;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 8;
     -fx-padding: 0 2;
-    -fx-pref-height: 5px;
-    -fx-max-height: 5px;
+
+    -fx-min-width: 24px;
+    -fx-max-width: 24px;
+    -fx-min-height: 14px;
+    -fx-max-height: 14px;
 }
 
