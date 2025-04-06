@@ -20,7 +20,7 @@ import java.io.File;
 public class RightToolbar implements LocalizationListener {
 
     @FXML
-    private Label stressLabel, stressSecondaryLabel, displacementLabel, characteristicLabel;
+    private Label stressLabel, stressSecondaryLabel, displacementLabel, displacementSecondaryLabel, characteristicLabel;
 
     @FXML
     private Button stressButton, displacementButton, characteristicButton;
@@ -47,6 +47,7 @@ public class RightToolbar implements LocalizationListener {
         stressButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
 
         displacementLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "displacement-label"));
+        displacementSecondaryLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "displacement-secondaryLabel"));
         displacementButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
 
         characteristicLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "characteristic-label"));
