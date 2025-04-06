@@ -10,8 +10,8 @@ import org.cmps.tetrahedron.utils.Scaler;
  */
 public class CanvasProperties {
 
-    public static final int X_SHIFT = 250;
-    public static final int Y_SHIFT = 130;
+    public static final int X_SHIFT = 235;
+    public static final int Y_SHIFT = 100;
 
     public static int getWidth() {
         return WindowProperties.getLogicalWidth() - X_SHIFT * 2;
