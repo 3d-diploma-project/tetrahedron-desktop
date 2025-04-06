@@ -42,6 +42,8 @@
     -fx-background-color: #1E0094;
     -fx-text-fill: white;
     -fx-background-radius: 4;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 4;
 }
 
 .load-button:hover {
