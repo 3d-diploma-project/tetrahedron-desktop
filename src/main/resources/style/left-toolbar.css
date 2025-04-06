@@ -1,26 +1,32 @@
 
 .instrument-sidebar {
-    -fx-max-height: 0px;
-    -fx-padding: 14;
-    -fx-spacing: 10;
+    -fx-min-width: 76px;
+    -fx-min-height: 310px;
+    -fx-max-width: 76px;
+    -fx-max-height: 310px;
+    -fx-padding: 32px 24px;
+    -fx-spacing: 18px;
     -fx-background-color: #ECF4FE;
-    -fx-background-radius: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-border-color: #CACACA;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
 }
 
 .button {
     -fx-background-color: transparent;
     -fx-background-radius: 50%;
-    -fx-min-width: 50px;
-    -fx-min-height: 50px;
-    -fx-max-width: 50px;
-    -fx-max-height: 50px;
-    -fx-padding: 0;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-padding: 7px;
     -fx-stroke: #0E0E0E;
 }
 
 .button:focused {
-    -fx-background-color: #1E0094;
+    -fx-background-color: #130452;
 }
 
 .button:focused > .button {
@@ -28,16 +34,16 @@
 }
 
 .button:hover {
-    -fx-background-color: #FAFCFE;
-    -fx-stroke: #0E0E0E;
+    -fx-background-color: #1E0094;
+    -fx-stroke: #FAFCFE;
 }
 
 .button:hover > .button {
-    -fx-stroke: #0E0E0E;
+    -fx-stroke: #FAFCFE;
 }
 
 .button-selected {
-    -fx-background-color: #1E0094;
+    -fx-background-color: #130452;
     -fx-stroke: #FAFCFE;
 }
 

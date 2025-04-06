@@ -45,14 +45,14 @@ public class SceneController {
         anchorPane.getStyleClass().add("main");
         VBox.setVgrow(anchorPane, Priority.ALWAYS);
 
-        AnchorPane.setLeftAnchor(instrumentSidebar, 10d);
-        AnchorPane.setTopAnchor(instrumentSidebar, 75d);
+        AnchorPane.setLeftAnchor(instrumentSidebar, 32d);
+        AnchorPane.setTopAnchor(instrumentSidebar, 120d);
         AnchorPane.setRightAnchor(rightToolbar, 20d);
         AnchorPane.setTopAnchor(rightToolbar, 75d);
 
         LegendView legend = LegendView.getInstance();
         anchorPane.getChildren().add(legend);
-        AnchorPane.setLeftAnchor(legend, 100d);
+        AnchorPane.setLeftAnchor(legend, 122d);
         AnchorPane.setTopAnchor(legend, 0.0);
         AnchorPane.setBottomAnchor(legend, 0.0);
         legend.setMouseTransparent(true);
