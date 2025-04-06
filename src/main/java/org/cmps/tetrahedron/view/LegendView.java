@@ -31,6 +31,7 @@ public class LegendView extends HBox {
     private final double labelBoxBorder = 0.4;
 
     private LegendView() {
+        this.setMouseTransparent(true);
         allColorBoxes.setAlignment(Pos.CENTER);
         allLabelBoxes.setAlignment(Pos.CENTER);
         allLabelBoxes.setTranslateX(-(colorBoxSizeX - (double) (colorBoxSizeX - labelBoxX) / 2));
