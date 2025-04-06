@@ -18,17 +18,6 @@ public class WindowProperties {
     public static final int MIN_WIDTH = 1000;
     public static final int MIN_HEIGHT = 800;
 
-    private static boolean changed = true;
-
-    public static boolean isChanged() {
-        if (changed) {
-            changed = false;
-            return true;
-        }
-
-        return false;
-    }
-
     public static Dimension getLogicalSize() {
         return new Dimension(logicalWidth, logicalHeight);
     }
@@ -38,7 +27,6 @@ public class WindowProperties {
             return;
         }
 
-        changed = true;
         WindowProperties.logicalWidth = width;
     }
 
@@ -47,7 +35,6 @@ public class WindowProperties {
             return;
         }
 
-        changed = true;
         WindowProperties.logicalHeight = height;
     }
 

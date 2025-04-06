@@ -2,7 +2,6 @@ package org.cmps.tetrahedron;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
 import org.cmps.tetrahedron.config.CanvasProperties;
 import org.cmps.tetrahedron.config.WindowProperties;
 import org.cmps.tetrahedron.view.ModelFilesPicker;
@@ -30,13 +29,11 @@ public class Tetrahedron {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setMinimumSize(new Dimension(WindowProperties.MIN_WIDTH, WindowProperties.MIN_HEIGHT));
-        frame.setPreferredSize(WindowProperties.getLogicalSize());
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         setIcon(frame);
 
         final JFXPanel fxPanel = new JFXPanel();
-        fxPanel.setSize(WindowProperties.getLogicalSize());
-        Scene scene = SceneController.getScene();
-        fxPanel.setScene(scene);
+        fxPanel.setScene(SceneController.getScene());
 
         GLData data = new GLData();
         data.majorVersion = 3;
@@ -53,22 +50,30 @@ public class Tetrahedron {
         pane.add(canvas, Integer.valueOf(10));
         pane.add(fxPanel, Integer.valueOf(1));
 
-        frame.pack();
-        frame.setVisible(true);
-        frame.transferFocus();
-
-        WindowProperties.setHeight(frame.getHeight());
-        WindowProperties.setWidth(frame.getWidth());
-
         frame.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent evt) {
-                Component c = (Component)evt.getSource();
-                Dimension size = c.getSize();
+            public void componentShown(ComponentEvent e) {
+                resize(e);
+            }
+
+            public void componentResized(ComponentEvent e) {
+                resize(e);
+            }
+
+            private void resize(ComponentEvent e) {
+                JFrame frame = (JFrame) e.getSource();
+                Dimension size = frame.getRootPane().getSize();
 
                 WindowProperties.setWidth((int) size.getWidth());
                 WindowProperties.setHeight((int) size.getHeight());
+
+                fxPanel.setSize(WindowProperties.getLogicalSize());
+                canvas.setSize(CanvasProperties.getWidth(), CanvasProperties.getHeight());
             }
         });
+
+        frame.pack();
+        frame.setVisible(true);
+        frame.transferFocus();
 
         Platform.runLater(ModelFilesPicker::openDialogWindow);
 
@@ -77,11 +82,6 @@ public class Tetrahedron {
                 canvas.validate();
             }
             canvas.render();
-
-            if (WindowProperties.isChanged()) {
-                fxPanel.setSize(WindowProperties.getLogicalSize());
-                canvas.setSize(CanvasProperties.getWidth(), CanvasProperties.getHeight());
-            }
 
             try {
                 Thread.sleep(30);
