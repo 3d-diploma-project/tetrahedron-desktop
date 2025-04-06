@@ -29,7 +29,7 @@ public class Tetrahedron {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setMinimumSize(new Dimension(WindowProperties.MIN_WIDTH, WindowProperties.MIN_HEIGHT));
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        maximizeWindow(frame);
         setIcon(frame);
 
         final JFXPanel fxPanel = new JFXPanel();
@@ -101,5 +101,12 @@ public class Tetrahedron {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void maximizeWindow(JFrame frame) {
+        if (org.lwjgl.system.Platform.get().equals(org.lwjgl.system.Platform.MACOSX)) {
+            frame.setPreferredSize(WindowProperties.getLogicalSize());
+        }
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
     }
 }
