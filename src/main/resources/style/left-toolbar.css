@@ -1,26 +1,34 @@
 
 .instrument-sidebar {
-    -fx-max-height: 0px;
-    -fx-padding: 14;
-    -fx-spacing: 10;
-    -fx-background-color: #ECF4FE;
-    -fx-background-radius: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+    -fx-padding: 32px 17px;
+    -fx-spacing: 18px;
+    -fx-background-color: #E7EDF2;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-border-color: #CACACA;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
 }
 
 .button {
+    transition-property: -fx-background-color, -fx-min-width, -fx-min-height, -fx-max-width, -fx-max-height;
+    transition-duration: 150ms;
     -fx-background-color: transparent;
     -fx-background-radius: 50%;
-    -fx-min-width: 50px;
-    -fx-min-height: 50px;
-    -fx-max-width: 50px;
-    -fx-max-height: 50px;
-    -fx-padding: 0;
+    -fx-min-width: 26px;
+    -fx-min-height: 26px;
+    -fx-max-width: 26px;
+    -fx-max-height: 26px;
+    -fx-padding: 7px;
     -fx-stroke: #0E0E0E;
 }
 
 .button:focused {
-    -fx-background-color: #1E0094;
+    -fx-background-color: #130452;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
 }
 
 .button:focused > .button {
@@ -28,17 +36,25 @@
 }
 
 .button:hover {
-    -fx-background-color: #FAFCFE;
-    -fx-stroke: #0E0E0E;
+    -fx-background-color: #1E0094;
+    -fx-stroke: #FAFCFE;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
 }
 
 .button:hover > .button {
-    -fx-stroke: #0E0E0E;
+    -fx-stroke: #FAFCFE;
 }
 
 .button-selected {
-    -fx-background-color: #1E0094;
+    -fx-background-color: #130452;
     -fx-stroke: #FAFCFE;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
 }
 
 .button-selected:hover {
