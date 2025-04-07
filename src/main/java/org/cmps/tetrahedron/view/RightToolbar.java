@@ -77,6 +77,12 @@ public class RightToolbar implements LocalizationListener {
     }
 
     @FXML
+    private void openStressScaleDialog() {
+        Bounds bounds = stressButton.localToScreen(stressButton.getBoundsInParent());
+        StressDialog.showDialog(bounds.getMinX(), bounds.getMinY());
+    }
+
+    @FXML
     private void selectCustomCharacteristicFile(MouseEvent mouseEvent) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();

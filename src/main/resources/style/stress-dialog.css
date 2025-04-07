@@ -1,0 +1,109 @@
+.dialog-pane {
+    -fx-background-color: TRANSPARENT;
+    -fx-padding: 10px 10px;
+}
+
+.content {
+    -fx-background-color: #E7EDF2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 12px 10px;
+    -fx-font-family: "Geologica Roman";
+}
+
+.label-input-container {
+    -fx-alignment: center-left;
+}
+
+.dialog-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+    -fx-alignment: center;
+}
+
+.dialog-label-bold {
+    -fx-max-width: 88px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #0E0E0E;
+    -fx-wrap-text: true;
+}
+
+.stress-selector {
+    -fx-min-width: 177px;
+    -fx-min-height: 36px;
+    -fx-max-width: 177px;
+    -fx-max-height: 36px;
+    -fx-font-size: 13px;
+
+    -fx-background-color: #FAFAFA;
+    -fx-text-fill: #0E0E0E;
+    -fx-background-radius: 4;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 5;
+}
+
+.stress-selector:disabled {
+    -fx-background-radius: 4;
+}
+
+.stress-selector .list-cell {
+    -fx-min-width: 177px;
+    -fx-min-height: 36px;
+    -fx-max-width: 177px;
+    -fx-max-height: 36px;
+    -fx-font-size: 13px;
+
+    -fx-background-color: #FAFAFA;
+    -fx-text-fill: #0E0E0E;
+    -fx-background-radius: 4;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 5;
+}
+
+.stress-selector .list-cell:hover{
+    -fx-background-color: #E5E5E5;
+}
+
+.stress-selector .list-cell:hover:selected {
+    -fx-background-color: #EAF4FF;
+}
+
+.list-view {
+    -fx-background-color: #EAF4FF;
+    -fx-alignment: center-left;
+}
+
+
+
+.button-box {
+    -fx-alignment: center;
+}
+
+.save-button {
+    -fx-background-color: #1E0094;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 66px;
+    -fx-margin: 8px 16px;
+    -fx-pref-width: 92px;
+    -fx-pref-height: 32px;
+
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+    -fx-border-width: 1px;
+}
+
+.save-button:hover, .save-button:focused {
+    -fx-background-color: #E7EDF2;
+    -fx-border-color: #1E0094;
+    -fx-text-fill: #1E0094;
+}
+
+.save-button:pressed {
+    -fx-background-color: #1D0070;
+    -fx-border-color: #1D0070;
+    -fx-text-fill: white;
+}
