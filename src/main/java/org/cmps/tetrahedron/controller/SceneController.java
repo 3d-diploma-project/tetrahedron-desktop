@@ -7,7 +7,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.cmps.tetrahedron.config.WindowProperties;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.InfoPanel;
 import org.cmps.tetrahedron.view.LegendView;
@@ -52,12 +51,12 @@ public class SceneController {
         VBox.setVgrow(mainBlock, Priority.ALWAYS);
 
         InfoPanel infoPanel = InfoPanel.getInstance();
-        infoPanel.setPadding(new Insets(0, 0, 50, 0));
+        infoPanel.setPadding(new Insets(0, 0, 30, 0));
 
         VBox root = new VBox(navbar, mainBlock, infoPanel);
         root.getStyleClass().add("model-view-page");
 
-        Scene scene = new Scene(root, WindowProperties.getLogicalWidth(), WindowProperties.getLogicalHeight());
+        Scene scene = new Scene(root);
         scene.getStylesheets()
              .add(Objects.requireNonNull(SceneController.class.getResource("/styles.css")).toExternalForm());
         return scene;
