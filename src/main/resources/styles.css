@@ -8,40 +8,9 @@
     src: url('/fonts/Geologica-Light.ttf');
 }
 
-.main {
-}
-
 .model-view-page {
     -fx-background-color: #ECF4FE;
     -fx-spacing: 20;
-}
-
-.instrument-sidebar {
-    -fx-max-height: 0px;
-    -fx-padding: 14;
-    -fx-spacing: 10;
-    -fx-background-color: #ECF4FE;
-    -fx-opacity: 0.9;
-    -fx-background-radius: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
-}
-
-.sidebar-button {
-    -fx-background-color: rgba(255, 255, 255, 0.0);
-    -fx-background-radius: 50%;
-    -fx-min-width: 50px;
-    -fx-min-height: 50px;
-    -fx-max-width: 50px;
-    -fx-max-height: 50px;
-    -fx-padding: 0;
-}
-
-.sidebar-button:focused {
-    -fx-background-color: #E0E6EE;
-}
-
-.sidebar-button:hover {
-    -fx-background-color: #FAFCFE;
 }
 
 .info-text {

@@ -1,10 +1,15 @@
 package org.cmps.tetrahedron.controller;
 
-import javafx.scene.layout.*;
-import org.cmps.tetrahedron.utils.ResourceReader;
-import org.cmps.tetrahedron.view.*;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import org.cmps.tetrahedron.config.WindowProperties;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import org.cmps.tetrahedron.utils.ResourceReader;
+import org.cmps.tetrahedron.view.InfoPanel;
+import org.cmps.tetrahedron.view.LegendView;
 
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -30,41 +35,30 @@ public class SceneController {
     }
 
     private Scene buildScene() {
-        VBox root = new VBox();
-        root.getStyleClass().add("model-view-page");
-        Scene scene = new Scene(root, WindowProperties.getLogicalWidth(), WindowProperties.getLogicalHeight());
-        scene.getStylesheets().add(Objects.requireNonNull(SceneController.class.getResource("/styles.css")).toExternalForm());
-
         HBox navbar = ResourceReader.readComponent("/view/Navbar.fxml", HBox.class);
 
         VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
-
-        VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class, ResourceBundle.getBundle("i18n.right-toolbar"));
-
-        AnchorPane anchorPane = new AnchorPane(instrumentSidebar, rightToolbar);
-        anchorPane.getStyleClass().add("main");
-        VBox.setVgrow(anchorPane, Priority.ALWAYS);
-
-        AnchorPane.setLeftAnchor(instrumentSidebar, 10d);
-        AnchorPane.setTopAnchor(instrumentSidebar, 75d);
-        AnchorPane.setRightAnchor(rightToolbar, 20d);
-        AnchorPane.setTopAnchor(rightToolbar, 75d);
-
         LegendView legend = LegendView.getInstance();
-        anchorPane.getChildren().add(legend);
-        AnchorPane.setLeftAnchor(legend, 100d);
-        AnchorPane.setTopAnchor(legend, 0.0);
-        AnchorPane.setBottomAnchor(legend, 0.0);
-        legend.setMouseTransparent(true);
+        Pane pane = new Pane();
+        HBox.setHgrow(pane, Priority.ALWAYS);
+        VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class,
+                                                         ResourceBundle.getBundle("i18n.right-toolbar"));
 
-        root.getChildren().addAll(navbar, anchorPane);
+        HBox mainBlock = new HBox(30, instrumentSidebar, legend, pane, rightToolbar);
+        mainBlock.setPadding(new Insets(0, 15, 0, 15));
+        mainBlock.setAlignment(Pos.CENTER);
+        mainBlock.setFillHeight(false);
+        VBox.setVgrow(mainBlock, Priority.ALWAYS);
 
         InfoPanel infoPanel = InfoPanel.getInstance();
-        AnchorPane absolutePane = new AnchorPane(infoPanel);
-        AnchorPane.setBottomAnchor(infoPanel, 80d);
-        VBox.setVgrow(absolutePane, Priority.ALWAYS);
+        infoPanel.setPadding(new Insets(0, 0, 30, 0));
 
-        root.getChildren().add(absolutePane);
+        VBox root = new VBox(navbar, mainBlock, infoPanel);
+        root.getStyleClass().add("model-view-page");
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets()
+             .add(Objects.requireNonNull(SceneController.class.getResource("/styles.css")).toExternalForm());
         return scene;
     }
 }
