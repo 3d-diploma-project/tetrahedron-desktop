@@ -1,6 +1,6 @@
 
 .instrument-sidebar {
-    -fx-padding: 32px 24px;
+    -fx-padding: 32px 17px;
     -fx-spacing: 18px;
     -fx-background-color: #E7EDF2;
     -fx-background-radius: 12px;
@@ -11,6 +11,8 @@
 }
 
 .button {
+    transition-property: -fx-background-color, -fx-min-width, -fx-min-height, -fx-max-width, -fx-max-height;
+    transition-duration: 150ms;
     -fx-background-color: transparent;
     -fx-background-radius: 50%;
     -fx-min-width: 26px;
