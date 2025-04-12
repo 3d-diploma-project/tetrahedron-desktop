@@ -45,7 +45,13 @@
 }
 
 .stress-selector:disabled {
-    -fx-background-radius: 4;
+    -fx-background-color: #CACACA;
+    -fx-opacity: 1;
+}
+
+.stress-selector:disabled .list-cell {
+    -fx-background-color: #CACACA;
+    -fx-opacity: 1;
 }
 
 .stress-selector .list-cell {

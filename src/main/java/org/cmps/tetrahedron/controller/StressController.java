@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.Stress;
+import org.cmps.tetrahedron.model.StressViewSettings;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.view.LegendView;
@@ -22,13 +23,43 @@ public class StressController {
 
     @Getter
     private static StressController instance = new StressController();
+    private static StressViewSettings viewSettings = StressViewSettings.getInstance();
     @Getter
     private Stress stress = new Stress();
+    @Getter
+    private File lastStressFile;
+
+    public void applyStress(File stressData) throws ModelValidationException {
+        ModelController modelController = ModelController.getInstance();
+
+        Map<Integer, float[]> originalVertices = modelController.getOriginalVertices();
+        Map<Integer, float[]> currentVertices = modelController.getModel().getVertices();
+
+        for (Map.Entry<Integer, float[]> entry : originalVertices.entrySet()) {
+            float[] orig = entry.getValue();
+            float[] current = currentVertices.get(entry.getKey());
+
+            current[0] = orig[0];
+            current[1] = orig[1];
+            current[2] = orig[2];
+        }
+
+        modelController.getModel().calculateModelCenter();
+        modelController.centerModel();
+        modelController.setModelReady(true);
+
+        StressViewSettings.getInstance().setShowMises(true);
+
+        initStress(stressData);
+    }
 
     public void initStress(File stressData) throws ModelValidationException {
-        Map<Integer, float[]> stressDataWithIndex= DataReader.readStress(stressData);
+        lastStressFile = stressData;
 
-        processStressData(stressDataWithIndex, StressDisplayOption.MISES);
+        Map<Integer, float[]> stressDataWithIndex = DataReader.readStress(stressData);
+
+        StressDisplayOption option = getStressDisplayOption();
+        processStressData(stressDataWithIndex, option);
 
         TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
         stress.setColors(stress.getStressToDisplay()
@@ -69,6 +100,12 @@ public class StressController {
         return switch (option) {
             case MISES -> misesStress(stressValues[0], stressValues[1], stressValues[2],
                     stressValues[3], stressValues[4], stressValues[5]);
+            case X -> stressValues[0];
+            case Y -> stressValues[3];
+            case Z -> stressValues[5];
+            case XY -> stressValues[1];
+            case YZ -> stressValues[4];
+            case XZ -> stressValues[2];
             default -> throw new IllegalArgumentException("Unsupported stress display option: " + option);
         };
     }
@@ -79,5 +116,26 @@ public class StressController {
                 + Math.pow(qy - qz, 2)
                 + Math.pow(qz - qx, 2)
                 + 6 * (Math.pow(txy, 2) + Math.pow(tyz, 2) + Math.pow(tzx, 2))));
+    }
+
+    private StressDisplayOption getStressDisplayOption() {
+        StressDisplayOption option;
+
+        if (viewSettings.isShowMises()) {
+            option = StressDisplayOption.MISES;
+        } else {
+            String selected = viewSettings.getSelectedComponent();
+            option = switch (selected) {
+                case "x" -> StressDisplayOption.X;
+                case "y" -> StressDisplayOption.Y;
+                case "z" -> StressDisplayOption.Z;
+                case "xy" -> StressDisplayOption.XY;
+                case "yz" -> StressDisplayOption.YZ;
+                case "xz" -> StressDisplayOption.XZ;
+                default -> throw new IllegalArgumentException("Unknown component: " + selected);
+            };
+        }
+
+        return option;
     }
 }

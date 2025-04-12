@@ -66,7 +66,7 @@ public class RightToolbar implements LocalizationListener {
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
-                ModelController.getInstance().applyStress(file);
+                StressController.getInstance().applyStress(file);
                 Stress stressModel = StressController.getInstance().getStress();
 
                 legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());

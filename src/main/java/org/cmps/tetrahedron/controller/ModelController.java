@@ -78,23 +78,6 @@ public class ModelController {
         modelColors = customCharacteristic.getColors();
     }
 
-    public void applyStress(File stressData) throws ModelValidationException {
-        for (Integer idx : originalVertices.keySet()) {
-            float[] orig = originalVertices.get(idx);
-
-            float[] current = model.getVertices().get(idx);
-            current[0] = orig[0];
-            current[1] = orig[1];
-            current[2] = orig[2];
-        }
-
-        model.calculateModelCenter();
-        centerModel();
-        modelReady = true;
-
-        StressController.getInstance().initStress(stressData);
-    }
-
     public void setModelColors(List<float[]> modelColors) {
         this.modelColors = modelColors;
         ColorSettings.getInstance().setColoredInSelectedColor(false);

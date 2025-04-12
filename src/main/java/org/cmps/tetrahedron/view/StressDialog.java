@@ -13,11 +13,14 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.LocalizationController;
+import org.cmps.tetrahedron.controller.StressController;
+import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.StressViewSettings;
 import org.cmps.tetrahedron.utils.DialogUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.Switch;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -61,7 +64,7 @@ public class StressDialog {
     }
 
     @FXML
-    public void applyChanges() {
+    public void applyChanges() throws ModelValidationException {
         if (!stressViewSettings.isShowMises()) {
             stressViewSettings.setSelectedComponent(stressComponentComboBox.getValue());
         } else {
@@ -70,6 +73,11 @@ public class StressDialog {
 
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
+
+        File lastStressFile = StressController.getInstance().getLastStressFile();
+        if (lastStressFile != null) {
+            StressController.getInstance().initStress(lastStressFile);
+        }
     }
 
     private void onSwitchToggle(boolean isOn) {
@@ -107,6 +115,5 @@ public class StressDialog {
             });
         }
     }
-
 
 }
