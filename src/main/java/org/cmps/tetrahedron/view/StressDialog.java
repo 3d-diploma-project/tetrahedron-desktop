@@ -86,6 +86,10 @@ public class StressDialog {
         if (lastStressFile != null) {
             StressController.getInstance().initStress(lastStressFile);
         }
+
+//        StressController controller = StressController.getInstance();
+//        controller.processStressData(controller.getStress().getStress(), controller.getStress().getDisplayOption());
+
     }
 
     private void onSwitchToggle(boolean isOn) {

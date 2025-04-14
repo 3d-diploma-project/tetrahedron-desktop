@@ -71,7 +71,7 @@ public class StressController {
         LegendView.getInstance().setVisible(true);
     }
 
-    private void processStressData(Map<Integer, float[]> stressDataWithIndex, StressDisplayOption option) {
+    public void processStressData(Map<Integer, float[]> stressDataWithIndex, StressDisplayOption option) {
         stress.setMinStress(Float.MAX_VALUE);
         stress.setMaxStress(Float.MIN_VALUE);
 
@@ -121,14 +121,6 @@ public class StressController {
     }
 
     public static StressDisplayOption fromString(String name) {
-        return switch (name) {
-            case "x" -> StressDisplayOption.X;
-            case "y" -> StressDisplayOption.Y;
-            case "z" -> StressDisplayOption.Z;
-            case "xy" -> StressDisplayOption.XY;
-            case "yz" -> StressDisplayOption.YZ;
-            case "xz" -> StressDisplayOption.XZ;
-            default -> throw new IllegalArgumentException("Unknown component: " + name);
-        };
+        return StressDisplayOption.valueOf(name.toUpperCase());
     }
 }
