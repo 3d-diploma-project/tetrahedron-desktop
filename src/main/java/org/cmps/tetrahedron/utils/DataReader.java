@@ -202,7 +202,7 @@ public class DataReader {
                     float value = Float.parseFloat(token);
 
                     if (Float.isNaN(value) || Float.isInfinite(value)) {
-                        throw new ModelValidationException("read-number", "check-string", token);
+                        throw new ModelValidationException("read-number", "check-string", line);
                     }
 
                     if (value < customModel.getMinValue()) {
@@ -214,7 +214,7 @@ public class DataReader {
                     index++;
                     values.add(value);
                 } catch (NumberFormatException e) {
-                    throw new ModelValidationException("read-number", "check-string", token);
+                    throw new ModelValidationException("read-number", "check-string", line);
                 }
             }
 
