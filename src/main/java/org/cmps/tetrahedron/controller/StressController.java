@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.Stress;
-import org.cmps.tetrahedron.model.StressViewSettings;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.view.LegendView;
@@ -23,7 +22,6 @@ public class StressController {
 
     @Getter
     private static StressController instance = new StressController();
-    private static StressViewSettings viewSettings = StressViewSettings.getInstance();
     @Getter
     private Stress stress = new Stress();
     @Getter
@@ -48,7 +46,7 @@ public class StressController {
         modelController.centerModel();
         modelController.setModelReady(true);
 
-        StressViewSettings.getInstance().setShowMises(true);
+        stress.setDisplayOption(StressDisplayOption.MISES);
 
         initStress(stressData);
     }
@@ -119,23 +117,18 @@ public class StressController {
     }
 
     private StressDisplayOption getStressDisplayOption() {
-        StressDisplayOption option;
+        return stress.getDisplayOption();
+    }
 
-        if (viewSettings.isShowMises()) {
-            option = StressDisplayOption.MISES;
-        } else {
-            String selected = viewSettings.getSelectedComponent();
-            option = switch (selected) {
-                case "x" -> StressDisplayOption.X;
-                case "y" -> StressDisplayOption.Y;
-                case "z" -> StressDisplayOption.Z;
-                case "xy" -> StressDisplayOption.XY;
-                case "yz" -> StressDisplayOption.YZ;
-                case "xz" -> StressDisplayOption.XZ;
-                default -> throw new IllegalArgumentException("Unknown component: " + selected);
-            };
-        }
-
-        return option;
+    public static StressDisplayOption fromString(String name) {
+        return switch (name) {
+            case "x" -> StressDisplayOption.X;
+            case "y" -> StressDisplayOption.Y;
+            case "z" -> StressDisplayOption.Z;
+            case "xy" -> StressDisplayOption.XY;
+            case "yz" -> StressDisplayOption.YZ;
+            case "xz" -> StressDisplayOption.XZ;
+            default -> throw new IllegalArgumentException("Unknown component: " + name);
+        };
     }
 }

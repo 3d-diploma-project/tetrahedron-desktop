@@ -9,13 +9,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.StressController;
+import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
-import org.cmps.tetrahedron.model.StressViewSettings;
+import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DialogUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.Switch;
@@ -27,7 +25,6 @@ import java.util.ResourceBundle;
 public class StressDialog {
 
     private static final LocalizationController local = LocalizationController.getInstance();
-    private static final StressViewSettings stressViewSettings = StressViewSettings.getInstance();
 
     @FXML
     private Button saveButton;
@@ -46,30 +43,41 @@ public class StressDialog {
 
     @FXML
     public void initialize() {
-        elementGridController.setInitialState(local.getString(LocalizationController.STRESS_DIALOG_BUNDLE, "mises-stress-label"),
-                stressViewSettings.isShowMises(),
-                this::onSwitchToggle);
+        Stress stress = StressController.getInstance().getStress();
+        StressDisplayOption option = stress.getDisplayOption();
+
+        boolean isMises = option == StressDisplayOption.MISES;
+
+        elementGridController.setInitialState(
+                local.getString(LocalizationController.STRESS_DIALOG_BUNDLE, "mises-stress-label"),
+                isMises,
+                this::onSwitchToggle
+        );
         elementGridController.setLabelStyle("-fx-font-family: 'Geologica Roman'; -fx-font-size: 13px; -fx-text-fill: #0E0E0E;");
 
-        String savedComponent = stressViewSettings.getSelectedComponent();
-        if (savedComponent != null && !stressViewSettings.isShowMises()) {
-            stressComponentComboBox.setValue(savedComponent);
+        if (!isMises) {
+            stressComponentComboBox.setValue(option.name().toLowerCase());
         } else {
             stressComponentComboBox.setValue(null);
             stressComponentComboBox.setPromptText(
                     local.getString(LocalizationController.STRESS_DIALOG_BUNDLE, "component-stress-choose"));
         }
 
-        onSwitchToggle(stressViewSettings.isShowMises());
+        onSwitchToggle(isMises);
     }
 
     @FXML
     public void applyChanges() throws ModelValidationException {
-        if (!stressViewSettings.isShowMises()) {
-            stressViewSettings.setSelectedComponent(stressComponentComboBox.getValue());
+        Stress stress = StressController.getInstance().getStress();
+        if (!stressComponentComboBox.isDisabled()) {
+            String selected = stressComponentComboBox.getValue();
+            if (selected != null) {
+                stress.setDisplayOption(StressController.fromString(selected));
+            }
         } else {
-            stressViewSettings.setSelectedComponent(null);
+            stress.setDisplayOption(StressDisplayOption.MISES);
         }
+
 
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
@@ -81,39 +89,31 @@ public class StressDialog {
     }
 
     private void onSwitchToggle(boolean isOn) {
-        stressViewSettings.setShowMises(isOn);
+        stressComponentComboBox.setDisable(isOn);
 
-        if (isOn) {
-            stressComponentComboBox.setDisable(true);
-            stressComponentComboBox.setValue(null);
-            stressComponentComboBox.getSelectionModel().clearSelection();
-        } else {
-            stressComponentComboBox.setDisable(false);
-            stressComponentComboBox.setCellFactory(cb -> new ListCell<>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setGraphic(null);
-                    } else {
-                        HBox container = new HBox();
-                        Label componentName = new Label(item);
-                        componentName.setStyle("-fx-text-fill: #0E0E0E;");
+        stressComponentComboBox.setCellFactory(cb -> new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    HBox container = new HBox();
+                    Label componentName = new Label(item);
+                    componentName.setStyle("-fx-text-fill: #0E0E0E;");
 
-                        Pane pane = new Pane();
-                        HBox.setHgrow(pane, Priority.ALWAYS);
-                        container.setAlignment(Pos.CENTER_LEFT);
+                    Pane pane = new Pane();
+                    HBox.setHgrow(pane, Priority.ALWAYS);
+                    container.setAlignment(Pos.CENTER_LEFT);
 
-                        SVGPath checkMark = ResourceReader.readComponent("/icon/Checkmark.fxml", SVGPath.class);
-                        HBox.setMargin(checkMark, new Insets(0, 5, 0, 0));
-                        checkMark.setVisible(java.util.Objects.equals(item, stressComponentComboBox.getValue()));
+                    SVGPath checkMark = ResourceReader.readComponent("/icon/Checkmark.fxml", SVGPath.class);
+                    HBox.setMargin(checkMark, new Insets(0, 5, 0, 0));
+                    checkMark.setVisible(java.util.Objects.equals(item, stressComponentComboBox.getValue()));
 
-                        container.getChildren().addAll(componentName, pane, checkMark);
-                        setGraphic(container);
-                    }
+                    container.getChildren().addAll(componentName, pane, checkMark);
+                    setGraphic(container);
                 }
-            });
-        }
+            }
+        });
     }
-
 }
