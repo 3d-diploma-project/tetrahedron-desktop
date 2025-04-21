@@ -29,25 +29,9 @@ public class StressController {
 
     public void applyStress(File stressData) throws ModelValidationException {
         ModelController modelController = ModelController.getInstance();
-
-        Map<Integer, float[]> originalVertices = modelController.getOriginalVertices();
-        Map<Integer, float[]> currentVertices = modelController.getModel().getVertices();
-
-        for (Map.Entry<Integer, float[]> entry : originalVertices.entrySet()) {
-            float[] orig = entry.getValue();
-            float[] current = currentVertices.get(entry.getKey());
-
-            current[0] = orig[0];
-            current[1] = orig[1];
-            current[2] = orig[2];
-        }
-
-        modelController.getModel().calculateModelCenter();
-        modelController.centerModel();
-        modelController.setModelReady(true);
+        modelController.clearDisplacement();
 
         stress.setDisplayOption(StressDisplayOption.MISES);
-
         initStress(stressData);
     }
 
@@ -55,23 +39,17 @@ public class StressController {
         lastStressFile = stressData;
 
         Map<Integer, float[]> stressDataWithIndex = DataReader.readStress(stressData);
+        stress.setStress(stressDataWithIndex);
 
-        StressDisplayOption option = getStressDisplayOption();
-        processStressData(stressDataWithIndex, option);
-
-        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
-        stress.setColors(stress.getStressToDisplay()
-                .stream()
-                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
-                .toList());
-
-        ModelController.getInstance().setModelColors(stress.getColors());
+        processStressData(stress.getDisplayOption());
 
         LegendView.getInstance().updateLegend(stress.getMinStress(), stress.getMaxStress());
         LegendView.getInstance().setVisible(true);
     }
 
-    public void processStressData(Map<Integer, float[]> stressDataWithIndex, StressDisplayOption option) {
+    public void processStressData(StressDisplayOption option) {
+        Map<Integer, float[]> stressDataWithIndex = stress.getStress();
+
         stress.setMinStress(Float.MAX_VALUE);
         stress.setMaxStress(Float.MIN_VALUE);
 
@@ -91,7 +69,14 @@ public class StressController {
         }
 
         stress.setStressToDisplay(stressToDisplay);
-        stress.setStress(stressDataWithIndex);
+
+        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
+        stress.setColors(stressToDisplay.stream()
+                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
+                .toList());
+
+        ModelController.getInstance().setModelColors(stress.getColors());
+        ModelController.getInstance().setModelReady(true);
     }
 
     private float calculateStress(float[] stressValues, StressDisplayOption option) {
@@ -114,13 +99,5 @@ public class StressController {
                 + Math.pow(qy - qz, 2)
                 + Math.pow(qz - qx, 2)
                 + 6 * (Math.pow(txy, 2) + Math.pow(tyz, 2) + Math.pow(tzx, 2))));
-    }
-
-    private StressDisplayOption getStressDisplayOption() {
-        return stress.getDisplayOption();
-    }
-
-    public static StressDisplayOption fromString(String name) {
-        return StressDisplayOption.valueOf(name.toUpperCase());
     }
 }

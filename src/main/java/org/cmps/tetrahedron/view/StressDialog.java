@@ -72,7 +72,7 @@ public class StressDialog {
         if (!stressComponentComboBox.isDisabled()) {
             String selected = stressComponentComboBox.getValue();
             if (selected != null) {
-                stress.setDisplayOption(StressController.fromString(selected));
+                stress.setDisplayOption(StressDisplayOption.valueOf(selected.toUpperCase()));
             }
         } else {
             stress.setDisplayOption(StressDisplayOption.MISES);

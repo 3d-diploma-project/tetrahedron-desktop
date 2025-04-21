@@ -114,4 +114,20 @@ public class ModelController {
 
         Platform.runLater(ModelFilesPicker::openDialogWindow);
     }
+
+    public void clearDisplacement() {
+        for (Map.Entry<Integer, float[]> entry : originalVertices.entrySet()) {
+            float[] orig = entry.getValue();
+            float[] current = model.getVertices().get(entry.getKey());
+
+            current[0] = orig[0];
+            current[1] = orig[1];
+            current[2] = orig[2];
+        }
+
+        model.calculateModelCenter();
+        centerModel();
+        setModelReady(true);
+    }
+
 }
