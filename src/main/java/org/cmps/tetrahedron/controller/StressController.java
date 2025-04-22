@@ -42,9 +42,6 @@ public class StressController {
         stress.setStress(stressDataWithIndex);
 
         processStressData(stress.getDisplayOption());
-
-        LegendView.getInstance().updateLegend(stress.getMinStress(), stress.getMaxStress());
-        LegendView.getInstance().setVisible(true);
     }
 
     public void processStressData(StressDisplayOption option) {
@@ -77,6 +74,8 @@ public class StressController {
 
         ModelController.getInstance().setModelColors(stress.getColors());
         ModelController.getInstance().setModelReady(true);
+        LegendView.getInstance().updateLegend(stress.getMinStress(), stress.getMaxStress());
+        LegendView.getInstance().setVisible(true);
     }
 
     private float calculateStress(float[] stressValues, StressDisplayOption option) {

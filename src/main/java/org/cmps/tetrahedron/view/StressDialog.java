@@ -78,18 +78,10 @@ public class StressDialog {
             stress.setDisplayOption(StressDisplayOption.MISES);
         }
 
-
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
 
-        File lastStressFile = StressController.getInstance().getLastStressFile();
-        if (lastStressFile != null) {
-            StressController.getInstance().initStress(lastStressFile);
-        }
-
-//        StressController controller = StressController.getInstance();
-//        controller.processStressData(controller.getStress().getStress(), controller.getStress().getDisplayOption());
-
+        StressController.getInstance().processStressData(stress.getDisplayOption());
     }
 
     private void onSwitchToggle(boolean isOn) {
