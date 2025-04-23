@@ -32,12 +32,8 @@ public class StressController {
         modelController.clearDisplacement();
 
         stress.setDisplayOption(StressDisplayOption.MISES);
-        initStress(stressData);
-    }
 
-    public void initStress(File stressData) throws ModelValidationException {
         lastStressFile = stressData;
-
         Map<Integer, float[]> stressDataWithIndex = DataReader.readStress(stressData);
         stress.setStress(stressDataWithIndex);
 
@@ -73,9 +69,7 @@ public class StressController {
                 .toList());
 
         ModelController.getInstance().setModelColors(stress.getColors());
-        ModelController.getInstance().setModelReady(true);
         LegendView.getInstance().updateLegend(stress.getMinStress(), stress.getMaxStress());
-        LegendView.getInstance().setVisible(true);
     }
 
     private float calculateStress(float[] stressValues, StressDisplayOption option) {

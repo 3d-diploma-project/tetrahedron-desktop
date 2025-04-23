@@ -81,6 +81,7 @@ public class ModelController {
     public void setModelColors(List<float[]> modelColors) {
         this.modelColors = modelColors;
         ColorSettings.getInstance().setColoredInSelectedColor(false);
+        ModelController.getInstance().setModelReady(true);
     }
 
     private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
