@@ -2,7 +2,7 @@
 
 set -e
 
-APP_VERSION="2.0.0"
+APP_VERSION="3.0.0"
 
 cd ..
 

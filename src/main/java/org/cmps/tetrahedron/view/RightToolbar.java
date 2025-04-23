@@ -5,7 +5,9 @@ import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import lombok.Getter;
 import org.cmps.tetrahedron.controller.*;
+import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
@@ -17,7 +19,12 @@ import org.cmps.tetrahedron.view.component.Switch;
 
 import java.io.File;
 
+import static org.cmps.tetrahedron.enums.StressDisplayOption.MISES;
+
 public class RightToolbar implements LocalizationListener {
+
+    @Getter
+    private static RightToolbar instance;
 
     @FXML
     private Label stressLabel, stressSecondaryLabel, displacementLabel, displacementSecondaryLabel, characteristicLabel;
@@ -26,9 +33,14 @@ public class RightToolbar implements LocalizationListener {
     private Button stressButton, displacementButton, characteristicButton;
 
     @FXML
+    private Button stressSettings;
+
+    @FXML
     private Switch elementGridController;
 
     public void initialize() {
+        instance = this;
+
         LocalizationController localization = LocalizationController.getInstance();
         ModelViewSettings modelViewSettings = ModelViewSettings.getInstance();
 
@@ -36,6 +48,8 @@ public class RightToolbar implements LocalizationListener {
         elementGridController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"),
                                               modelViewSettings.isShowElementMesh(),
                                               modelViewSettings::setShowElementMesh);
+
+        stressSettings.setVisible(false);
     }
 
     @Override
@@ -56,6 +70,24 @@ public class RightToolbar implements LocalizationListener {
         elementGridController.setLabel(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"));
     }
 
+    public void setStressDisplayOption(StressDisplayOption stressDisplayOption) {
+        if (stressDisplayOption == null) {
+            return;
+        }
+
+        LocalizationController localization = LocalizationController.getInstance();
+        String text;
+        if (MISES.equals(stressDisplayOption)) {
+            text = localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-secondaryLabel");
+        } else {
+            text = localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-secondaryLabel2");
+            text = text.formatted(stressDisplayOption.toString().toLowerCase());
+        }
+
+        stressSecondaryLabel.setVisible(true);
+        stressSecondaryLabel.setText(text);
+    }
+
     @FXML
     private void selectStressFile(MouseEvent mouseEvent) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
@@ -70,6 +102,7 @@ public class RightToolbar implements LocalizationListener {
                 Stress stressModel = StressController.getInstance().getStress();
 
                 legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
+                stressSettings.setVisible(true);
             }
         } catch (ModelValidationException e) {
             new ErrorDialog(e);

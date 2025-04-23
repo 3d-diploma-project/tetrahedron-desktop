@@ -82,6 +82,7 @@ public class StressDialog {
         stage.close();
 
         StressController.getInstance().processStressData(stress.getDisplayOption());
+        RightToolbar.getInstance().setStressDisplayOption(stress.getDisplayOption());
     }
 
     private void onSwitchToggle(boolean isOn) {
