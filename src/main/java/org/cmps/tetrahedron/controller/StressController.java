@@ -24,25 +24,25 @@ public class StressController {
     private static StressController instance = new StressController();
     @Getter
     private Stress stress = new Stress();
+    @Getter
+    private File lastStressFile;
 
-    public void initStress(File stressData) throws ModelValidationException {
-        Map<Integer, float[]> stressDataWithIndex= DataReader.readStress(stressData);
+    public void applyStress(File stressData) throws ModelValidationException {
+        ModelController modelController = ModelController.getInstance();
+        modelController.clearDisplacement();
 
-        processStressData(stressDataWithIndex, StressDisplayOption.MISES);
+        stress.setDisplayOption(StressDisplayOption.MISES);
 
-        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
-        stress.setColors(stress.getStressToDisplay()
-                .stream()
-                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
-                .toList());
+        lastStressFile = stressData;
+        Map<Integer, float[]> stressDataWithIndex = DataReader.readStress(stressData);
+        stress.setStress(stressDataWithIndex);
 
-        ModelController.getInstance().setModelColors(stress.getColors());
-
-        LegendView.getInstance().updateLegend(stress.getMinStress(), stress.getMaxStress());
-        LegendView.getInstance().setVisible(true);
+        processStressData(stress.getDisplayOption());
     }
 
-    private void processStressData(Map<Integer, float[]> stressDataWithIndex, StressDisplayOption option) {
+    public void processStressData(StressDisplayOption option) {
+        Map<Integer, float[]> stressDataWithIndex = stress.getStress();
+
         stress.setMinStress(Float.MAX_VALUE);
         stress.setMaxStress(Float.MIN_VALUE);
 
@@ -62,13 +62,26 @@ public class StressController {
         }
 
         stress.setStressToDisplay(stressToDisplay);
-        stress.setStress(stressDataWithIndex);
+
+        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
+        stress.setColors(stressToDisplay.stream()
+                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
+                .toList());
+
+        ModelController.getInstance().setModelColors(stress.getColors());
+        LegendView.getInstance().updateLegend(stress.getMinStress(), stress.getMaxStress());
     }
 
     private float calculateStress(float[] stressValues, StressDisplayOption option) {
         return switch (option) {
             case MISES -> misesStress(stressValues[0], stressValues[1], stressValues[2],
                     stressValues[3], stressValues[4], stressValues[5]);
+            case X -> stressValues[0];
+            case Y -> stressValues[3];
+            case Z -> stressValues[5];
+            case XY -> stressValues[1];
+            case YZ -> stressValues[4];
+            case XZ -> stressValues[2];
             default -> throw new IllegalArgumentException("Unsupported stress display option: " + option);
         };
     }

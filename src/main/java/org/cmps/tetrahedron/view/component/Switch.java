@@ -35,6 +35,10 @@ public class Switch {
         label.setText(text);
     }
 
+    public void setLabelStyle(String style) {
+        label.setStyle(style);
+    }
+
     private void updateStyle() {
         button.getStyleClass().removeAll("switch-on", "switch-off");
         button.getStyleClass().add(state ? "switch-on" : "switch-off");

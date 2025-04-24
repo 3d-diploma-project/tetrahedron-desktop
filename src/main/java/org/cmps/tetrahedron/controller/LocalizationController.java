@@ -21,6 +21,7 @@ public class LocalizationController {
     public static final String ERROR_DIALOG_BUNDLE = "i18n.error-dialog";
     public static final String WARNING_DIALOG_BUNDLE = "i18n.warning-dialog";
     public static final String MODEL_FILES_PICKER_BUNDLE = "i18n.model-files-picker";
+    public static final String STRESS_DIALOG_BUNDLE = "i18n.stress-dialog";
 
 
     private LocalizationController() {
@@ -35,6 +36,7 @@ public class LocalizationController {
         bundles.put(ERROR_DIALOG_BUNDLE, ResourceBundle.getBundle(ERROR_DIALOG_BUNDLE, currentLocale));
         bundles.put(WARNING_DIALOG_BUNDLE, ResourceBundle.getBundle(WARNING_DIALOG_BUNDLE, currentLocale));
         bundles.put(MODEL_FILES_PICKER_BUNDLE, ResourceBundle.getBundle(MODEL_FILES_PICKER_BUNDLE, currentLocale));
+        bundles.put(STRESS_DIALOG_BUNDLE, ResourceBundle.getBundle(STRESS_DIALOG_BUNDLE, currentLocale));
     }
 
     public ResourceBundle getBundle(String name) {

@@ -17,7 +17,7 @@
             <HBox spacing="5" alignment="CENTER_LEFT">
                 <Label fx:id="stressLabel" styleClass="data-label" text="%stress-label"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Button styleClass="small-button">
+                <Button fx:id="stressSettings" onAction="#openStressScaleDialog" styleClass="small-button">
                     <graphic>
                         <fx:include source="/icon/SmallButton.fxml"/>
                     </graphic>

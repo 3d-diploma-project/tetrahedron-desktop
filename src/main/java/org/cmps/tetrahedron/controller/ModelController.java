@@ -78,26 +78,10 @@ public class ModelController {
         modelColors = customCharacteristic.getColors();
     }
 
-    public void applyStress(File stressData) throws ModelValidationException {
-        for (Integer idx : originalVertices.keySet()) {
-            float[] orig = originalVertices.get(idx);
-
-            float[] current = model.getVertices().get(idx);
-            current[0] = orig[0];
-            current[1] = orig[1];
-            current[2] = orig[2];
-        }
-
-        model.calculateModelCenter();
-        centerModel();
-        modelReady = true;
-
-        StressController.getInstance().initStress(stressData);
-    }
-
     public void setModelColors(List<float[]> modelColors) {
         this.modelColors = modelColors;
         ColorSettings.getInstance().setColoredInSelectedColor(false);
+        ModelController.getInstance().setModelReady(true);
     }
 
     private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
@@ -131,4 +115,20 @@ public class ModelController {
 
         Platform.runLater(ModelFilesPicker::openDialogWindow);
     }
+
+    public void clearDisplacement() {
+        for (Map.Entry<Integer, float[]> entry : originalVertices.entrySet()) {
+            float[] orig = entry.getValue();
+            float[] current = model.getVertices().get(entry.getKey());
+
+            current[0] = orig[0];
+            current[1] = orig[1];
+            current[2] = orig[2];
+        }
+
+        model.calculateModelCenter();
+        centerModel();
+        setModelReady(true);
+    }
+
 }

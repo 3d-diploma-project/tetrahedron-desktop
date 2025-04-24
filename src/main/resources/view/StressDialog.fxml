@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cmps.tetrahedron.view.StressDialog"
+            stylesheets="@/style/stress-dialog.css">
+    <content>
+        <VBox spacing="14">
+            <HBox alignment="CENTER">
+                <Label text="%stress-label" styleClass="dialog-title"/>
+            </HBox>
+
+            <fx:include fx:id="elementGrid" source="./component/Switch.fxml"/>
+
+            <HBox spacing="10" styleClass="label-input-container">
+                <VBox alignment="CENTER_LEFT">
+                    <Label text="%component-stress-label" styleClass="dialog-label-bold"/>
+                </VBox>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="stressComponentComboBox" styleClass="stress-selector">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="x"/>
+                            <String fx:value="y"/>
+                            <String fx:value="z"/>
+                            <String fx:value="xy"/>
+                            <String fx:value="yz"/>
+                            <String fx:value="xz"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
+
+            <HBox alignment="CENTER" styleClass="button-box">
+                <Button text="%save" fx:id="saveButton" styleClass="save-button" onAction="#applyChanges"/>
+            </HBox>
+        </VBox>
+    </content>
+</DialogPane>
