@@ -31,6 +31,7 @@
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="UA"/>
                 <String fx:value="EN"/>
+                <String fx:value="DE"/>
             </FXCollections>
         </items>
     </ComboBox>
