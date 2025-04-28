@@ -38,7 +38,7 @@ public class VertexInfoController implements LocalizationListener {
     @Getter
     private boolean clicked;
 
-    private String lastInfoToDisplay;
+    private String lastInfoToDisplay = "";
 
     private VertexInfoController() {
         localizationController.registerListener(this);
@@ -64,7 +64,7 @@ public class VertexInfoController implements LocalizationListener {
      */
     private String buildNodeInfo(Vector3f worldCoord) {
         if (modelController.getVertices().isEmpty()) {
-            return localizationController.getString(VERTEX_INFO_BUNDLE, "click-on-vertex");
+            return "";
         }
 
         int closestNode = 0;
@@ -98,7 +98,7 @@ public class VertexInfoController implements LocalizationListener {
     }
 
     private void updateDefaultInfo() {
-        lastInfoToDisplay = localizationController.getString(VERTEX_INFO_BUNDLE, "click-on-vertex");
+        lastInfoToDisplay = "";
 
         if (displayInfo != null) {
             Platform.runLater(() -> displayInfo.accept(lastInfoToDisplay));
@@ -110,7 +110,7 @@ public class VertexInfoController implements LocalizationListener {
         if (!clicked) {
             lastInfoToDisplay = buildNodeInfo(coordinatesConvertor.getWorldCoordinates(x, y, 1.0f));
         } else {
-            lastInfoToDisplay = localizationController.getString(VERTEX_INFO_BUNDLE, "click-on-vertex");
+            lastInfoToDisplay = "";
         }
 
         if (displayInfo != null) {
