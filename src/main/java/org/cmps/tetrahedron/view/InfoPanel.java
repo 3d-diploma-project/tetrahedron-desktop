@@ -15,7 +15,7 @@ public class InfoPanel extends HBox {
     @Getter
     private static final InfoPanel instance = new InfoPanel();
 
-    Label nodeInfo = new Label("Click on a vertex");
+    Label nodeInfo = new Label("");
 
     private InfoPanel() {
         getChildren().add(nodeInfo);

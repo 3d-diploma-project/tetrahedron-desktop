@@ -22,6 +22,7 @@ public class LocalizationController {
     public static final String WARNING_DIALOG_BUNDLE = "i18n.warning-dialog";
     public static final String MODEL_FILES_PICKER_BUNDLE = "i18n.model-files-picker";
     public static final String STRESS_DIALOG_BUNDLE = "i18n.stress-dialog";
+    public static final String VERTEX_INFO_BUNDLE = "i18n.vertex-info";
 
 
     private LocalizationController() {
@@ -30,6 +31,7 @@ public class LocalizationController {
     }
 
     private void loadBundles() {
+        bundles.clear();
         bundles.put(RIGHT_TOOLBAR_BUNDLE, ResourceBundle.getBundle(RIGHT_TOOLBAR_BUNDLE, currentLocale));
         bundles.put(INDEX_FILE_SELECTOR_BUNDLE, ResourceBundle.getBundle(INDEX_FILE_SELECTOR_BUNDLE, currentLocale));
         bundles.put(NODE_FILE_SELECTOR_BUNDLE, ResourceBundle.getBundle(NODE_FILE_SELECTOR_BUNDLE, currentLocale));
@@ -37,6 +39,7 @@ public class LocalizationController {
         bundles.put(WARNING_DIALOG_BUNDLE, ResourceBundle.getBundle(WARNING_DIALOG_BUNDLE, currentLocale));
         bundles.put(MODEL_FILES_PICKER_BUNDLE, ResourceBundle.getBundle(MODEL_FILES_PICKER_BUNDLE, currentLocale));
         bundles.put(STRESS_DIALOG_BUNDLE, ResourceBundle.getBundle(STRESS_DIALOG_BUNDLE, currentLocale));
+        bundles.put(VERTEX_INFO_BUNDLE, ResourceBundle.getBundle(VERTEX_INFO_BUNDLE, currentLocale));
     }
 
     public ResourceBundle getBundle(String name) {
