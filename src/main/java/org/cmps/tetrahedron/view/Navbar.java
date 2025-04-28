@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import org.cmps.tetrahedron.controller.LocalizationController;
+import org.cmps.tetrahedron.enums.Language;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
 import java.io.IOException;
@@ -55,9 +56,7 @@ public class Navbar {
 
     @FXML
     public void changeLanguage(ActionEvent event) {
-        String selectedLanguage = languageSelector.getValue();
-
-        Locale newLocale = selectedLanguage.equals("EN") ? Locale.of("en") : Locale.of("uk");
-        LocalizationController.getInstance().setLocale(newLocale);
+        Language selectedLanguage = Language.valueOf(languageSelector.getValue());
+        LocalizationController.getInstance().setLocale(selectedLanguage.getLocale());
     }
 }
