@@ -8,7 +8,8 @@ import java.util.Locale;
 public enum Language {
     UA("Українська", Locale.of("uk")),
     EN("English", Locale.of("en")),
-    DE("Deutsch", Locale.of("de"));
+    DE("Deutsch", Locale.of("de")),
+    PL("Polski", Locale.of("pl"));
 
     private final String displayName;
     private final Locale locale;

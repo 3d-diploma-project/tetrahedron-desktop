@@ -32,6 +32,7 @@
                 <String fx:value="UA"/>
                 <String fx:value="EN"/>
                 <String fx:value="DE"/>
+                <String fx:value="PL"/>
             </FXCollections>
         </items>
     </ComboBox>
