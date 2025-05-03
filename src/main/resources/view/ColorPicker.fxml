@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cmps.tetrahedron.view.ColorPickerComponent"
+            stylesheets="@/style/color-picker.css">
+    <content>
+        <VBox spacing="10">
+            <HBox styleClass="model-color-info">
+                <Label styleClass="main-label" text="%model-color"/>
+                <HBox styleClass="additional-box-info">
+
+                    <Button fx:id="pickColor" styleClass="pick-color" onAction="#clickOnColorPicker"/>
+                    <ColorPicker fx:id="colorPicker" visible="false" managed="false"/>
+
+                    <HBox styleClass="hex-vbox">
+                        <Label  fx:id="hexValueLabel" styleClass="hex-value" text="#6500CB"/>
+                    </HBox>
+                </HBox>
+            </HBox>
+
+            <HBox alignment="CENTER">
+                <Button fx:id="saveButton" styleClass="save-button" text="%save-button" onAction="#applyColor"/>
+            </HBox>
+
+        </VBox>
+    </content>
+
+</DialogPane>

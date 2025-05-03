@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.view;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import org.cmps.tetrahedron.controller.ModelController;
 import javafx.scene.Scene;
@@ -26,6 +27,9 @@ public class InstrumentsSidebar {
 
     @FXML
     private Button leftRight;
+
+    @FXML
+    public Button colorPicker;
 
     @FXML
     private Button deleteModel;
@@ -59,33 +63,14 @@ public class InstrumentsSidebar {
 
     @FXML
     public void clickOnColorPicker() {
-        Stage stage = new Stage();
-        ColorPicker colorPicker = new ColorPicker();
-        colorPicker.setOnAction(event -> {
-            Color selectedColor = colorPicker.getValue();
-
-            float[] colorArray = new float[]{
-                    (float) selectedColor.getRed(),
-                    (float) selectedColor.getGreen(),
-                    (float) selectedColor.getBlue()
-            };
-
-            ColorSettings.getInstance().setModelColor(colorArray);
-            ColorSettings.getInstance().setColoredInSelectedColor(true);
-            stage.close();
-        });
-
-        StackPane root = new StackPane(colorPicker);
-        Scene scene = new Scene(root, 100, 40);
-        stage.setScene(scene);
-        stage.show();
+        Bounds bounds = colorPicker.localToScreen(colorPicker.getBoundsInParent());
+        ColorPickerComponent.showColorPicker(bounds.getMinX(), bounds.getMinY());
     }
 
     @FXML
     public void clickOnDelete() {
         modelController.clearModel();
     }
-
 
     private void focus(Button button) {
         if(!button.getStyleClass().contains("button-selected")) {

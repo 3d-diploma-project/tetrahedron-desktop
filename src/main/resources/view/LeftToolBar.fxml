@@ -28,7 +28,7 @@
         </graphic>
     </Button>
 
-    <Button styleClass="button" onMouseClicked="#clickOnColorPicker">
+    <Button styleClass="button" fx:id="colorPicker" onMouseClicked="#clickOnColorPicker">
         <graphic>
             <fx:include source="/icon/ColorPicker.fxml"/>
         </graphic>
