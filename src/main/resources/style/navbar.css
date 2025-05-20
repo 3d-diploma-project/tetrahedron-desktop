@@ -49,3 +49,12 @@
     -fx-max-width: 50px;
     -fx-padding: 0 0 0 1;
 }
+
+.instruction-button {
+    -fx-background-color: transparent;
+    -fx-min-width: 26px;
+    -fx-min-height: 26px;
+    -fx-max-width: 26px;
+    -fx-max-height: 26px;
+    -fx-translate-y: -4;
+}

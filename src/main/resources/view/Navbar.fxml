@@ -26,15 +26,23 @@
 
     <Region HBox.hgrow="ALWAYS"/>
 
-    <ComboBox fx:id="languageSelector" styleClass="language-selector" onAction="#changeLanguage">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
-                <String fx:value="UA"/>
-                <String fx:value="EN"/>
-                <String fx:value="DE"/>
-                <String fx:value="PL"/>
-            </FXCollections>
-        </items>
-    </ComboBox>
+    <HBox spacing="20">
+        <ComboBox fx:id="languageSelector" styleClass="language-selector" onAction="#changeLanguage">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="UA"/>
+                    <String fx:value="EN"/>
+                    <String fx:value="DE"/>
+                    <String fx:value="PL"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <Button styleClass="instruction-button" fx:id="instructionButton" onAction="#openInstructions">
+            <graphic>
+                <fx:include source="/icon/Instruction.fxml"/>
+            </graphic>
+        </Button>
+    </HBox>
 
 </HBox>

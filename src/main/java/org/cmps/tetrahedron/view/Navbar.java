@@ -2,22 +2,19 @@ package org.cmps.tetrahedron.view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.enums.Language;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
-import java.io.IOException;
-import java.util.Locale;
-import java.util.prefs.Preferences;
+import java.awt.*;
+
 
 public class Navbar {
 
@@ -58,5 +55,15 @@ public class Navbar {
     public void changeLanguage(ActionEvent event) {
         Language selectedLanguage = Language.valueOf(languageSelector.getValue());
         LocalizationController.getInstance().setLocale(selectedLanguage.getLocale());
+    }
+
+    public void openInstructions(ActionEvent actionEvent) {
+        String url = "https://github.com/NTU-KhPI-CMPS/tetrahedron-desktop/wiki";
+
+        try {
+            Desktop.getDesktop().browse(new java.net.URI(url));
+        } catch (Exception e) {
+            System.out.println("Failed to open the browser: " + e.getMessage());
+        }
     }
 }
