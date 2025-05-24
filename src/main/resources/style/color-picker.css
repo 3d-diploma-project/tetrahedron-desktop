@@ -49,6 +49,32 @@
     -fx-cursor: hand;
 }
 
+.main-label {
+    -fx-font-family: "Geologica Roman Medium";
+    -fx-font-size: 13px;
+    -fx-text-fill: #0E0E0E;
+}
+
+.secondary-label {
+    -fx-font-family: "Geologica Roman";
+    -fx-font-size: 13px;
+    -fx-text-fill: #0E0E0E;
+}
+
+.text-field {
+    -fx-min-width: 58px;
+    -fx-max-width: 58px;
+    -fx-min-height: 18px;
+    -fx-max-height: 18px;
+    -fx-border-radius: 2px;
+    -fx-background-color: white;
+    -fx-alignment: center;
+    -fx-padding: 2px 8px;
+}
+
+.text-field:hover {
+    -fx-background-color: #E5E5E6;
+}
 
 .save-button {
     -fx-background-color: #1E0094;

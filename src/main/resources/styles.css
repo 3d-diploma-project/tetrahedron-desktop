@@ -8,6 +8,11 @@
     src: url('/fonts/Geologica-Light.ttf');
 }
 
+@font-face {
+    -fx-font-family: "Geologica Roman Medium";
+    src: url('/fonts/Geologica-Medium.ttf');
+}
+
 .model-view-page {
     -fx-background-color: #ECF4FE;
     -fx-spacing: 20;

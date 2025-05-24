@@ -1,19 +1,25 @@
 package org.cmps.tetrahedron.view;
 
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.cmps.tetrahedron.controller.LocalizationController;
+import org.cmps.tetrahedron.controller.ModelController;
+import org.cmps.tetrahedron.controller.StressController;
+import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.utils.DialogUtils;
+import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -33,17 +39,24 @@ public class ColorPickerComponent {
     public Label hexValueLabel;
 
     @FXML
+    private TextField legendCountInput;
+
+    @FXML
     public Button saveButton;
 
     @FXML
     public void initialize() {
-        if (ColorSettings.getInstance().isColoredInSelectedColor()) {
-            float[] colorArray = ColorSettings.getInstance().getModelColor();
-            tempSelectedColor = Color.color(colorArray[0], colorArray[1], colorArray[2]);
-        }
+        float[] colorArray = ColorSettings.getInstance().getModelColor();
+        tempSelectedColor = Color.color(colorArray[0], colorArray[1], colorArray[2]);
 
         colorPicker.setValue(tempSelectedColor);
         updateColorDisplay(tempSelectedColor);
+
+        legendCountInput.setText(String.valueOf(LegendUtils.getColorArraySize()));
+
+//        Platform.runLater(() -> {
+//            legendCountInput.setDisable(ModelController.getInstance().getModelColors() == null);
+//        });
     }
 
     private void updateColorDisplay(Color color) {
@@ -85,7 +98,21 @@ public class ColorPickerComponent {
             ColorSettings.getInstance().setModelColor(colorArray);
             ColorSettings.getInstance().setColoredInSelectedColor(true);
         }
+
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
+
+        try {
+            int colorCount = Integer.parseInt(legendCountInput.getText());
+            if (colorCount >= 2 && colorCount <= 15) {
+                LegendUtils.setColorArraySize(colorCount);
+                StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
+                StressController.getInstance().processStressData(displayOption);
+            } else {
+                System.err.println("Legend color count must be between 2 and 15!");
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid legend color count input!");
+        }
     }
 }
