@@ -14,6 +14,7 @@ import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.StressController;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
+import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.utils.DialogUtils;
 import org.cmps.tetrahedron.utils.LegendUtils;
@@ -53,10 +54,6 @@ public class ColorPickerComponent {
         updateColorDisplay(tempSelectedColor);
 
         legendCountInput.setText(String.valueOf(LegendUtils.getColorArraySize()));
-
-//        Platform.runLater(() -> {
-//            legendCountInput.setDisable(ModelController.getInstance().getModelColors() == null);
-//        });
     }
 
     private void updateColorDisplay(Color color) {
@@ -109,10 +106,10 @@ public class ColorPickerComponent {
                 StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
                 StressController.getInstance().processStressData(displayOption);
             } else {
-                System.err.println("Legend color count must be between 2 and 15!");
+                new ErrorDialog(new ModelValidationException("legend-range"));
             }
         } catch (NumberFormatException e) {
-            System.err.println("Invalid legend color count input!");
+            new ErrorDialog(new ModelValidationException("legend-format"));
         }
     }
 }
