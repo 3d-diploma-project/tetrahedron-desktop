@@ -1,10 +1,13 @@
 package org.cmps.tetrahedron.view;
 
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.StressController;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
@@ -15,6 +18,7 @@ import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.Switch;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -126,5 +130,18 @@ public class ColorPickerComponent {
 
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
+
+        try {
+            int colorCount = Integer.parseInt(legendCountInput.getText());
+            if (colorCount >= 2 && colorCount <= 15) {
+                LegendUtils.setColorArraySize(colorCount);
+                StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
+                StressController.getInstance().processStressData(displayOption);
+            } else {
+                new ErrorDialog(new ModelValidationException("legend-range"));
+            }
+        } catch (NumberFormatException e) {
+            new ErrorDialog(new ModelValidationException("legend-format"));
+        }
     }
 }
