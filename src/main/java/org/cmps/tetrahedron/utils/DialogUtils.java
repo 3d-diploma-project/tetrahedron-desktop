@@ -25,7 +25,7 @@ public class DialogUtils {
         dialog.show();
         // +40 is a shift to have space between windows
         dialog.setX(x + 40);
-        dialog.setY(y - content.getHeight() * 1);
+        dialog.setY(y - content.getHeight());
     }
 
     private static Stage buildDialogWindow(Pane content) {

@@ -13,7 +13,8 @@ public class LegendUtils {
     @Getter
     private static int colorArraySize = 7;
 
-    public static Map<Integer, float[]> COLORS = getHSVColors();
+    @Getter
+    private static Map<Integer, float[]> colorsLegend = getHSVColors();
 
     public static TreeMap<Float, Integer> buildLegend(float min, float max) {
         TreeMap<Float, Integer> stressColorMap = new TreeMap<>();
@@ -55,6 +56,6 @@ public class LegendUtils {
 
     public static void setColorArraySizeAndTheme(int size, boolean grayscale) {
         colorArraySize = size;
-        COLORS = grayscale ? getGrayColors() : getHSVColors();
+        colorsLegend = grayscale ? getGrayColors() : getHSVColors();
     }
 }

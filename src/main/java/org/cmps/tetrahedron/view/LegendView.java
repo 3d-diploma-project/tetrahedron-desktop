@@ -6,8 +6,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import lombok.Getter;
-import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.FontUtils;
 import org.cmps.tetrahedron.utils.LegendUtils;
 
@@ -41,7 +39,7 @@ public class LegendView extends HBox {
     }
 
     public void updateLegend(float minValue, float maxValue) {
-        Map<Integer, float[]> colors = LegendUtils.COLORS;
+        Map<Integer, float[]> colors = LegendUtils.getColorsLegend();
         List<String> ranges = generateRangeValues(minValue, maxValue);
 
         setVisible(true);
