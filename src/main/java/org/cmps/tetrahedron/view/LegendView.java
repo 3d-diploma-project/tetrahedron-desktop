@@ -35,7 +35,7 @@ public class LegendView extends HBox {
         allColorBoxes.setAlignment(Pos.CENTER);
         allLabelBoxes.setAlignment(Pos.CENTER);
         allLabelBoxes.setTranslateX(-(colorBoxSizeX - (double) (colorBoxSizeX - labelBoxX) / 2));
-        allLabelBoxes.setSpacing(colorBoxSizeY - labelBoxY - labelBoxBorder * 2);
+        allLabelBoxes.setSpacing(colorBoxSizeY - labelBoxY - labelBoxBorder * 2 + 1);
 
         getChildren().addAll(allColorBoxes, allLabelBoxes);
     }
