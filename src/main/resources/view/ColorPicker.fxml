@@ -37,13 +37,21 @@
                 </HBox>
 
                 <VBox spacing="10">
-                    <HBox spacing="44" alignment="CENTER">
-                        <VBox minWidth="95" maxWidth="95">
+                    <HBox spacing="44">
+                        <VBox minWidth="95" maxWidth="95" alignment="CENTER_LEFT">
                             <Label styleClass="secondary-label" text="%legend-count" wrapText="true"/>
                         </VBox>
 
                         <TextField fx:id="legendCountInput" styleClass="text-field" text=" "/>
                     </HBox>
+
+                    <VBox spacing="2">
+                        <fx:include fx:id="elementGrid" source="./component/Switch.fxml"/>
+
+                        <HBox>
+                            <Label styleClass="third-label" text="%legend-theme-secondary"/>
+                        </HBox>
+                    </VBox>
                 </VBox>
             </VBox>
 

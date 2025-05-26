@@ -17,7 +17,6 @@ import org.joml.Vector3f;
 import java.io.File;
 import java.util.*;
 
-import static org.cmps.tetrahedron.utils.LegendUtils.COLORS;
 
 @Getter
 public class ModelController {
@@ -72,7 +71,7 @@ public class ModelController {
         TreeMap<Float, Integer> legend = LegendUtils.buildLegend(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());
         customCharacteristic.setColors(customCharacteristic.getValues()
                 .stream()
-                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
+                .map(value -> LegendUtils.getColorsLegend().get(legend.get(legend.floorKey(value))))
                 .toList());
 
         modelColors = customCharacteristic.getColors();

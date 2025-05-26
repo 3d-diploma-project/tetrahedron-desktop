@@ -1,8 +1,7 @@
 package org.cmps.tetrahedron.utils;
 
-import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
+
 
 import java.awt.*;
 import java.util.HashMap;
@@ -14,12 +13,8 @@ public class LegendUtils {
     @Getter
     private static int colorArraySize = 7;
 
-    public static Map<Integer, float[]> COLORS = getColors();
-
-    public static void setColorArraySize(int size) {
-        colorArraySize = size;
-        COLORS = getColors();
-    }
+    @Getter
+    private static Map<Integer, float[]> colorsLegend = getHSVColors();
 
     public static TreeMap<Float, Integer> buildLegend(float min, float max) {
         TreeMap<Float, Integer> stressColorMap = new TreeMap<>();
@@ -34,7 +29,7 @@ public class LegendUtils {
         return stressColorMap;
     }
 
-    private static Map<Integer, float[]> getColors() {
+    private static Map<Integer, float[]> getHSVColors() {
         double jump = 0.66 / (colorArraySize * 1.0);
         Map<Integer, float[]> colors = new HashMap<>();
 
@@ -44,5 +39,23 @@ public class LegendUtils {
         }
 
         return colors;
+    }
+
+    private static Map<Integer, float[]> getGrayColors() {
+        Map<Integer, float[]> colors = new HashMap<>();
+        float minGray = 0.2f;
+        float maxGray = 0.8f;
+
+        for (int i = 0; i < colorArraySize; i++) {
+            float gray = minGray + (maxGray - minGray) * (i / (float) (colorArraySize - 1));
+            colors.put(i, new float[]{gray, gray, gray});
+        }
+
+        return colors;
+    }
+
+    public static void setColorArraySizeAndTheme(int size, boolean grayscale) {
+        colorArraySize = size;
+        colorsLegend = grayscale ? getGrayColors() : getHSVColors();
     }
 }

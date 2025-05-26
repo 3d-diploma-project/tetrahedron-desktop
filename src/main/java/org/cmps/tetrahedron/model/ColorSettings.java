@@ -14,4 +14,5 @@ public class ColorSettings {
 
     private float[] modelColor = DEFAULT_MODEL_COLOR;
     private boolean coloredInSelectedColor = true;
+    private boolean grayscaleLegendTheme = false;
 }

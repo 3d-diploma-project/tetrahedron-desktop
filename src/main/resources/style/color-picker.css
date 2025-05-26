@@ -1,104 +1,111 @@
 .dialog-pane {
-    -fx-background-color: TRANSPARENT;
-    -fx-padding: 10px 10px;
+  -fx-background-color: TRANSPARENT;
+  -fx-padding: 10px 10px;
 }
 
 .content {
-    -fx-background-color: #E7EDF2;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
-    -fx-border-radius: 12px;
-    -fx-background-radius: 12px;
-    -fx-padding: 20px 16px;
-    -fx-font-family: "Geologica Roman";
+  -fx-background-color: #e7edf2;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+  -fx-border-radius: 12px;
+  -fx-background-radius: 12px;
+  -fx-padding: 20px 16px;
+  -fx-font-family: "Geologica Roman";
 }
 
 .model-color-info {
-    -fx-spacing: 20;
+  -fx-spacing: 20;
 }
 
 .model-color-info .main-label {
-    -fx-font-size: 13px;
+  -fx-font-size: 13px;
 }
 
 .additional-box-info {
-    -fx-spacing: 4;
+  -fx-spacing: 4;
 }
 
 .hex-vbox {
-    -fx-background-color: #FAFAFA;
-    -fx-border-radius: 2px;
-    -fx-background-radius: 2px;
-    -fx-padding: 2px 8px;
+  -fx-background-color: #fafafa;
+  -fx-border-radius: 2px;
+  -fx-background-radius: 2px;
+  -fx-padding: 2px 8px;
 }
 
 .hex-value {
-    -fx-font-size: 10px;
-    -fx-text-fill: #0E0E0E;
+  -fx-font-size: 10px;
+  -fx-text-fill: #0e0e0e;
 }
 
 .pick-color {
-    -fx-min-width: 20px;
-    -fx-max-width: 20px;
-    -fx-min-height: 17px;
-    -fx-max-height: 17px;
+  -fx-min-width: 20px;
+  -fx-max-width: 20px;
+  -fx-min-height: 17px;
+  -fx-max-height: 17px;
 
-    -fx-background-color: #6500CB;
-    -fx-border-color: #0E0E0E;
-    -fx-background-radius: 2px;
-    -fx-border-radius: 2px;
-    -fx-cursor: hand;
+  -fx-background-color: #6500cb;
+  -fx-border-color: #0e0e0e;
+  -fx-background-radius: 2px;
+  -fx-border-radius: 2px;
+  -fx-cursor: hand;
 }
 
 .main-label {
-    -fx-font-family: "Geologica Roman Medium";
-    -fx-font-size: 13px;
-    -fx-text-fill: #0E0E0E;
+  -fx-font-family: "Geologica Roman Medium";
+  -fx-font-size: 13px;
+  -fx-text-fill: #0e0e0e;
 }
 
 .secondary-label {
-    -fx-font-family: "Geologica Roman";
-    -fx-font-size: 13px;
-    -fx-text-fill: #0E0E0E;
+  -fx-font-family: "Geologica Roman";
+  -fx-font-size: 13px;
+  -fx-text-fill: #0e0e0e;
+}
+
+.third-label {
+  -fx-font-family: "Geologica Roman Light";
+  -fx-font-size: 10px;
+  -fx-text-fill: #727272;
 }
 
 .text-field {
-    -fx-min-width: 58px;
-    -fx-max-width: 58px;
-    -fx-min-height: 18px;
-    -fx-max-height: 18px;
-    -fx-border-radius: 2px;
-    -fx-background-color: white;
-    -fx-alignment: center;
-    -fx-padding: 2px 8px;
+  -fx-min-width: 58px;
+  -fx-max-width: 58px;
+  -fx-min-height: 18px;
+  -fx-max-height: 18px;
+  -fx-border-radius: 2px;
+  -fx-background-color: white;
+  -fx-alignment: center;
+  -fx-padding: 2px 8px;
 }
 
 .text-field:hover {
-    -fx-background-color: #E5E5E6;
+  -fx-background-color: #e5e5e6;
 }
 
 .save-button {
-    -fx-background-color: #1E0094;
-    -fx-text-fill: white;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 66px;
-    -fx-margin: 8px 16px;
-    -fx-pref-width: 92px;
-    -fx-pref-height: 32px;
+  -fx-background-color: #1e0094;
+  -fx-text-fill: white;
+  -fx-font-size: 13px;
+  -fx-font-weight: bold;
+  -fx-background-radius: 66px;
+  -fx-margin: 8px 16px;
+  -fx-pref-width: 92px;
+  -fx-pref-height: 32px;
 
-    -fx-border-color: #1E0094;
-    -fx-border-radius: 66px;
-    -fx-border-width: 1px;
+  -fx-border-color: #1e0094;
+  -fx-border-radius: 66px;
+  -fx-border-width: 1px;
 }
 
-.save-button:hover, .save-button:focused {
-    -fx-background-color: #E7EDF2;
-    -fx-border-color: #1E0094;
-    -fx-text-fill: #1E0094;
+.save-button:hover,
+.save-button:focused {
+  -fx-background-color: #e7edf2;
+  -fx-border-color: #1e0094;
+  -fx-text-fill: #1e0094;
 }
 
 .save-button:pressed {
-    -fx-background-color: #1D0070;
-    -fx-border-color: #1D0070;
-    -fx-text-fill: white;
+  -fx-background-color: #1d0070;
+  -fx-border-color: #1d0070;
+  -fx-text-fill: white;
 }

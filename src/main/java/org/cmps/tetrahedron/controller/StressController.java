@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.cmps.tetrahedron.utils.LegendUtils.COLORS;
 
 @Setter
 public class StressController {
@@ -65,7 +64,7 @@ public class StressController {
 
         TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
         stress.setColors(stressToDisplay.stream()
-                .map(value -> COLORS.get(legend.get(legend.floorKey(value))))
+                .map(value -> LegendUtils.getColorsLegend().get(legend.get(legend.floorKey(value))))
                 .toList());
 
         ModelController.getInstance().setModelColors(stress.getColors());

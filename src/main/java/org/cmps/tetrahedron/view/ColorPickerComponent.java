@@ -4,14 +4,11 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.cmps.tetrahedron.controller.LocalizationController;
-import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.StressController;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
@@ -19,6 +16,7 @@ import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.utils.DialogUtils;
 import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
+import org.cmps.tetrahedron.view.component.Switch;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -29,6 +27,7 @@ public class ColorPickerComponent {
     private static final LocalizationController local = LocalizationController.getInstance();
 
     private Color tempSelectedColor;
+    private boolean isLegendThemeGrayscale = false;
 
     @FXML
     public Button pickColor;
@@ -46,14 +45,30 @@ public class ColorPickerComponent {
     public Button saveButton;
 
     @FXML
+    private Switch elementGridController;
+
+    @FXML
     public void initialize() {
         float[] colorArray = ColorSettings.getInstance().getModelColor();
         tempSelectedColor = Color.color(colorArray[0], colorArray[1], colorArray[2]);
 
         colorPicker.setValue(tempSelectedColor);
         updateColorDisplay(tempSelectedColor);
-
         legendCountInput.setText(String.valueOf(LegendUtils.getColorArraySize()));
+
+        isLegendThemeGrayscale = ColorSettings.getInstance().isGrayscaleLegendTheme();
+
+        elementGridController.setInitialState(
+                local.getString(LocalizationController.COLOR_PICKER_BUNDLE, "legend-theme"),
+                isLegendThemeGrayscale,
+                this::onSwitchToggle
+        );
+        elementGridController.setLabelStyle("-fx-font-family: 'Geologica Roman'; -fx-font-size: 13px; -fx-text-fill: #0E0E0E;");
+    }
+
+    private void onSwitchToggle(boolean isOn) {
+        isLegendThemeGrayscale = isOn;
+        ColorSettings.getInstance().setGrayscaleLegendTheme(isLegendThemeGrayscale);
     }
 
     private void updateColorDisplay(Color color) {
@@ -99,17 +114,21 @@ public class ColorPickerComponent {
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
 
+        int colorCount;
         try {
-            int colorCount = Integer.parseInt(legendCountInput.getText());
-            if (colorCount >= 2 && colorCount <= 15) {
-                LegendUtils.setColorArraySize(colorCount);
-                StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
-                StressController.getInstance().processStressData(displayOption);
-            } else {
+            colorCount = Integer.parseInt(legendCountInput.getText());
+            if (colorCount < 2 || colorCount > 15) {
                 new ErrorDialog(new ModelValidationException("legend-range"));
+                return;
             }
         } catch (NumberFormatException e) {
             new ErrorDialog(new ModelValidationException("legend-format"));
+            return;
         }
+
+        LegendUtils.setColorArraySizeAndTheme(colorCount, isLegendThemeGrayscale);
+
+        StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
+        StressController.getInstance().processStressData(displayOption);
     }
 }
