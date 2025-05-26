@@ -61,6 +61,12 @@
     -fx-text-fill: #0E0E0E;
 }
 
+.third-label {
+    -fx-font-family: "Geologica Roman Light";
+    -fx-font-size: 10px;
+    -fx-text-fill: #727272;
+}
+
 .text-field {
     -fx-min-width: 58px;
     -fx-max-width: 58px;
