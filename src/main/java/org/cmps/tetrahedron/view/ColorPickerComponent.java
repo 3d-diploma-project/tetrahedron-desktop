@@ -111,6 +111,9 @@ public class ColorPickerComponent {
             ColorSettings.getInstance().setColoredInSelectedColor(true);
         }
 
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        stage.close();
+
         int colorCount;
         try {
             colorCount = Integer.parseInt(legendCountInput.getText());
@@ -127,21 +130,5 @@ public class ColorPickerComponent {
 
         StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
         StressController.getInstance().processStressData(displayOption);
-
-        Stage stage = (Stage) saveButton.getScene().getWindow();
-        stage.close();
-
-        try {
-            int colorCount = Integer.parseInt(legendCountInput.getText());
-            if (colorCount >= 2 && colorCount <= 15) {
-                LegendUtils.setColorArraySize(colorCount);
-                StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
-                StressController.getInstance().processStressData(displayOption);
-            } else {
-                new ErrorDialog(new ModelValidationException("legend-range"));
-            }
-        } catch (NumberFormatException e) {
-            new ErrorDialog(new ModelValidationException("legend-format"));
-        }
     }
 }
