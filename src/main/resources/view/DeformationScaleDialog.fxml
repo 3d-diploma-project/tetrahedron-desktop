@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cmps.tetrahedron.view.DeformationDialog"
@@ -10,6 +12,24 @@
         <VBox spacing="14">
             <HBox alignment="CENTER">
                 <Label text="%displacement-label" styleClass="dialog-title"/>
+            </HBox>
+
+            <fx:include fx:id="elementGrid" source="./component/Switch.fxml"/>
+
+            <HBox spacing="10" styleClass="label-input-container">
+                <Pane HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="displacementComponentComboBox" styleClass="deformation-selector">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="x"/>
+                            <String fx:value="y"/>
+                            <String fx:value="z"/>
+                            <String fx:value="xy"/>
+                            <String fx:value="yz"/>
+                            <String fx:value="xz"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
             </HBox>
 
             <HBox spacing="10" styleClass="label-input-container">

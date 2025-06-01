@@ -22,6 +22,7 @@ public class LocalizationController {
     public static final String WARNING_DIALOG_BUNDLE = "i18n.warning-dialog";
     public static final String MODEL_FILES_PICKER_BUNDLE = "i18n.model-files-picker";
     public static final String STRESS_DIALOG_BUNDLE = "i18n.stress-dialog";
+    public static final String DEFORMATION_DIALOG_BUNDLE = "i18n.deformation-dialog";
     public static final String VERTEX_INFO_BUNDLE = "i18n.vertex-info";
     public static final String COLOR_PICKER_BUNDLE = "i18n.color-picker";
 
