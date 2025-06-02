@@ -38,9 +38,9 @@ public class CoordinatesConvertor {
         Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix);
 
         return viewProjMatrix.unproject(mouseX,
-                                        CanvasProperties.getPhysicalHeight() - mouseY,
+                                        CanvasProperties.getHeight() - mouseY,
                                         depth,
-                                        new int[]{0, 0, CanvasProperties.getPhysicalWidth(), CanvasProperties.getPhysicalHeight()},
+                                        new int[]{0, 0, CanvasProperties.getWidth(), CanvasProperties.getHeight()},
                                         new Vector3f());
     }
 }

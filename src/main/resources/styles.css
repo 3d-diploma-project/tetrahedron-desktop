@@ -14,7 +14,7 @@
 }
 
 .model-view-page {
-    -fx-background-color: #ECF4FE;
+    -fx-background-color: transparent;
     -fx-spacing: 20;
 }
 
