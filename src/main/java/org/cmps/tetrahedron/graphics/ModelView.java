@@ -1,10 +1,12 @@
 package org.cmps.tetrahedron.graphics;
 
+import com.sun.javafx.perf.PerformanceTracker;
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.image.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import lombok.SneakyThrows;
+import javafx.scene.layout.StackPane;
 import org.cmps.tetrahedron.config.CanvasProperties;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -12,60 +14,67 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.system.Configuration;
-import org.lwjgl.system.Platform;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ModelView extends Pane {
 
-    private static final ExecutorService renderExecutor = Executors.newSingleThreadExecutor();
     private static final ModelRenderer modelRenderer = new ModelRenderer();
+    private static final ImageView imageView = new ImageView();
 
     private static int fbo;
     private static int tex;
     private static ByteBuffer buffer;
-
-    private static final ImageView imageView = new ImageView();
+    private static PixelBuffer<ByteBuffer> pixelBuffer;
+    private static PerformanceTracker performanceTracker;
 
     public ModelView() {
-        getChildren().add(imageView);
+        Label label = new Label();
+        StackPane labelPane = new StackPane(label);
+        labelPane.setAlignment(Pos.TOP_LEFT);
+
+        StackPane root = new StackPane(imageView, labelPane);
+        getChildren().add(root);
 
         this.widthProperty().addListener((obs, oldVal, newVal) -> {
-            submitToRenderExecutor(() -> CanvasProperties.setWidth(newVal.intValue()));
+            CanvasProperties.setWidth(newVal.intValue());
         });
         this.heightProperty().addListener((obs, oldVal, newVal) -> {
-            submitToRenderExecutor(() -> CanvasProperties.setHeight(newVal.intValue()));
+            CanvasProperties.setHeight(newVal.intValue());
+        });
+        this.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            performanceTracker = PerformanceTracker.getSceneTracker(newScene);
         });
 
-        submitToRenderExecutor(this::initGl);
-        startTimer(() -> {
-            Image image = submitToRenderExecutor(() -> {
+        initGl();
+
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
                 if (CanvasProperties.isSizeChanged()) {
                     Dimension size = CanvasProperties.getSize();
 
-                    imageView.setFitWidth(size.width);
-                    imageView.setFitHeight(size.height);
-
                     recreateFramebuffer(size.width, size.height);
+                    recreateWritableImage(size.width, size.height);
                 }
 
-                return drawImage(CanvasProperties.getWidth(), CanvasProperties.getHeight());
-            });
+                drawFrame(CanvasProperties.getWidth(), CanvasProperties.getHeight());
+                pixelBuffer.updateBuffer(b -> null);
 
-            imageView.setImage(image);
-        });
+                if (performanceTracker != null) {
+                    label.setText(String.format(
+                            "Current resolution: %dx%d, FPS: %f",
+                            CanvasProperties.getWidth(),
+                            CanvasProperties.getHeight(),
+                            performanceTracker.getInstantFPS()
+                    ));
+                }
+            }
+        }.start();
     }
 
     private void initGl() {
-        if (Platform.get() == Platform.MACOSX) {
-            Configuration.GLFW_LIBRARY_NAME.set("glfw_async");
-        }
-
         GLFW.glfwInit();
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -76,6 +85,8 @@ public class ModelView extends Pane {
         GL.createCapabilities();
 
         recreateFramebuffer(CanvasProperties.getWidth(), CanvasProperties.getHeight());
+        recreateWritableImage(CanvasProperties.getWidth(), CanvasProperties.getHeight());
+
         modelRenderer.initGL();
     }
 
@@ -99,39 +110,19 @@ public class ModelView extends Pane {
         GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthRenderbuffer);
         GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL30.GL_DEPTH_COMPONENT32F, width, height);
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depthRenderbuffer);
-
-        buffer = BufferUtils.createByteBuffer(width * height * 4);
     }
 
-    private Image drawImage(int width, int height) {
+    private void recreateWritableImage(int width, int height) {
+        buffer = BufferUtils.createByteBuffer(width * height * 4);
+        pixelBuffer = new PixelBuffer<>(width, height, buffer, PixelFormat.getByteBgraPreInstance());
+        imageView.setImage(new WritableImage(pixelBuffer));
+    }
+
+    private void drawFrame(int width, int height) {
         GL11.glViewport(0, 0, width, height);
 
         modelRenderer.paintGL();
 
         GL11.glReadPixels(0, 0, width, height, GL12.GL_BGRA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-        PixelFormat<ByteBuffer> pixelFormat = PixelFormat.getByteBgraPreInstance();
-        PixelBuffer<ByteBuffer> pixelBuffer = new PixelBuffer<>(width, height, buffer, pixelFormat);
-
-        return new WritableImage(pixelBuffer);
-    }
-
-    private void startTimer(Runnable task) {
-        new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                task.run();
-            }
-        }.start();
-    }
-
-    @SneakyThrows
-    private Image submitToRenderExecutor(Callable<Image> task) {
-        return renderExecutor.submit(task).get();
-    }
-
-    @SneakyThrows
-    private void submitToRenderExecutor(Runnable task) {
-        renderExecutor.submit(task).get();
     }
 }

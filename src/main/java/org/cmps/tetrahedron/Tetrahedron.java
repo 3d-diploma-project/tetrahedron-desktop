@@ -1,16 +1,15 @@
 package org.cmps.tetrahedron;
 
+import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.stage.Stage;
+import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.ModelFilesPicker;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.SceneController;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
 
 /**
  * Creates a program window and inits all components (LWJGL and JavaFX parts).
@@ -18,53 +17,41 @@ import java.io.InputStream;
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
  */
-public class Tetrahedron {
+public class Tetrahedron extends Application {
 
     public static final int MIN_WIDTH = 1000;
     public static final int MIN_HEIGHT = 800;
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Tetrahedron");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-        maximizeWindow(frame);
-        setIcon(frame);
+    @Override
+    public void start(Stage primaryStage) {
 
-        final JFXPanel fxPanel = new JFXPanel();
-        fxPanel.setScene(SceneController.getScene());
+        primaryStage.setScene(SceneController.getScene());
 
-        fxPanel.addMouseListener(MouseController.getInstance());
-        fxPanel.addMouseWheelListener(MouseController.getInstance());
-        fxPanel.addMouseMotionListener(MouseController.getInstance());
+        primaryStage.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            MouseController.getInstance().mousePressed(e);
+        });
+        primaryStage.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
+            MouseController.getInstance().mouseReleased(e);
+        });
+        primaryStage.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            MouseController.getInstance().mouseDragged(e);
+        });
+        primaryStage.addEventFilter(ScrollEvent.SCROLL, e -> {
+            MouseController.getInstance().mouseWheelMoved(e);
+        });
 
-        frame.add(fxPanel);
+        primaryStage.setTitle("Tetrahedron");
 
-        frame.pack();
-        frame.setVisible(true);
-        frame.transferFocus();
+        ImageView logo = ResourceReader.imageReader("/logo.png");
+        primaryStage.getIcons().add(logo.getImage());
+
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMaximized(true);
+
+        primaryStage.show();
+        primaryStage.requestFocus();
 
         Platform.runLater(ModelFilesPicker::openDialogWindow);
-    }
-
-    private static void setIcon(JFrame frame) {
-        try {
-            InputStream inputStream = Tetrahedron.class.getClassLoader().getResourceAsStream("logo.png");
-            if (inputStream != null) {
-                BufferedImage iconImage = ImageIO.read(inputStream);
-                frame.setIconImage(iconImage);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static void maximizeWindow(JFrame frame) {
-        if (org.lwjgl.system.Platform.get().equals(org.lwjgl.system.Platform.MACOSX)) {
-            int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-            int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-            frame.setPreferredSize(new Dimension(width, height));
-        }
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
     }
 }
