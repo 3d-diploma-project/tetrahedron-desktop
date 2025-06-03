@@ -6,7 +6,6 @@ import javafx.stage.FileChooser;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.FileChooserController;
-import org.cmps.tetrahedron.controller.SceneController;
 
 import java.io.File;
 import java.util.ResourceBundle;
@@ -34,7 +33,7 @@ public class FilePicker {
     public void onClick() {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
-        file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
+        file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
             fileChooserController.saveLastUsedDirectory(file);
