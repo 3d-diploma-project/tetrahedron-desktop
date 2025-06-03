@@ -150,7 +150,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>org.cmps.tetrahedron.Tetrahedron</mainClass>
+                            <mainClass>org.cmps.tetrahedron.Launcher</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
