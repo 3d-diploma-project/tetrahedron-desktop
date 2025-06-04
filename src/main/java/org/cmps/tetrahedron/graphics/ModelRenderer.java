@@ -89,7 +89,7 @@ public class ModelRenderer {
         if (vertexInfoController.isClicked()) {
             float[] depth = new float[1];
             GL11C.glReadPixels(vertexInfoController.getX(),
-                    CanvasProperties.getHeight() - vertexInfoController.getY(), 1, 1,
+                    vertexInfoController.getY(), 1, 1,
                     GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
             vertexInfoController.updateVertexInfoToDisplay(depth[0]);
         }
