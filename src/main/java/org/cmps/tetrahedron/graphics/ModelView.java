@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL30;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 public class ModelView extends Pane {
 
@@ -44,7 +45,9 @@ public class ModelView extends Pane {
             CanvasProperties.setHeight(newVal.intValue());
         });
         this.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            performanceTracker = PerformanceTracker.getSceneTracker(newScene);
+            if (Objects.equals(System.getProperty("glStats"), "true")) {
+                performanceTracker = PerformanceTracker.getSceneTracker(newScene);
+            }
         });
 
         initGl();
