@@ -1,7 +1,6 @@
-package org.cmps.tetrahedron;
+package org.cmps.tetrahedron.graphics;
 
 import org.cmps.tetrahedron.config.CanvasProperties;
-import org.cmps.tetrahedron.config.WindowProperties;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.VertexInfoController;
@@ -11,10 +10,7 @@ import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.joml.Matrix4f;
 import org.joml.Matrix4x3f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11C;
-import org.lwjgl.opengl.awt.AWTGLCanvas;
-import org.lwjgl.opengl.awt.GLData;
 
 import java.nio.FloatBuffer;
 import java.util.List;
@@ -44,7 +40,7 @@ import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
  */
-public class ModelCanvas extends AWTGLCanvas {
+public class ModelRenderer {
 
     private final ModelController modelController = ModelController.getInstance();
 
@@ -64,13 +60,7 @@ public class ModelCanvas extends AWTGLCanvas {
     private final MouseController mouseController = MouseController.getInstance();
     private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
-    public ModelCanvas(GLData data) {
-        super(data);
-    }
-
-    @Override
     public void initGL() {
-        GL.createCapabilities();
         glClearColor(0.93f, 0.956f, 0.992f, 1.0f);
 
         // Enable depth test
@@ -89,20 +79,17 @@ public class ModelCanvas extends AWTGLCanvas {
         CoordinatesConvertor.initInstance(projMatrix, viewMatrix);
     }
 
-    @Override
     public void paintGL() {
-        glViewport(0, 0, CanvasProperties.getPhysicalWidth(), CanvasProperties.getPhysicalHeight());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         updateMatrix(mouseController.getZoomFactor(), mouseController.getX(), mouseController.getY());
         renderModel();
-        swapBuffers();
 
         VertexInfoController vertexInfoController = VertexInfoController.getInstance();
         if (vertexInfoController.isClicked()) {
             float[] depth = new float[1];
             GL11C.glReadPixels(vertexInfoController.getX(),
-                    CanvasProperties.getPhysicalHeight() - vertexInfoController.getY(), 1, 1,
+                    vertexInfoController.getY(), 1, 1,
                     GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
             vertexInfoController.updateVertexInfoToDisplay(depth[0]);
         }
@@ -111,7 +98,7 @@ public class ModelCanvas extends AWTGLCanvas {
     private void updateMatrix(float zoomFactor, float x, float y) {
         float fov = (float) Math.toRadians(30 / zoomFactor);
         projMatrix.setPerspective((float) Math.min(fov, Math.PI),
-                (float) CanvasProperties.getPhysicalWidth() / CanvasProperties.getPhysicalHeight(),
+                (float) CanvasProperties.getWidth() / CanvasProperties.getHeight(),
                 0.1f,
                 Float.POSITIVE_INFINITY);
 
@@ -127,7 +114,7 @@ public class ModelCanvas extends AWTGLCanvas {
         initColors();
         initModelSettings();
 
-        glUniform2f(viewportSizeUniform, WindowProperties.getPhysicalWidth(), WindowProperties.getPhysicalHeight());
+        glUniform2f(viewportSizeUniform, CanvasProperties.getWidth(), CanvasProperties.getHeight());
         glBindVertexArray(vao);
 
         if (modelController.isModelReady()) {

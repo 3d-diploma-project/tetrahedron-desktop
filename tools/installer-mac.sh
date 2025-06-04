@@ -10,9 +10,9 @@ mkdir tmp tmp/app
 cp target/tetrahedron-desktop-$APP_VERSION-SNAPSHOT-jar-with-dependencies.jar tmp/app/Tetrahedron.jar
 
 jlink --strip-debug --no-man-pages --no-header-files --compress zip-6 \
-  --add-modules java.base,java.scripting,java.desktop,jdk.unsupported,jdk.unsupported.desktop --output tmp/jre
+  --add-modules java.base,java.xml,java.scripting,jdk.unsupported --output tmp/jre
 
-jpackage --input tmp/app --main-jar Tetrahedron.jar --main-class org.cmps.tetrahedron.Tetrahedron --runtime-image tmp/jre \
+jpackage --input tmp/app --main-jar Tetrahedron.jar --main-class org.cmps.tetrahedron.Launcher --runtime-image tmp/jre \
   --name Tetrahedron --vendor "CMPS, KhPI" --app-version $APP_VERSION --icon src/main/resources/logo.icns \
   --mac-package-identifier cmps.tetrahedron --type dmg --dest dist
 

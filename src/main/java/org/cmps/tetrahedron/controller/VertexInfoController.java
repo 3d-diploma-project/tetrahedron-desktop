@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
-import org.cmps.tetrahedron.utils.Scaler;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -46,8 +45,8 @@ public class VertexInfoController implements LocalizationListener {
     }
 
     public void setClickCoords(int x, int y) {
-        this.x = Scaler.scaleByX(x);
-        this.y = Scaler.scaleByY(y);
+        this.x = x;
+        this.y = y;
         clicked = true;
     }
 
