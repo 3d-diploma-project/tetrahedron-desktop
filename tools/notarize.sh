@@ -3,7 +3,7 @@
 set -e
 
 CERT_NAME=""
-APP_VERSION="4.0.0"
+APP_VERSION="4.1.0"
 
 detach_tetrahedron_volumes() {
   df | grep Tetrahedron | awk '{print $1}' | while read volume; do
