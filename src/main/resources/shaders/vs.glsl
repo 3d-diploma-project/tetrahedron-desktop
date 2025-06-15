@@ -2,6 +2,7 @@
 
 uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
+uniform mat4 modelMatrix;
 
 in vec3 color;
 
@@ -12,6 +13,6 @@ out Vertex {
 } vertex;
 
 void main(void) {
-  gl_Position = projMatrix * viewMatrix * vec4(position, 1.0);
+  gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
   vertex.fragmentColor = color;
 }

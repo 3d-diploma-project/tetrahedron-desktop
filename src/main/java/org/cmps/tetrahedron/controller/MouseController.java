@@ -12,7 +12,7 @@ public class MouseController {
     @Getter
     private static final MouseController instance = new MouseController();
     @Getter
-    private float zoomFactor = 1.0f;
+    private float zoomFactor = 2.5f;
     @Setter
     private VerticeMoveMode verticalMoveMode = VerticeMoveMode.CURSOR;
 
@@ -68,7 +68,7 @@ public class MouseController {
             return;
         }
         zoomFactor += (float) scrollEvent.getDeltaY() / 50;
-        zoomFactor = Math.max(1f, Math.min(zoomFactor, 500.0f));
+        zoomFactor = Math.max(1f, Math.min(zoomFactor, 5.0f));
     }
 
     public float getY() {

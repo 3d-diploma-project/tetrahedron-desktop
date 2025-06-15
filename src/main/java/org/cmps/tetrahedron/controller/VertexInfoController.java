@@ -81,19 +81,13 @@ public class VertexInfoController implements LocalizationListener {
             }
         }
 
-        float[] orig = modelController.getOriginalVertices().get(closestNode);
+        float[] orig = modelController.getModel().getOriginalVertices().get(closestNode);
+        if (orig == null) {
+            return "";
+        }
 
         String template = localizationController.getString(VERTEX_INFO_BUNDLE, "closest-node-info");
         return String.format(Locale.ROOT, template, closestNode, orig[0], orig[1], orig[2]);
-    }
-
-    private float[] moveToOriginal(float[] vertex) {
-        Vector3f center = modelController.getModel().getCenter();
-        return new float[]{
-                vertex[0] + center.x,
-                vertex[1] + center.y,
-                vertex[2] + center.z
-        };
     }
 
     private void updateDefaultInfo() {

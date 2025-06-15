@@ -2,7 +2,6 @@ package org.cmps.tetrahedron.utils;
 
 import org.cmps.tetrahedron.config.CanvasProperties;
 import org.joml.Matrix4f;
-import org.joml.Matrix4x3f;
 import org.joml.Vector3f;
 
 public class CoordinatesConvertor {
@@ -10,15 +9,15 @@ public class CoordinatesConvertor {
     private static CoordinatesConvertor instance;
 
     private final Matrix4f projMatrix;
-    private final Matrix4x3f viewMatrix;
+    private final Matrix4f viewMatrix;
 
-    public CoordinatesConvertor(Matrix4f projMatrix, Matrix4x3f viewMatrix) {
+    public CoordinatesConvertor(Matrix4f projMatrix, Matrix4f viewMatrix) {
         this.projMatrix = projMatrix;
         this.viewMatrix = viewMatrix;
     }
 
     public static void initInstance(Matrix4f projMatrix,
-                                    Matrix4x3f viewMatrix) {
+                                    Matrix4f viewMatrix) {
         instance = new CoordinatesConvertor(projMatrix, viewMatrix);
     }
 

@@ -12,17 +12,15 @@ import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.view.LegendView;
 import org.cmps.tetrahedron.view.ModelFilesPicker;
-import org.joml.Vector3f;
 
 import java.io.File;
 import java.util.*;
-
 
 @Getter
 public class ModelController {
 
     @Getter
-    private static ModelController instance = new ModelController();
+    private static final ModelController instance = new ModelController();
 
     private Model model;
     @Setter
@@ -30,8 +28,6 @@ public class ModelController {
     @Getter
     private CustomCharacteristic customCharacteristic;
     private List<float[]> modelColors = null;
-
-    private Map<Integer, float[]> originalVertices;
 
     private ModelController() {
         model = Model.builder()
@@ -43,15 +39,11 @@ public class ModelController {
     public void initModelData(File nodes, File indices) throws ModelValidationException, InternalValidationException {
         Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
 
-        originalVertices = deepCopyVertices(vertices);
-
         model = Model.builder()
                 .vertices(vertices)
                 .faces(DataReader.readIndexesAndConvertToFaces(indices, vertices))
                 .build();
         modelReady = true;
-
-        centerModel();
     }
 
     public List<float[][]> getFaces() {
@@ -83,31 +75,9 @@ public class ModelController {
         ModelController.getInstance().setModelReady(true);
     }
 
-    private Map<Integer, float[]> deepCopyVertices(Map<Integer, float[]> source) {
-        Map<Integer, float[]> copy = new HashMap<>();
-        for (Map.Entry<Integer, float[]> e : source.entrySet()) {
-            float[] v = e.getValue();
-            copy.put(e.getKey(), new float[]{v[0], v[1], v[2]});
-        }
-        return copy;
-    }
-
-    public void centerModel() {
-        Vector3f center = model.getCenter();
-
-        Map<Integer, float[]> vertices = getVertices();
-        for (Map.Entry<Integer, float[]> entry : vertices.entrySet()) {
-            float[] vertex = entry.getValue();
-            vertex[0] -= center.x;
-            vertex[1] -= center.y;
-            vertex[2] -= center.z;
-        }
-    }
-
     public void clearModel() {
         modelReady = true;
-        model.setVertices(new HashMap<>());
-        model.setFaces(new ArrayList<>());
+        model.clear();
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
         LegendView.getInstance().reset();
@@ -116,18 +86,7 @@ public class ModelController {
     }
 
     public void clearDisplacement() {
-        for (Map.Entry<Integer, float[]> entry : originalVertices.entrySet()) {
-            float[] orig = entry.getValue();
-            float[] current = model.getVertices().get(entry.getKey());
-
-            current[0] = orig[0];
-            current[1] = orig[1];
-            current[2] = orig[2];
-        }
-
-        model.calculateModelCenter();
-        centerModel();
+        model.updateVertices(model.getOriginalVertices());
         setModelReady(true);
     }
-
 }
