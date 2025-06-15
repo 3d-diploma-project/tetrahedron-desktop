@@ -8,6 +8,7 @@ import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.view.LegendView;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,9 @@ public class DeformationController {
 
     public void applyDisplacements(File file) throws ModelValidationException {
         Model model = ModelController.getInstance().getModel();
-        Map<Integer, float[]> originalVertices = ModelController.getInstance().getOriginalVertices();
+        Map<Integer, float[]> originalVertices = model.getOriginalVertices();
 
-        if (originalVertices == null || model == null) {
+        if (originalVertices.isEmpty()) {
             return;
         }
 
@@ -43,26 +44,26 @@ public class DeformationController {
 
     public void applyDeformationScale(float scale) {
         Model model = ModelController.getInstance().getModel();
-        Map<Integer, float[]> originalVertices = ModelController.getInstance().getOriginalVertices();
+        Map<Integer, float[]> originalVertices = model.getOriginalVertices();
 
-        if (lastAppliedDeformations == null || originalVertices == null || model == null) {
+        if (lastAppliedDeformations == null || originalVertices.isEmpty()) {
             return;
-        }
-
-        int i = 0;
-        Map<Integer, float[]> modelVertices = model.getVertices();
-        for (Integer idx : originalVertices.keySet()) {
-            float[] orig = originalVertices.get(idx);
-            float[] def = lastAppliedDeformations.get(i++);
-            float[] current = modelVertices.get(idx);
-            current[0] = orig[0] + def[0] * scale;
-            current[1] = orig[1] + def[1] * scale;
-            current[2] = orig[2] + def[2] * scale;
         }
 
         currentScale = scale;
 
-        ModelController.getInstance().centerModel();
+        Map<Integer, float[]> modelVertices = new HashMap<>();
+        for (Integer idx : originalVertices.keySet()) {
+            float[] orig = originalVertices.get(idx);
+            float[] def = lastAppliedDeformations.get(idx - 1);
+            modelVertices.put(idx, new float[]{
+                    orig[0] + def[0] * scale,
+                    orig[1] + def[1] * scale,
+                    orig[2] + def[2] * scale
+            });
+        }
+
+        model.updateVertices(modelVertices);
         ModelController.getInstance().setModelReady(true);
     }
 }
