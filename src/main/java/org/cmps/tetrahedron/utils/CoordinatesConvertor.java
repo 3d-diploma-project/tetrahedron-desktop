@@ -10,15 +10,16 @@ public class CoordinatesConvertor {
 
     private final Matrix4f projMatrix;
     private final Matrix4f viewMatrix;
+    private final Matrix4f modelMatrix;
 
-    public CoordinatesConvertor(Matrix4f projMatrix, Matrix4f viewMatrix) {
+    public CoordinatesConvertor(Matrix4f projMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
         this.projMatrix = projMatrix;
         this.viewMatrix = viewMatrix;
+        this.modelMatrix = modelMatrix;
     }
 
-    public static void initInstance(Matrix4f projMatrix,
-                                    Matrix4f viewMatrix) {
-        instance = new CoordinatesConvertor(projMatrix, viewMatrix);
+    public static void initInstance(Matrix4f projMatrix, Matrix4f viewMatrix, Matrix4f modelMatrix) {
+        instance = new CoordinatesConvertor(projMatrix, viewMatrix, modelMatrix);
     }
 
     public static CoordinatesConvertor getInstance() {
@@ -34,7 +35,7 @@ public class CoordinatesConvertor {
     }
 
     public Vector3f getWorldCoordinates(int mouseX, int mouseY, float depth) {
-        Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix);
+        Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix).mul(modelMatrix);
 
         return viewProjMatrix.unproject(mouseX,
                                         mouseY,

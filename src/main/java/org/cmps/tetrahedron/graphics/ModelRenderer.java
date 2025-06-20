@@ -73,7 +73,7 @@ public class ModelRenderer {
     private int modelColor;
     private int showElementMesh;
 
-    private Matrix4f modelMatrix = new Matrix4f();
+    private final Matrix4f modelMatrix = new Matrix4f();
     private final Matrix4f viewMatrix = new Matrix4f();
     private final Matrix4f projMatrix = new Matrix4f();
 
@@ -96,7 +96,7 @@ public class ModelRenderer {
         int program = createRasterProgram();
         initProgram(program);
 
-        CoordinatesConvertor.initInstance(projMatrix, viewMatrix);
+        CoordinatesConvertor.initInstance(projMatrix, viewMatrix, modelMatrix);
     }
 
     public void paintGL() {
@@ -121,9 +121,10 @@ public class ModelRenderer {
             return;
         }
 
-        modelMatrix = new Matrix4f().rotateY(x)
-                                    .rotateX(y)
-                                    .translate(model.getCenter());
+        modelMatrix.identity()
+                .rotateY(x)
+                .rotateX(y)
+                .translate(model.getCenter());
 
         float eyeZ = zoomFactor * model.getRadius();
         viewMatrix.setLookAt(0.0f, 0.0f, eyeZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
