@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.view;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -86,8 +87,7 @@ public class ModelFilesPicker {
     }
 
     private void onClose(WindowEvent dialogEvent) {
-        dialogEvent.consume();
-        onClick();
+        Platform.exit();
     }
 
     private boolean validateFileExistence(FilePicker filePicker) {

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
-import org.cmps.tetrahedron.utils.Scaler;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -46,8 +45,8 @@ public class VertexInfoController implements LocalizationListener {
     }
 
     public void setClickCoords(int x, int y) {
-        this.x = Scaler.scaleByX(x);
-        this.y = Scaler.scaleByY(y);
+        this.x = x;
+        this.y = y;
         clicked = true;
     }
 
@@ -82,19 +81,13 @@ public class VertexInfoController implements LocalizationListener {
             }
         }
 
-        float[] orig = modelController.getOriginalVertices().get(closestNode);
+        float[] orig = modelController.getModel().getOriginalVertices().get(closestNode);
+        if (orig == null) {
+            return "";
+        }
 
         String template = localizationController.getString(VERTEX_INFO_BUNDLE, "closest-node-info");
         return String.format(Locale.ROOT, template, closestNode, orig[0], orig[1], orig[2]);
-    }
-
-    private float[] moveToOriginal(float[] vertex) {
-        Vector3f center = modelController.getModel().getCenter();
-        return new float[]{
-                vertex[0] + center.x,
-                vertex[1] + center.y,
-                vertex[2] + center.z
-        };
     }
 
     private void updateDefaultInfo() {

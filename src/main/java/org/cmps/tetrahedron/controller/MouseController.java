@@ -1,45 +1,46 @@
 package org.cmps.tetrahedron.controller;
 
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.enums.VerticeMoveMode;
 import org.cmps.tetrahedron.view.InfoPanel;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.util.Objects;
-
-public class MouseController extends MouseAdapter {
+public class MouseController {
 
     @Getter
     private static final MouseController instance = new MouseController();
-
     @Getter
-    private float zoomFactor = 1.0f;
+    private float zoomFactor = 2.5f;
+    @Setter
+    private VerticeMoveMode verticalMoveMode = VerticeMoveMode.CURSOR;
+
+    private boolean wasDragged = false;
     private double lastMouseX = 0;
     private double lastMouseY = 0;
     private double deltaX = 0;
     private double deltaY = 0;
-    @Setter
-    private VerticeMoveMode verticalMoveMode = VerticeMoveMode.CURSOR;
 
     private MouseController() {
     }
 
-    @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-        int x = mouseEvent.getX();
-        int y = mouseEvent.getY();
+    public void mouseReleased(MouseEvent mouseEvent) {
+        if (wasDragged) {
+            return;
+        }
+
+        int x = (int) mouseEvent.getX();
+        int y = (int) mouseEvent.getY();
 
         VertexInfoController.getInstance().setDisplayInfo(InfoPanel.getInstance()::setText);
         VertexInfoController.getInstance().setClickCoords(x, y);
     }
 
-    @Override
     public void mouseDragged(MouseEvent mouseEvent) {
-        int x = mouseEvent.getX();
-        int y = mouseEvent.getY();
+        wasDragged = true;
+        int x = (int) mouseEvent.getX();
+        int y = (int) mouseEvent.getY();
         switch (verticalMoveMode) {
             case UP_DOWN:
                 deltaY += (y - lastMouseY);
@@ -56,19 +57,18 @@ public class MouseController extends MouseAdapter {
         lastMouseY = y;
     }
 
-    @Override
     public void mousePressed(MouseEvent mouseEvent) {
         lastMouseX = mouseEvent.getX();
         lastMouseY = mouseEvent.getY();
+        wasDragged = false;
     }
 
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent scrollEvent) {
+    public void mouseWheelMoved(ScrollEvent scrollEvent) {
         if (scrollEvent.isShiftDown()) {
             return;
         }
-        zoomFactor += (float) scrollEvent.getPreciseWheelRotation() / 50;
-        zoomFactor = Math.max(1f, Math.min(zoomFactor, 500.0f));
+        zoomFactor += (float) scrollEvent.getDeltaY() / 50;
+        zoomFactor = Math.max(1f, Math.min(zoomFactor, 5.0f));
     }
 
     public float getY() {
@@ -78,5 +78,4 @@ public class MouseController extends MouseAdapter {
     public float getX() {
         return (float) deltaX * 0.01f;
     }
-
 }

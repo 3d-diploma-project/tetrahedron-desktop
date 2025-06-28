@@ -3,13 +3,11 @@ package org.cmps.tetrahedron.controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.InfoPanel;
 import org.cmps.tetrahedron.view.LegendView;
+import org.cmps.tetrahedron.graphics.ModelView;
 
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -53,8 +51,10 @@ public class SceneController {
         InfoPanel infoPanel = InfoPanel.getInstance();
         infoPanel.setPadding(new Insets(0, 0, 30, 0));
 
-        VBox root = new VBox(navbar, mainBlock, infoPanel);
-        root.getStyleClass().add("model-view-page");
+        VBox controls = new VBox(navbar, mainBlock, infoPanel);
+        controls.getStyleClass().add("model-view-page");
+
+        StackPane root = new StackPane(new ModelView(), controls);
 
         Scene scene = new Scene(root);
         scene.getStylesheets()
