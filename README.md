@@ -58,7 +58,7 @@ It allows you to load files to build models, apply and analyze any data on it (f
 ```
 - Run a built jar-file
 ```shell
-  java -jar target/tetrahedron-desktop-4.2.0-SNAPSHOT-jar-with-dependencies.jar
+  java -jar target/tetrahedron-desktop-<VERSION>-jar-with-dependencies.jar
 ```
 
 ### Running in IntelliJ IDEA
@@ -77,12 +77,25 @@ Run a script
 - Windows: [installer-win.bat](tools/installer-win.bat)
 - macOS: [installer-mac.sh](tools/installer-mac.sh)
 
-### Signing/Notarizing
-- You can sign and notarize a macOS bundle if you have an Apple Developer account:
-  - You should have a Developer ID certificate in your Keychain and notarytool authenticated with App Store Connect
-  - In [notarize.sh](tools/notarize.sh) set `CERT_NAME` to the name of your Developer ID certificate
-  - Run: [notarize.sh](tools/notarize.sh)
-- You can sign a Windows Installer if you have Azure Trusted Signing Certificate Profile:
-  - You should have Azure CLI installed and authenticated with your account
-  - In [signing.json](tools/signing.json) set `CodeSigningAccountName` and `CertificateProfileName`
-  - Run: [sign.bat](tools/sign.bat)
+## Signing/Notarizing
+
+### Prerequisites
+On Windows:
+- Azure Trusted Signing Certificate Profile
+- SignTool installed
+- Trusted Signing Client Tools installed
+- Azure CLI installed and authenticated with your account
+
+On macOS:
+- Apple Developer Account
+- Xcode Command Line Tools installed
+- Developer ID certificate added to your Keychain
+- `notarytool` authenticated with App Store Connect
+
+### Signing Windows Installer
+- In [signing.json](tools/signing.json) set `CodeSigningAccountName` and `CertificateProfileName`
+- Run: [sign.bat](tools/sign.bat)
+
+### Signing an notarizing macOS application bundle
+- In [notarize.sh](tools/notarize.sh) set `CERT_NAME` to the name of your Developer ID certificate
+- Run: [notarize.sh](tools/notarize.sh)

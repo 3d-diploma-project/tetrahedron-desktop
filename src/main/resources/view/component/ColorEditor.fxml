@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ColorPicker?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cmps.tetrahedron.view.component.ColorEditor"
+      styleClass="model-color-info"
+      stylesheets="@/style/color-picker.css">
+
+    <HBox minWidth="95" maxWidth="95">
+        <Label fx:id="colorName" styleClass="secondary-label"/>
+    </HBox>
+
+    <HBox styleClass="additional-box-info">
+        <Button fx:id="pickColorButton" styleClass="pick-color" onAction="#selectModelColor"/>
+        <ColorPicker fx:id="colorPicker" visible="false" managed="false"/>
+
+        <HBox styleClass="hex-vbox">
+            <Label fx:id="hexValue" styleClass="hex-value"/>
+        </HBox>
+    </HBox>
+</HBox>
