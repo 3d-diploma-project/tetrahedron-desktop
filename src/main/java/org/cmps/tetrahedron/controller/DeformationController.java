@@ -53,7 +53,6 @@ public class DeformationController {
 
         deformationComponents = components;
         currentScale = scale;
-        System.out.println(scale);
 
         int i = 0;
         Map<Integer, float[]> modelVertices = new HashMap<>();
