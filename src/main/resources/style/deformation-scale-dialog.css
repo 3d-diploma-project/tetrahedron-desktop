@@ -33,7 +33,7 @@
 }
 
 .input-field {
-    -fx-pref-width: 70px;
+    -fx-pref-width: 75px;
     -fx-pref-height: 32px;
     -fx-border-width: 0.5px;
     -fx-border-radius: 4px;
@@ -77,9 +77,9 @@
 }
 
 .deformation-selector {
-    -fx-min-width: 70px;
+    -fx-min-width: 75px;
     -fx-min-height: 32px;
-    -fx-max-width: 70px;
+    -fx-max-width: 75px;
     -fx-max-height: 32px;
     -fx-font-size: 13px;
 
