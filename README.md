@@ -84,7 +84,7 @@ On Windows:
 - Azure Trusted Signing Certificate Profile
 - SignTool installed
 - Trusted Signing Client Tools installed
-- Azure CLI authenticated with your account
+- Azure CLI installed and authenticated with your account
 
 On macOS:
 - Apple Developer Account

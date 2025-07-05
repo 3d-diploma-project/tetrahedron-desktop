@@ -1,22 +1,13 @@
 package org.cmps.tetrahedron.view.component;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.cmps.tetrahedron.controller.LocalizationController;
-import org.cmps.tetrahedron.view.ColorPickerComponent;
 
-/**
- * TODO: add description.
- *
- * @author Mariia Borodin (HappyMary16)
- * @since 1.0
- */
 public class ColorEditor {
 
     private Color color;
