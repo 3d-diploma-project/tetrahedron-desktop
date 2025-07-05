@@ -1,6 +1,6 @@
 @echo off
 
-set version=4.2.0
+set version=5.0.0
 
 call cd ..
 
