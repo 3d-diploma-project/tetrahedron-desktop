@@ -41,6 +41,9 @@ public class StressController {
 
     public void processStressData(StressDisplayOption option) {
         Map<Integer, float[]> stressDataWithIndex = stress.getStress();
+        if (stressDataWithIndex == null || stressDataWithIndex.isEmpty()) {
+            return;
+        }
 
         stress.setMinStress(Float.MAX_VALUE);
         stress.setMaxStress(Float.MIN_VALUE);

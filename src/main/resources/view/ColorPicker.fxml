@@ -14,22 +14,9 @@
                     <Label styleClass="main-label" text="%model-label"/>
                 </HBox>
 
-                <HBox styleClass="model-color-info">
-                    <HBox minWidth="95" maxWidth="95">
-                        <Label styleClass="secondary-label" text="%model-color"/>
-                    </HBox>
-
-                    <HBox styleClass="additional-box-info">
-                        <Button fx:id="pickColor" styleClass="pick-color" onAction="#clickOnColorPicker"/>
-                        <ColorPicker fx:id="colorPicker" visible="false" managed="false"/>
-
-                        <HBox styleClass="hex-vbox">
-                            <Label  fx:id="hexValueLabel" styleClass="hex-value" text="#6500CB"/>
-                        </HBox>
-                    </HBox>
-                </HBox>
+                <fx:include fx:id="modelColorPicker" source="component/ColorEditor.fxml"/>
+                <fx:include fx:id="backgroundColorPicker" source="component/ColorEditor.fxml"/>
             </VBox>
-
 
             <VBox spacing="14">
                 <HBox alignment="CENTER">

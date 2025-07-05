@@ -1,13 +1,11 @@
 package org.cmps.tetrahedron.view;
 
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.paint.Color;
+import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import lombok.Getter;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.StressController;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
@@ -16,9 +14,9 @@ import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.utils.DialogUtils;
 import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
+import org.cmps.tetrahedron.view.component.ColorEditor;
 import org.cmps.tetrahedron.view.component.Switch;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -26,17 +24,12 @@ public class ColorPickerComponent {
 
     private static final LocalizationController local = LocalizationController.getInstance();
 
-    private Color tempSelectedColor;
     private boolean isLegendThemeGrayscale = false;
 
     @FXML
-    public Button pickColor;
-
+    private ColorEditor modelColorPickerController;
     @FXML
-    private ColorPicker colorPicker;
-
-    @FXML
-    public Label hexValueLabel;
+    private ColorEditor backgroundColorPickerController;
 
     @FXML
     private TextField legendCountInput;
@@ -47,13 +40,21 @@ public class ColorPickerComponent {
     @FXML
     private Switch elementGridController;
 
+    public static void showColorPicker(double x, double y) {
+        Locale.setDefault(local.getCurrentLocale());
+        DialogPane pane = ResourceReader.readComponent("/view/ColorPicker.fxml", DialogPane.class,
+                                                       ResourceBundle.getBundle("i18n.color-picker"));
+
+        DialogUtils.displayDialogOnRight(pane, x, y);
+    }
+
     @FXML
     public void initialize() {
-        float[] colorArray = ColorSettings.getInstance().getModelColor();
-        tempSelectedColor = Color.color(colorArray[0], colorArray[1], colorArray[2]);
+        ColorSettings colorSettings = ColorSettings.getInstance();
 
-        colorPicker.setValue(tempSelectedColor);
-        updateColorDisplay(tempSelectedColor);
+        modelColorPickerController.initialize("model-color", colorSettings.getModelColor());
+        backgroundColorPickerController.initialize("background-color", colorSettings.getBackgroundColor());
+
         legendCountInput.setText(String.valueOf(LegendUtils.getColorArraySize()));
 
         isLegendThemeGrayscale = ColorSettings.getInstance().isGrayscaleLegendTheme();
@@ -63,7 +64,8 @@ public class ColorPickerComponent {
                 isLegendThemeGrayscale,
                 this::onSwitchToggle
         );
-        elementGridController.setLabelStyle("-fx-font-family: 'Geologica Roman'; -fx-font-size: 13px; -fx-text-fill: #0E0E0E;");
+        elementGridController.setLabelStyle(
+                "-fx-font-family: 'Geologica Roman'; -fx-font-size: 13px; -fx-text-fill: #0E0E0E;");
     }
 
     private void onSwitchToggle(boolean isOn) {
@@ -71,48 +73,19 @@ public class ColorPickerComponent {
         ColorSettings.getInstance().setGrayscaleLegendTheme(isLegendThemeGrayscale);
     }
 
-    private void updateColorDisplay(Color color) {
-        int red = (int) (color.getRed() * 255);
-        int green = (int) (color.getGreen() * 255);
-        int blue = (int) (color.getBlue() * 255);
-        String hex = String.format("#%02X%02X%02X", red, green, blue);
-
-        pickColor.setStyle("-fx-background-color: " + hex + ";");
-        hexValueLabel.setText(hex);
-    }
-
-    @FXML
-    public void clickOnColorPicker() {
-        colorPicker.show();
-
-        colorPicker.setOnAction(event -> {
-            tempSelectedColor = colorPicker.getValue();
-            updateColorDisplay(tempSelectedColor);
-        });
-    }
-
-    public static void showColorPicker(double x, double y) {
-        Locale.setDefault(local.getCurrentLocale());
-        DialogPane pane = ResourceReader.readComponent("/view/ColorPicker.fxml", DialogPane.class,
-                ResourceBundle.getBundle("i18n.color-picker"));
-
-        DialogUtils.displayDialogOnRight(pane, x, y);
-    }
-
     public void applyColor(ActionEvent actionEvent) {
-        if (tempSelectedColor != null) {
-            float[] colorArray = new float[] {
-                    (float) tempSelectedColor.getRed(),
-                    (float) tempSelectedColor.getGreen(),
-                    (float) tempSelectedColor.getBlue()
-            };
-
-            ColorSettings.getInstance().setModelColor(colorArray);
+        ColorSettings.getInstance().setModelColor(modelColorPickerController.getColor());
+        if (modelColorPickerController.isWasUpdated()) {
             ColorSettings.getInstance().setColoredInSelectedColor(true);
         }
+        ColorSettings.getInstance().setBackgroundColor(backgroundColorPickerController.getColor());
 
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
+
+        if (modelColorPickerController.isWasUpdated()) {
+            return;
+        }
 
         int colorCount;
         try {

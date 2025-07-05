@@ -81,7 +81,8 @@ public class ModelRenderer {
     private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     public void initGL() {
-        glClearColor(0.93f, 0.956f, 0.992f, 1.0f);
+        float[] backgroundColor = ColorSettings.getInstance().getBackgroundColor();
+        glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0f);
 
         // Enable depth test
         glEnable(GL_DEPTH_TEST);
@@ -100,6 +101,8 @@ public class ModelRenderer {
     }
 
     public void paintGL() {
+        float[] backgroundColor = ColorSettings.getInstance().getBackgroundColor();
+        glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         updateMatrix(mouseController.getZoomFactor(), mouseController.getX(), mouseController.getY());
