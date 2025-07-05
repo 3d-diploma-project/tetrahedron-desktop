@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 
 public class LocalizationController {
@@ -34,15 +35,10 @@ public class LocalizationController {
 
     private void loadBundles() {
         bundles.clear();
-        bundles.put(RIGHT_TOOLBAR_BUNDLE, ResourceBundle.getBundle(RIGHT_TOOLBAR_BUNDLE, currentLocale));
-        bundles.put(INDEX_FILE_SELECTOR_BUNDLE, ResourceBundle.getBundle(INDEX_FILE_SELECTOR_BUNDLE, currentLocale));
-        bundles.put(NODE_FILE_SELECTOR_BUNDLE, ResourceBundle.getBundle(NODE_FILE_SELECTOR_BUNDLE, currentLocale));
-        bundles.put(ERROR_DIALOG_BUNDLE, ResourceBundle.getBundle(ERROR_DIALOG_BUNDLE, currentLocale));
-        bundles.put(WARNING_DIALOG_BUNDLE, ResourceBundle.getBundle(WARNING_DIALOG_BUNDLE, currentLocale));
-        bundles.put(MODEL_FILES_PICKER_BUNDLE, ResourceBundle.getBundle(MODEL_FILES_PICKER_BUNDLE, currentLocale));
-        bundles.put(STRESS_DIALOG_BUNDLE, ResourceBundle.getBundle(STRESS_DIALOG_BUNDLE, currentLocale));
-        bundles.put(VERTEX_INFO_BUNDLE, ResourceBundle.getBundle(VERTEX_INFO_BUNDLE, currentLocale));
-        bundles.put(COLOR_PICKER_BUNDLE, ResourceBundle.getBundle(COLOR_PICKER_BUNDLE, currentLocale));
+        Stream.of(RIGHT_TOOLBAR_BUNDLE, INDEX_FILE_SELECTOR_BUNDLE, NODE_FILE_SELECTOR_BUNDLE,
+                  ERROR_DIALOG_BUNDLE, WARNING_DIALOG_BUNDLE, MODEL_FILES_PICKER_BUNDLE,
+                  STRESS_DIALOG_BUNDLE, VERTEX_INFO_BUNDLE, COLOR_PICKER_BUNDLE, DEFORMATION_DIALOG_BUNDLE)
+              .forEach(bundle -> bundles.put(bundle, ResourceBundle.getBundle(bundle, currentLocale)));
     }
 
     public ResourceBundle getBundle(String name) {

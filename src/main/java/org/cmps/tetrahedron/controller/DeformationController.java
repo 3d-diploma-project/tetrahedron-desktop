@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.Model;
@@ -8,9 +9,7 @@ import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.view.LegendView;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DeformationController {
 
@@ -20,6 +19,8 @@ public class DeformationController {
 
     @Getter
     private float currentScale = DEFAULT_SCALE;
+    @Getter
+    private Set<String> deformationComponents = null;
 
     @Getter
     private static final DeformationController instance = new DeformationController();
@@ -39,67 +40,36 @@ public class DeformationController {
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
         LegendView.getInstance().setVisible(false);
-        applyDeformationScale(DEFAULT_SCALE);
+        applyDeformationScale(DEFAULT_SCALE, null);
     }
 
-    public void applyDeformationScale(float scale, String component) {
+    public void applyDeformationScale(float scale, Set<String> components) {
         Model model = ModelController.getInstance().getModel();
-        Map<Integer, float[]> originalVertices = ModelController.getInstance().getOriginalVertices();
+        Map<Integer, float[]> originalVertices = ModelController.getInstance().getModel().getOriginalVertices();
 
-        if (lastAppliedDeformations == null || originalVertices == null || model == null) {
+        if (lastAppliedDeformations == null || originalVertices == null) {
             return;
         }
+
+        deformationComponents = components;
+        currentScale = scale;
+        System.out.println(scale);
 
         int i = 0;
-        Map<Integer, float[]> modelVertices = model.getVertices();
-        for (Integer idx : originalVertices.keySet()) {
-            float[] orig = originalVertices.get(idx);
-            float[] def = lastAppliedDeformations.get(i++);
-            float[] current = modelVertices.get(idx);
-
-            switch (component) {
-                case "x" -> current[0] = orig[0] + def[0] * scale;
-                case "y" -> current[1] = orig[1] + def[1] * scale;
-                case "z" -> current[2] = orig[2] + def[2] * scale;
-                case "xy" -> {
-                    current[0] = orig[0] + def[0] * scale;
-                    current[1] = orig[1] + def[1] * scale;
-                }
-                case "yz" -> {
-                    current[1] = orig[1] + def[1] * scale;
-                    current[2] = orig[2] + def[2] * scale;
-                }
-                case "xz" -> {
-                    current[0] = orig[0] + def[0] * scale;
-                    current[2] = orig[2] + def[2] * scale;
-                }
-            }
-        }
-
-        currentScale = scale;
-        ModelController.getInstance().centerModel();
-        ModelController.getInstance().setModelReady(true);
-    }
-
-    public void applyDeformationScale(float scale) {
-        Model model = ModelController.getInstance().getModel();
-        Map<Integer, float[]> originalVertices = model.getOriginalVertices();
-
-        if (lastAppliedDeformations == null || originalVertices.isEmpty()) {
-            return;
-        }
-
-        currentScale = scale;
-
         Map<Integer, float[]> modelVertices = new HashMap<>();
         for (Integer idx : originalVertices.keySet()) {
             float[] orig = originalVertices.get(idx);
-            float[] def = lastAppliedDeformations.get(idx - 1);
-            modelVertices.put(idx, new float[]{
-                    orig[0] + def[0] * scale,
-                    orig[1] + def[1] * scale,
-                    orig[2] + def[2] * scale
-            });
+            float[] def = lastAppliedDeformations.get(i++);
+            float[] current = new float[] {orig[0], orig[1], orig[2]};
+            modelVertices.put(idx, current);
+
+            for (String component : Optional.ofNullable(deformationComponents).orElse(Set.of("x", "y", "z"))) {
+                switch (component) {
+                    case "x" -> current[0] = orig[0] + def[0] * currentScale;
+                    case "y" -> current[1] = orig[1] + def[1] * currentScale;
+                    case "z" -> current[2] = orig[2] + def[2] * currentScale;
+                }
+            }
         }
 
         model.updateVertices(modelVertices);

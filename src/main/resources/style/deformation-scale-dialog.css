@@ -21,7 +21,7 @@
 }
 
 .dialog-label-bold {
-    -fx-max-width: 168px;
+    -fx-max-width: 175px;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #0E0E0E;
@@ -34,7 +34,7 @@
 
 .input-field {
     -fx-pref-width: 70px;
-    -fx-pref-height: 25px;
+    -fx-pref-height: 32px;
     -fx-border-width: 0.5px;
     -fx-border-radius: 4px;
     -fx-padding: 6px;
@@ -77,10 +77,10 @@
 }
 
 .deformation-selector {
-    -fx-min-width: 177px;
-    -fx-min-height: 36px;
-    -fx-max-width: 177px;
-    -fx-max-height: 36px;
+    -fx-min-width: 70px;
+    -fx-min-height: 32px;
+    -fx-max-width: 70px;
+    -fx-max-height: 32px;
     -fx-font-size: 13px;
 
     -fx-background-color: #FAFAFA;
@@ -101,10 +101,10 @@
 }
 
 .deformation-selector .list-cell {
-    -fx-min-width: 177px;
-    -fx-min-height: 36px;
-    -fx-max-width: 177px;
-    -fx-max-height: 36px;
+    -fx-min-width: 70px;
+    -fx-min-height: 32px;
+    -fx-max-width: 70px;
+    -fx-max-height: 32px;
     -fx-font-size: 13px;
 
     -fx-background-color: #FAFAFA;

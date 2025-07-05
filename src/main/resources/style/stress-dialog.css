@@ -32,9 +32,9 @@
 
 .stress-selector {
     -fx-min-width: 177px;
-    -fx-min-height: 36px;
+    -fx-min-height: 32px;
     -fx-max-width: 177px;
-    -fx-max-height: 36px;
+    -fx-max-height: 32px;
     -fx-font-size: 13px;
 
     -fx-background-color: #FAFAFA;
@@ -56,9 +56,9 @@
 
 .stress-selector .list-cell {
     -fx-min-width: 177px;
-    -fx-min-height: 36px;
+    -fx-min-height: 32px;
     -fx-max-width: 177px;
-    -fx-max-height: 36px;
+    -fx-max-height: 32px;
     -fx-font-size: 13px;
 
     -fx-background-color: #FAFAFA;
