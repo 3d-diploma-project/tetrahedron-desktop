@@ -1,9 +1,13 @@
 package org.cmps.tetrahedron.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 import org.joml.Vector3f;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 public class Model {
@@ -17,6 +21,8 @@ public class Model {
     private Vector3f max;
     private float radius;
 
+    private float[][] normals;
+
     @Builder
     public Model(Map<Integer, float[]> vertices, List<float[][]> faces) {
         this.vertices = vertices != null ? vertices : new HashMap<>();
@@ -29,6 +35,7 @@ public class Model {
         }
 
         calculateCenterAndBoundaries();
+        calculateNormals();
     }
 
     public void updateVertices(Map<Integer, float[]> vertices) {
@@ -42,6 +49,7 @@ public class Model {
         }
 
         calculateCenterAndBoundaries();
+        calculateNormals();
     }
 
     public void clear() {
@@ -80,5 +88,21 @@ public class Model {
             copy.put(e.getKey(), new float[]{v[0], v[1], v[2]});
         }
         return copy;
+    }
+
+    private void calculateNormals() {
+        normals = new float[faces.size()][3];
+
+        for (int i = 0; i < faces.size(); i++) {
+            float[][] face = faces.get(i);
+            float[] u =  new float[] {face[1][0] - face[0][0], face[1][1] - face[0][1], face[1][2] - face[0][2]};
+            float[] v =  new float[] {face[2][0] - face[0][0], face[2][1] - face[0][1], face[2][2] - face[0][2]};
+
+            normals[i] = new float[] {
+                    u[1] * v[2] - u[2] * v[1],
+                    u[2] * v[0] - u[0] * v[2],
+                    u[0] * v[1] - u[1] * v[0],
+            };
+        }
     }
 }

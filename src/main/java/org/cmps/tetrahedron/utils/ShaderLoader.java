@@ -31,6 +31,11 @@ public class ShaderLoader {
         glShaderSource(shader, strings, lengths);
         glCompileShader(shader);
 
+        String errorMessage = glGetShaderInfoLog(shader);
+        if (!errorMessage.isBlank()) {
+            System.out.println(errorMessage);
+        }
+
         return shader;
     }
 

@@ -10,4 +10,5 @@ public class ModelViewSettings {
     private static final ModelViewSettings instance = new ModelViewSettings();
 
     private boolean showElementMesh = true;
+    private boolean showLight = true;
 }
