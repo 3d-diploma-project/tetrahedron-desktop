@@ -37,6 +37,8 @@ public class RightToolbar implements LocalizationListener {
 
     @FXML
     private Switch elementGridController;
+    @FXML
+    private Switch lightController;
 
     public void initialize() {
         instance = this;
@@ -48,6 +50,9 @@ public class RightToolbar implements LocalizationListener {
         elementGridController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"),
                                               modelViewSettings.isShowElementMesh(),
                                               modelViewSettings::setShowElementMesh);
+        lightController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "light"),
+                                        modelViewSettings.isShowLight(),
+                                        modelViewSettings::setShowLight);
 
         stressSettings.setVisible(false);
     }
@@ -68,6 +73,7 @@ public class RightToolbar implements LocalizationListener {
         characteristicButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
 
         elementGridController.setLabel(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"));
+        lightController.setLabel(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "light"));
     }
 
     public void setStressDisplayOption(StressDisplayOption stressDisplayOption) {

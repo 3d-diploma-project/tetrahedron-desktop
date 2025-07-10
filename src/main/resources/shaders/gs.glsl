@@ -7,11 +7,13 @@ uniform vec2 viewportSize;
 
 in Vertex {
   vec3 fragmentColor;
+  vec3 normal;
 } vertex[];
 
 out VertexData {
   noperspective vec3 distance;
   vec3 fragmentColor;
+  vec3 normal;
 } vVertexOut;
 
 void main(void) {
@@ -27,16 +29,19 @@ void main(void) {
 
   vVertexOut.distance = vec3(fArea/length(v0), 0, 0);
   vVertexOut.fragmentColor = vertex[0].fragmentColor;
+  vVertexOut.normal = vertex[0].normal;
   gl_Position = gl_in[0].gl_Position;
   EmitVertex();
 
   vVertexOut.distance = vec3(0, fArea/length(v1), 0);
   vVertexOut.fragmentColor = vertex[1].fragmentColor;
+  vVertexOut.normal = vertex[1].normal;
   gl_Position = gl_in[1].gl_Position;
   EmitVertex();
 
   vVertexOut.distance = vec3(0, 0, fArea/length(v2));
   vVertexOut.fragmentColor = vertex[2].fragmentColor;
+  vVertexOut.normal = vertex[2].normal;
   gl_Position = gl_in[2].gl_Position;
   EmitVertex();
 }

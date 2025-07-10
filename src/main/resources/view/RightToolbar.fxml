@@ -10,6 +10,7 @@
 
     <VBox styleClass="data-section-container">
         <fx:include fx:id="elementGrid" source="./component/Switch.fxml"/>
+        <fx:include fx:id="light" source="./component/Switch.fxml"/>
     </VBox>
 
     <VBox styleClass="data-section-container">

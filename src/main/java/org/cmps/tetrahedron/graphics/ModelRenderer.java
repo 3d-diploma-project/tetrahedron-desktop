@@ -72,6 +72,7 @@ public class ModelRenderer {
     private int coloredInSelectedColor;
     private int modelColor;
     private int showElementMesh;
+    private int showLight;
 
     private final Matrix4f modelMatrix = new Matrix4f();
     private final Matrix4f viewMatrix = new Matrix4f();
@@ -179,6 +180,7 @@ public class ModelRenderer {
 
         if (modelController.isModelReady()) {
             initVao();
+            createNormalsBuffer(modelController.getModel().getNormals());
             modelController.setModelReady(false);
         }
 
@@ -237,6 +239,24 @@ public class ModelRenderer {
         glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0L);
     }
 
+    private void createNormalsBuffer(float[][] normals) {
+        int normalsBufferId = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, normalsBufferId);
+
+        FloatBuffer normalsBuffer = BufferUtils.createFloatBuffer(modelController.getFaces().size() * 3 * 3);
+        for (int i = 0; i < modelController.getFaces().size(); i++) {
+            for (int j = 0; j < 3; j++) {
+                normalsBuffer.put(normals[i]);
+            }
+        }
+        normalsBuffer.flip();
+
+        // setup color positions buffer
+        glBufferData(GL_ARRAY_BUFFER, normalsBuffer, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0L);
+    }
+
     private int createRasterProgram() {
         int program = glCreateProgram();
 
@@ -249,6 +269,7 @@ public class ModelRenderer {
 
         glBindAttribLocation(program, 0, "position");
         glBindAttribLocation(program, 1, "color");
+        glBindAttribLocation(program, 2, "normal");
 
         glLinkProgram(program);
 
@@ -265,6 +286,7 @@ public class ModelRenderer {
         coloredInSelectedColor = glGetUniformLocation(program, "coloredInSelectedColor");
         modelColor = glGetUniformLocation(program, "modelColor");
         showElementMesh = glGetUniformLocation(program, "showElementMesh");
+        showLight = glGetUniformLocation(program, "showLight");
     }
 
     private void initColors() {
@@ -276,5 +298,6 @@ public class ModelRenderer {
 
     private void initModelSettings() {
         glUniform1i(showElementMesh, ModelViewSettings.getInstance().isShowElementMesh() ? 1 : 0);
+        glUniform1i(showLight, ModelViewSettings.getInstance().isShowLight() ? 1 : 0);
     }
 }
