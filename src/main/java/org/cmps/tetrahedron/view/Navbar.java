@@ -1,6 +1,5 @@
 package org.cmps.tetrahedron.view;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,7 +13,7 @@ import org.cmps.tetrahedron.enums.Language;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
 import java.awt.*;
-
+import java.util.Locale;
 
 public class Navbar {
 
@@ -23,7 +22,9 @@ public class Navbar {
 
     @FXML
     public void initialize() {
-        languageSelector.setValue("UA");
+        Locale locale = LocalizationController.getInstance().getCurrentLocale();
+        Language appLanguage = Language.getLanguage(locale);
+        languageSelector.setValue(appLanguage.toString());
 
         languageSelector.setCellFactory(cb -> new ListCell<>() {
             @Override
@@ -52,12 +53,12 @@ public class Navbar {
     }
 
     @FXML
-    public void changeLanguage(ActionEvent event) {
+    public void changeLanguage() {
         Language selectedLanguage = Language.valueOf(languageSelector.getValue());
         LocalizationController.getInstance().setLocale(selectedLanguage.getLocale());
     }
 
-    public void openInstructions(ActionEvent actionEvent) {
+    public void openInstructions() {
         String url = "https://github.com/NTU-KhPI-CMPS/tetrahedron-desktop/wiki";
 
         try {
