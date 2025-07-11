@@ -6,7 +6,7 @@ import java.util.Locale;
 
 @Getter
 public enum Language {
-    UA(Locale.of("uk")),
+    UK(Locale.of("uk")),
     EN(Locale.of("en")),
     DE(Locale.of("de")),
     PL(Locale.of("pl"));
@@ -18,6 +18,11 @@ public enum Language {
     }
 
     public static Language getLanguage(Locale locale) {
+        // when locale is ru set language to ukrainian
+        if (locale.getLanguage().equals("ru")) {
+            return UK;
+        }
+
         for (Language language : Language.values()) {
             if (language.locale.getLanguage().equals(locale.getLanguage())) {
                 return language;
