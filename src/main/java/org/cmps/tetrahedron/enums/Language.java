@@ -6,21 +6,28 @@ import java.util.Locale;
 
 @Getter
 public enum Language {
-    UA("Українська", Locale.of("uk")),
-    EN("English", Locale.of("en")),
-    DE("Deutsch", Locale.of("de")),
-    PL("Polski", Locale.of("pl"));
+    UA(Locale.of("uk")),
+    EN(Locale.of("en")),
+    DE(Locale.of("de")),
+    PL(Locale.of("pl"));
 
-    private final String displayName;
     private final Locale locale;
 
-    Language(String displayName, Locale locale) {
-        this.displayName = displayName;
+    Language(Locale locale) {
         this.locale = locale;
     }
 
-    @Override
-    public String toString() {
-        return displayName;
+    public static Language getLanguage(Locale locale) {
+        for (Language language : Language.values()) {
+            if (language.locale.getLanguage().equals(locale.getLanguage())) {
+                return language;
+            }
+        }
+
+        return getDefaultLanguage();
+    }
+
+    public static Language getDefaultLanguage() {
+        return EN;
     }
 }

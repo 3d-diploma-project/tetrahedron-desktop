@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
+import org.cmps.tetrahedron.enums.Language;
 import org.cmps.tetrahedron.i18n.LocalizationListener;
 
 import java.util.*;
@@ -29,7 +30,8 @@ public class LocalizationController {
 
 
     private LocalizationController() {
-        currentLocale = Locale.getDefault();
+        Language appLanguage = Language.getLanguage(Locale.getDefault());
+        currentLocale = appLanguage.getLocale();
         loadBundles();
     }
 
