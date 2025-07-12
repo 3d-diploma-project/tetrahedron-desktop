@@ -12,6 +12,7 @@ import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.view.LegendView;
 import org.cmps.tetrahedron.view.ModelFilesPicker;
+import org.cmps.tetrahedron.viewmodel.Legend;
 
 import java.io.File;
 import java.util.*;
@@ -80,7 +81,7 @@ public class ModelController {
         model.clear();
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
-        LegendView.getInstance().reset();
+        Legend.getInstance().resetLegend();
 
         Platform.runLater(ModelFilesPicker::openDialogWindow);
     }

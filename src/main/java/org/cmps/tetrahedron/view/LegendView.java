@@ -1,24 +1,23 @@
 package org.cmps.tetrahedron.view;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
-import lombok.Getter;
 import org.cmps.tetrahedron.utils.FontUtils;
 import org.cmps.tetrahedron.utils.LegendUtils;
-
-import java.util.List;
+import org.cmps.tetrahedron.viewmodel.Legend;
 
 import java.util.*;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class LegendView extends HBox {
 
-    @Getter
-    private static final LegendView instance = new LegendView();
+    ObjectProperty<Legend.ValuesRange> valuesRange = new SimpleObjectProperty<>();
+
     private final VBox allColorBoxes = new VBox();
     private final VBox allLabelBoxes = new VBox();
 
@@ -28,26 +27,37 @@ public class LegendView extends HBox {
     private final int labelBoxY = 17;
     private final double labelBoxBorder = 0.4;
 
-    private LegendView() {
-        this.setMouseTransparent(true);
+    public LegendView() {
         allColorBoxes.setAlignment(Pos.CENTER);
         allLabelBoxes.setAlignment(Pos.CENTER);
         allLabelBoxes.setTranslateX(-(colorBoxSizeX - (double) (colorBoxSizeX - labelBoxX) / 2));
         allLabelBoxes.setSpacing(colorBoxSizeY - labelBoxY - labelBoxBorder * 2 + 1);
 
         getChildren().addAll(allColorBoxes, allLabelBoxes);
+
+        visibleProperty().bind(Legend.getInstance().getVisible());
+        valuesRange.bind(Legend.getInstance().getValuesRange());
+
+        valuesRange.addListener(this::handleLegendUpdate);
     }
 
-    public void updateLegend(float minValue, float maxValue) {
-        Map<Integer, float[]> colors = LegendUtils.getColorsLegend();
-        List<String> ranges = generateRangeValues(minValue, maxValue);
-
-        setVisible(true);
+    private void handleLegendUpdate(ObservableValue<? extends Legend.ValuesRange> observable,
+                                    Legend.ValuesRange oldValue,
+                                    Legend.ValuesRange newValue) {
         allColorBoxes.getChildren().clear();
         allLabelBoxes.getChildren().clear();
 
+        if (newValue == null) {
+            Legend.getInstance().setVisible(false);
+            return;
+        }
+
+        Map<Integer, float[]> colors = LegendUtils.getColorsLegend();
+        List<String> ranges = generateRangeValues(newValue.min(), newValue.max());
         addColorBoxes(colors);
         addValuesRangeBoxes(ranges);
+
+        Legend.getInstance().setVisible(true);
     }
 
     private void addColorBoxes(Map<Integer, float[]> colors) {
@@ -73,14 +83,14 @@ public class LegendView extends HBox {
 
     private void addValuesRangeBoxes(List<String> ranges) {
 
-        for (String border: ranges) {
+        for (String border : ranges) {
             VBox labelBox = new VBox();
             labelBox.setMinSize(labelBoxX, labelBoxY);
             labelBox.setStyle("-fx-background-color: #FAFAFA; "
-                    + "-fx-padding: 2; "
-                    + "-fx-border-color: black; "
-                    + "-fx-border-width: " + labelBoxBorder + "px;"
-                    + "-fx-alignment: center;");
+                                      + "-fx-padding: 2; "
+                                      + "-fx-border-color: black; "
+                                      + "-fx-border-width: " + labelBoxBorder + "px;"
+                                      + "-fx-alignment: center;");
 
             Label rangeValue = new Label(border);
             rangeValue.setFont(FontUtils.getGeolocicaFont(10, FontWeight.BOLD));
@@ -97,18 +107,12 @@ public class LegendView extends HBox {
         stressChunks.add(maxValue);
 
         return stressChunks.stream()
-                .sorted(Comparator.reverseOrder())
-                .map(num -> String.format("%.2e", num))
-                .toList();
+                           .sorted(Comparator.reverseOrder())
+                           .map(num -> String.format("%.2e", num))
+                           .toList();
     }
 
     private String toHex(float red, float green, float blue) {
         return String.format("#%02X%02X%02X", (int) (red * 255), (int) (green * 255), (int) (blue * 255));
-    }
-
-    public void reset() {
-        allColorBoxes.getChildren().clear();
-        allLabelBoxes.getChildren().clear();
-        setVisible(false);
     }
 }

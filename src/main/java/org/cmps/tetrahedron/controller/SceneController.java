@@ -36,7 +36,7 @@ public class SceneController {
         HBox navbar = ResourceReader.readComponent("/view/Navbar.fxml", HBox.class);
 
         VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
-        LegendView legend = LegendView.getInstance();
+        LegendView legend = new LegendView();
         Pane pane = new Pane();
         HBox.setHgrow(pane, Priority.ALWAYS);
         VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class,
