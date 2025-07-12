@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Pair;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -44,4 +45,15 @@ public class ResourceReader {
         }
     }
 
+    public static <T, CONTROLLER> Pair<T, CONTROLLER> readComponent(String path,
+                                                     Class<T> type,
+                                                     Class<CONTROLLER> controllerClass) {
+        FXMLLoader loader = new FXMLLoader(ResourceReader.class.getResource(path));
+
+        try {
+            return new Pair<>(loader.load(), loader.getController());
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading FXML file: " + e.getMessage());
+        }
+    }
 }

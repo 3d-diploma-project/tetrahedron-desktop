@@ -16,6 +16,7 @@ import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.ColorEditor;
 import org.cmps.tetrahedron.view.component.Switch;
+import org.cmps.tetrahedron.viewmodel.Legend;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -102,6 +103,8 @@ public class ColorPickerComponent {
         LegendUtils.setColorArraySizeAndTheme(colorCount, isLegendThemeGrayscale);
 
         StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
+        //TODO: fix
+        Legend.getInstance().resetLegend();
         StressController.getInstance().processStressData(displayOption);
     }
 }
