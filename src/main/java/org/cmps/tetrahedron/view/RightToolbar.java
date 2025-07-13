@@ -107,7 +107,7 @@ public class RightToolbar implements LocalizationListener {
                 StressController.getInstance().applyStress(file);
                 Stress stressModel = StressController.getInstance().getStress();
 
-                Legend.getInstance().updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
+                Legend.getInstance().updateValuesRange(stressModel.getMinStress(), stressModel.getMaxStress());
                 stressSettings.setVisible(true);
             }
         } catch (ModelValidationException e) {
@@ -133,7 +133,7 @@ public class RightToolbar implements LocalizationListener {
                 ModelController.getInstance().initCustomCharacteristic(file);
                 CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
 
-                Legend.getInstance().updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+                Legend.getInstance().updateValuesRange(customModel.getMinValue(), customModel.getMaxValue());
             }
         } catch (ModelValidationException e) {
             new ErrorDialog(e);

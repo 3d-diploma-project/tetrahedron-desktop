@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.*;
 import javafx.util.Pair;
-import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.LegendItem;
 import org.cmps.tetrahedron.viewmodel.Legend;
@@ -14,7 +13,7 @@ import java.util.*;
 
 public class LegendView extends HBox {
 
-    ObjectProperty<Legend.ValuesRange> valuesRange = new SimpleObjectProperty<>();
+    ObjectProperty<List<Legend.LegendItem>> valuesRange = new SimpleObjectProperty<>();
 
     private final VBox items = new VBox();
 
@@ -24,14 +23,14 @@ public class LegendView extends HBox {
         getChildren().add(items);
 
         visibleProperty().bind(Legend.getInstance().getVisible());
-        valuesRange.bind(Legend.getInstance().getValuesRange());
+        valuesRange.bind(Legend.getInstance().getItems());
 
         valuesRange.addListener(this::handleLegendUpdate);
     }
 
-    private void handleLegendUpdate(ObservableValue<? extends Legend.ValuesRange> observable,
-                                    Legend.ValuesRange oldValue,
-                                    Legend.ValuesRange newValue) {
+    private void handleLegendUpdate(ObservableValue<? extends List<Legend.LegendItem>> observable,
+                                    List<Legend.LegendItem> oldValue,
+                                    List<Legend.LegendItem> newValue) {
         items.getChildren().clear();
 
         if (newValue == null) {
@@ -39,19 +38,17 @@ public class LegendView extends HBox {
             return;
         }
 
-        var legend = LegendUtils.buildLegend(newValue.min(), newValue.max());
+        for (int i = 0; i < newValue.size(); i++) {
+            Legend.LegendItem itemData = newValue.get(i);
 
-        while (!legend.isEmpty()) {
             Pair<VBox, LegendItem> legendItem
                     = ResourceReader.readComponent("/view/component/LegendItem.fxml", VBox.class, LegendItem.class);
             LegendItem itemController = legendItem.getValue();
 
-            Map.Entry<Float, Integer> start = legend.pollFirstEntry();
-            itemController.setStart(start.getKey());
-            itemController.setColor(LegendUtils.getColorsLegend().get(start.getValue()));
-
-            if (legend.firstEntry() == null) {
-                itemController.setEnd(newValue.max());
+            itemController.setStart(itemData.min());
+            itemController.setColor(itemData.color());
+            if (i == newValue.size() - 1) {
+                itemController.setEnd(itemData.max());
             }
 
             items.getChildren().add(legendItem.getKey());

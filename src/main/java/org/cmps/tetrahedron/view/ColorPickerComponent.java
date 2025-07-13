@@ -12,7 +12,6 @@ import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.utils.DialogUtils;
-import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.ColorEditor;
 import org.cmps.tetrahedron.view.component.Switch;
@@ -20,6 +19,9 @@ import org.cmps.tetrahedron.viewmodel.Legend;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static org.cmps.tetrahedron.enums.LegendTheme.GREY;
+import static org.cmps.tetrahedron.enums.LegendTheme.RAINBOW;
 
 public class ColorPickerComponent {
 
@@ -56,9 +58,8 @@ public class ColorPickerComponent {
         modelColorPickerController.initialize("model-color", colorSettings.getModelColor());
         backgroundColorPickerController.initialize("background-color", colorSettings.getBackgroundColor());
 
-        legendCountInput.setText(String.valueOf(LegendUtils.getColorArraySize()));
-
-        isLegendThemeGrayscale = ColorSettings.getInstance().isGrayscaleLegendTheme();
+        legendCountInput.setText(String.valueOf(Legend.getInstance().getColorsCount()));
+        isLegendThemeGrayscale = Legend.getInstance().getTheme() == GREY;
 
         elementGridController.setInitialState(
                 local.getString(LocalizationController.COLOR_PICKER_BUNDLE, "legend-theme"),
@@ -71,7 +72,6 @@ public class ColorPickerComponent {
 
     private void onSwitchToggle(boolean isOn) {
         isLegendThemeGrayscale = isOn;
-        ColorSettings.getInstance().setGrayscaleLegendTheme(isLegendThemeGrayscale);
     }
 
     public void applyColor(ActionEvent actionEvent) {
@@ -100,11 +100,10 @@ public class ColorPickerComponent {
             return;
         }
 
-        LegendUtils.setColorArraySizeAndTheme(colorCount, isLegendThemeGrayscale);
+        Legend.getInstance().updateColorsCount(colorCount);
+        Legend.getInstance().updateTheme(isLegendThemeGrayscale ? GREY : RAINBOW);
 
         StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
-        //TODO: fix
-        Legend.getInstance().resetLegend();
         StressController.getInstance().processStressData(displayOption);
     }
 }

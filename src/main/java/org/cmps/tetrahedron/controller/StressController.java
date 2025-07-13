@@ -6,15 +6,14 @@ import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
-import org.cmps.tetrahedron.utils.LegendUtils;
 import org.cmps.tetrahedron.viewmodel.Legend;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
+import static org.cmps.tetrahedron.utils.ColorUtils.matchColorsWithValues;
 
 @Setter
 public class StressController {
@@ -64,14 +63,10 @@ public class StressController {
         }
 
         stress.setStressToDisplay(stressToDisplay);
+        Legend.getInstance().updateValuesRange(stress.getMinStress(), stress.getMaxStress());
 
-        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(stress.getMinStress(), stress.getMaxStress());
-        stress.setColors(stressToDisplay.stream()
-                .map(value -> LegendUtils.getColorsLegend().get(legend.get(legend.floorKey(value))))
-                .toList());
-
+        stress.setColors(matchColorsWithValues(stressToDisplay));
         ModelController.getInstance().setModelColors(stress.getColors());
-        Legend.getInstance().updateLegend(stress.getMinStress(), stress.getMaxStress());
     }
 
     private float calculateStress(float[] stressValues, StressDisplayOption option) {
