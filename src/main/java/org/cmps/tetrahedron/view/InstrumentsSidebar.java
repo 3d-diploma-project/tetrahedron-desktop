@@ -3,36 +3,28 @@ package org.cmps.tetrahedron.view;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import org.cmps.tetrahedron.controller.ModelController;
-import javafx.scene.Scene;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.enums.VerticeMoveMode;
-import javafx.scene.control.Button;
-import org.cmps.tetrahedron.model.ColorSettings;
 
 public class InstrumentsSidebar {
 
     private final MouseController mouseController = MouseController.getInstance();
     private final ModelController modelController = ModelController.getInstance();
 
+
     @FXML
     private Button cursor;
-
     @FXML
     private Button topBottom;
-
     @FXML
     private Button leftRight;
-
     @FXML
     public Button colorPicker;
-
     @FXML
-    private Button deleteModel;
+    public Button legendSettings;
 
     @FXML
     public void clickOnCursor() {
@@ -67,13 +59,18 @@ public class InstrumentsSidebar {
         ColorPickerComponent.showColorPicker(bounds.getMinX(), bounds.getMinY());
     }
 
+    public void clickOnLegendSettings() {
+        Bounds bounds = colorPicker.localToScreen(colorPicker.getBoundsInParent());
+        LegendDialog.showDialog(bounds.getMinX(), bounds.getMinY());
+    }
+
     @FXML
     public void clickOnDelete() {
         modelController.clearModel();
     }
 
     private void focus(Button button) {
-        if(!button.getStyleClass().contains("button-selected")) {
+        if (!button.getStyleClass().contains("button-selected")) {
             button.getStyleClass().add("button-selected");
         }
 
@@ -82,7 +79,7 @@ public class InstrumentsSidebar {
             return;
         }
 
-        if(!graphic.getStyleClass().contains("button-selected")) {
+        if (!graphic.getStyleClass().contains("button-selected")) {
             graphic.getStyleClass().add("button-selected");
         }
     }

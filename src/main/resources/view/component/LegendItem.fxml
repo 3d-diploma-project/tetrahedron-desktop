@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.cmps.tetrahedron.view.component.LegendItem"
@@ -11,9 +12,9 @@
 
     <HBox fx:id="color" styleClass="color"/>
     <VBox styleClass="label-box, start-label">
-        <Label fx:id="start" styleClass="label"/>
+        <TextField fx:id="start" styleClass="label" editable="false"/>
     </VBox>
     <VBox fx:id="endContainer" styleClass="label-box, end-label" visible="false">
-        <Label fx:id="end" styleClass="label"/>
+        <TextField fx:id="end" styleClass="label" editable="false"/>
     </VBox>
 </VBox>

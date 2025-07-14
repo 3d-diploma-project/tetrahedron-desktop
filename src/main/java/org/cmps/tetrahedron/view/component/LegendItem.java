@@ -1,16 +1,16 @@
 package org.cmps.tetrahedron.view.component;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class LegendItem {
 
     @FXML
-    private Label start;
+    private TextField start;
     @FXML
-    private Label end;
+    private TextField end;
     @FXML
     private VBox endContainer;
     @FXML
@@ -27,6 +27,11 @@ public class LegendItem {
 
     public void setColor(float[] rgbColor) {
         color.setStyle("-fx-background-color: " + toHex(rgbColor) + ";");
+    }
+
+    public void setEditable(boolean editable) {
+        start.setEditable(editable);
+        end.setEditable(editable);
     }
 
     private String toHex(float[] rgbColor) {

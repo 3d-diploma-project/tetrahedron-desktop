@@ -6,6 +6,13 @@
 }
 
 .label-box {
+    -fx-alignment: center;
+}
+
+.label {
+    -fx-font-family: "Geologica Roman";
+    -fx-font-size: 10;
+
     -fx-pref-width: 55;
     -fx-max-width: 55;
     -fx-pref-height: 17;
@@ -16,11 +23,6 @@
     -fx-border-color: black;
     -fx-border-width: 0.4;
     -fx-alignment: center;
-}
-
-.label {
-    -fx-font-family: "Geologica Roman";
-    -fx-font-size: 10;
 }
 
 .start-label {

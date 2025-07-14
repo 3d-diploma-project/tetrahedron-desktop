@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.cmps.tetrahedron.view.LegendView?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@/style/deformation-scale-dialog.css"
+            fx:controller="org.cmps.tetrahedron.view.LegendDialog">
+    <content>
+        <VBox spacing="14">
+            <LegendView fx:id="legend" editable="true"/>
+
+            <HBox alignment="CENTER" styleClass="button-box">
+                <Button text="save" styleClass="save-button" onAction="#updateLegend"/>
+            </HBox>
+        </VBox>
+    </content>
+</DialogPane>
