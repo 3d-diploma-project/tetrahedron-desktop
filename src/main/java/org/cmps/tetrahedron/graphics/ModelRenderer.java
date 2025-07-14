@@ -12,45 +12,13 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11C;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.List;
 
 import static org.cmps.tetrahedron.utils.ShaderLoader.createShader;
-import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11C.glDrawArrays;
-import static org.lwjgl.opengl.GL15.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL15.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL15.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL15.GL_FLOAT;
-import static org.lwjgl.opengl.GL15.GL_LESS;
-import static org.lwjgl.opengl.GL15.glClear;
-import static org.lwjgl.opengl.GL15.glClearColor;
-import static org.lwjgl.opengl.GL15.glDepthFunc;
-import static org.lwjgl.opengl.GL15.glEnable;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL15C.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15C.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15C.glBindBuffer;
-import static org.lwjgl.opengl.GL15C.glBufferData;
-import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
-import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
-import static org.lwjgl.opengl.GL20.glAttachShader;
-import static org.lwjgl.opengl.GL20.glCreateProgram;
-import static org.lwjgl.opengl.GL20.glGetUniformLocation;
-import static org.lwjgl.opengl.GL20.glLinkProgram;
-import static org.lwjgl.opengl.GL20.glUniform1i;
-import static org.lwjgl.opengl.GL20.glUniform3f;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-import static org.lwjgl.opengl.GL20C.glBindAttribLocation;
-import static org.lwjgl.opengl.GL20C.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20C.glUniform2f;
-import static org.lwjgl.opengl.GL20C.glUniformMatrix4fv;
-import static org.lwjgl.opengl.GL20C.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.opengl.GL30C.glBindVertexArray;
-import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
+import static org.lwjgl.opengles.GLES30.*;
 
 /**
  * Class responsible for painting of a 3D model.
@@ -111,11 +79,15 @@ public class ModelRenderer {
 
         VertexInfoController vertexInfoController = VertexInfoController.getInstance();
         if (vertexInfoController.isClicked()) {
-            float[] depth = new float[1];
-            GL11C.glReadPixels(vertexInfoController.getX(),
-                               vertexInfoController.getY(), 1, 1,
-                               GL11C.GL_DEPTH_COMPONENT, GL11C.GL_FLOAT, depth);
-            vertexInfoController.updateVertexInfoToDisplay(depth[0]);
+            IntBuffer depthBuffer = BufferUtils.createIntBuffer(1);
+            glReadPixels(vertexInfoController.getX(), vertexInfoController.getY(),
+                    1, 1, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, depthBuffer);
+
+            long unsignedDepth = Integer.toUnsignedLong(depthBuffer.get(0));
+            long maxUnsignedInt = Integer.toUnsignedLong(-1);
+            float normalizedDepth = (float) unsignedDepth / maxUnsignedInt;
+
+            vertexInfoController.updateVertexInfoToDisplay(normalizedDepth);
         }
     }
 
@@ -262,10 +234,8 @@ public class ModelRenderer {
 
         int vShader = createShader("shaders/vs.glsl", GL_VERTEX_SHADER);
         int fShader = createShader("shaders/fs.glsl", GL_FRAGMENT_SHADER);
-        int gShader = createShader("shaders/gs.glsl", GL_GEOMETRY_SHADER);
         glAttachShader(program, vShader);
         glAttachShader(program, fShader);
-        glAttachShader(program, gShader);
 
         glBindAttribLocation(program, 0, "position");
         glBindAttribLocation(program, 1, "color");
