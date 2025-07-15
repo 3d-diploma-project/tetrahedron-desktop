@@ -8,24 +8,32 @@ import javafx.scene.image.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.cmps.tetrahedron.config.CanvasProperties;
+import org.cmps.tetrahedron.utils.NativesExtractor;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.Configuration;
+import org.lwjgl.system.MemoryStack;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.file.Path;
 import java.util.Objects;
+
+import static org.lwjgl.egl.EGL15.*;
+import static org.lwjgl.opengles.GLES.*;
+import static org.lwjgl.opengles.GLES30.*;
+import static org.lwjgl.opengles.EXTTextureFormatBGRA8888.GL_BGRA_EXT;
 
 public class ModelView extends Pane {
 
     private static final ModelRenderer modelRenderer = new ModelRenderer();
     private static final ImageView imageView = new ImageView();
 
-    private static int fbo;
-    private static int tex;
+    private static long display;
+    private static long context;
+    private static long surface;
+    private static PointerBuffer configs;
     private static ByteBuffer buffer;
     private static PixelBuffer<ByteBuffer> pixelBuffer;
     private static PerformanceTracker performanceTracker;
@@ -58,8 +66,8 @@ public class ModelView extends Pane {
                 if (CanvasProperties.isSizeChanged()) {
                     Dimension size = CanvasProperties.getSize();
 
-                    recreateFramebuffer(size.width, size.height);
-                    recreateWritableImage(size.width, size.height);
+                    createSurface(size.width, size.height);
+                    createWritableImage(size.width, size.height);
                 }
 
                 drawFrame(CanvasProperties.getWidth(), CanvasProperties.getHeight());
@@ -78,54 +86,58 @@ public class ModelView extends Pane {
     }
 
     private void initGl() {
-        GLFW.glfwInit();
-        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 3);
+        Path extractedNatives = NativesExtractor.extractNatives();
+        Configuration.LIBRARY_PATH.set(extractedNatives.toString());
 
-        long window = GLFW.glfwCreateWindow(1, 1, "", 0, 0);
-        GLFW.glfwMakeContextCurrent(window);
-        GL.createCapabilities();
+        display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+        eglInitialize(display, (IntBuffer) null, null);
 
-        recreateFramebuffer(CanvasProperties.getWidth(), CanvasProperties.getHeight());
-        recreateWritableImage(CanvasProperties.getWidth(), CanvasProperties.getHeight());
+        int[] configAttribs = {
+                EGL_DEPTH_SIZE, 24,
+                EGL_NONE
+        };
+        configs = MemoryStack.stackCallocPointer(1);
+        eglChooseConfig(display, configAttribs, configs, new int[1]);
+
+        int[] contextAttribs = {
+                EGL_CONTEXT_CLIENT_VERSION, 3,
+                EGL_NONE
+        };
+        context = eglCreateContext(display, configs.get(0), EGL_NO_CONTEXT, contextAttribs);
+
+        createSurface(CanvasProperties.getWidth(), CanvasProperties.getHeight());
+        createWritableImage(CanvasProperties.getWidth(), CanvasProperties.getHeight());
 
         modelRenderer.initGL();
     }
 
-    private void recreateFramebuffer(int width, int height) {
-        if (fbo != 0) {
-            GL30.glDeleteFramebuffers(fbo);
-        }
-        if (tex != 0) {
-            GL11.glDeleteTextures(tex);
+    private void createSurface(int width, int height) {
+        if (surface != 0) {
+            eglDestroySurface(display, surface);
         }
 
-        fbo = GL30.glGenFramebuffers();
-        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
+        int[] surfaceAttribs = {
+                EGL_WIDTH, width,
+                EGL_HEIGHT, height,
+                EGL_NONE
+        };
+        surface = eglCreatePbufferSurface(display, configs.get(0), surfaceAttribs);
 
-        tex = GL11.glGenTextures();
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0);
-        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, tex, 0);
-
-        int depthRenderbuffer = GL30.glGenRenderbuffers();
-        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthRenderbuffer);
-        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL30.GL_DEPTH_COMPONENT32F, width, height);
-        GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depthRenderbuffer);
+        eglMakeCurrent(display, surface, surface, context);
+        createCapabilities();
     }
 
-    private void recreateWritableImage(int width, int height) {
+    private void createWritableImage(int width, int height) {
         buffer = BufferUtils.createByteBuffer(width * height * 4);
         pixelBuffer = new PixelBuffer<>(width, height, buffer, PixelFormat.getByteBgraPreInstance());
         imageView.setImage(new WritableImage(pixelBuffer));
     }
 
     private void drawFrame(int width, int height) {
-        GL11.glViewport(0, 0, width, height);
+        glViewport(0, 0, width, height);
 
         modelRenderer.paintGL();
 
-        GL11.glReadPixels(0, 0, width, height, GL12.GL_BGRA, GL11.GL_UNSIGNED_BYTE, buffer);
+        glReadPixels(0, 0, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buffer);
     }
 }
