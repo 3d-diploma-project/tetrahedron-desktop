@@ -13,15 +13,16 @@ Tetrahedron - програма для візуалізації даних на 3
 ### Розробники проєкту
 
 #### Дизайнер
-- [Саченко Тетяна (ІКМ-221А)](https://github.com/SachenkoTanya)
+- [Тетяна Саченко (ІКМ-221А)](https://github.com/SachenkoTanya)
 
 #### Розробники програмного забезпечення
 - [Вадим Старчак (ІКМ-221А)](https://github.com/VadimST04)
 - [Гурген Авагян (ІКМ-221А)](https://github.com/GurgenAvagyan)
+- [Михайло Грошевий. Аспірант кафедри Комп’ютерного Моделювання Процесів та Систем, НТУ "ХПІ"](https://web.kpi.kharkov.ua/cmps/uk/golovna/vikladatskij-sklad/groshevyj-myhajlo-oleksandrovych/)
 
 #### Ментори
-- [Татарінова Оксана. Завідувачка кафедрою Комп’ютерного Моделювання Процесів та Систем, НТУ "ХПІ"](https://web.kpi.kharkov.ua/cmps/uk/tatarinova-oksana-andriyivna/)
-- [Бородін Марія. Аспірант кафедри Комп’ютерного Моделювання Процесів та Систем, НТУ "ХПІ"](https://web.kpi.kharkov.ua/cmps/uk/golovna/vikladatskij-sklad/borodin-mariya-anatoliyivna/)
+- [Оксана Татарінова. Завідувачка кафедрою Комп’ютерного Моделювання Процесів та Систем, НТУ "ХПІ"](https://web.kpi.kharkov.ua/cmps/uk/tatarinova-oksana-andriyivna/)
+- [Марія Бородін. Аспірант кафедри Комп’ютерного Моделювання Процесів та Систем, НТУ "ХПІ"](https://web.kpi.kharkov.ua/cmps/uk/golovna/vikladatskij-sklad/borodin-mariya-anatoliyivna/)
 
 ## About
 Tetrahedron — a program for visual data analysis.
@@ -38,9 +39,10 @@ It allows you to load files to build models, apply and analyze any data on it (f
 #### Software Developers
 - [Vadym Starchak](https://github.com/VadimST04)
 - [Hurhen Avahian](https://github.com/GurgenAvagyan)
+- [Mykhailo Hroshevyi. Ph.D. student at the Department of Computer Modeling of Processes and Systems, NTU "KhPI"](https://web.kpi.kharkov.ua/cmps/en/main/magistral-staff/hroshevyi-mykhailo/)
 
 #### Mentors
-- [Tatarinova Oksana. Head of the Department of Computer Modeling of Processes and Systems, NTU "KhPI"](https://web.kpi.kharkov.ua/cmps/en/main/magistral-staff/tatarinova-oksana/)
+- [Oksana Tatarinova. Head of the Department of Computer Modeling of Processes and Systems, NTU "KhPI"](https://web.kpi.kharkov.ua/cmps/en/main/magistral-staff/tatarinova-oksana/)
 - [Mariia Borodin. Ph.D. student at the Department of Computer Modeling of Processes and Systems, NTU "KhPI"](https://web.kpi.kharkov.ua/cmps/en/magistral-staff/borodin-mariia/)
 
 ## Running the project locally
