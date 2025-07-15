@@ -73,11 +73,11 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-opengl</artifactId>
+            <artifactId>lwjgl-egl</artifactId>
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-glfw</artifactId>
+            <artifactId>lwjgl-opengles</artifactId>
         </dependency>
 
         <dependency>
@@ -87,12 +87,7 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-opengl</artifactId>
-            <classifier>natives-${platform}</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-glfw</artifactId>
+            <artifactId>lwjgl-opengles</artifactId>
             <classifier>natives-${platform}</classifier>
         </dependency>
 
@@ -121,6 +116,20 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>natives/**</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/natives/${platform}</directory>
+                <targetPath>natives</targetPath>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
