@@ -18,7 +18,7 @@ Tetrahedron - програма для візуалізації даних на 3
 #### Розробники програмного забезпечення
 - [Вадим Старчак (ІКМ-221А)](https://github.com/VadimST04)
 - [Гурген Авагян (ІКМ-221А)](https://github.com/GurgenAvagyan)
-- [Мохайло Грошевий. Аспірант кафедри Комп’ютерного Моделювання Процесів та Систем, НТУ "ХПІ"](https://web.kpi.kharkov.ua/cmps/uk/golovna/vikladatskij-sklad/groshevyj-myhajlo-oleksandrovych/)
+- [Михайло Грошевий. Аспірант кафедри Комп’ютерного Моделювання Процесів та Систем, НТУ "ХПІ"](https://web.kpi.kharkov.ua/cmps/uk/golovna/vikladatskij-sklad/groshevyj-myhajlo-oleksandrovych/)
 
 #### Ментори
 - [Оксана Татарінова. Завідувачка кафедрою Комп’ютерного Моделювання Процесів та Систем, НТУ "ХПІ"](https://web.kpi.kharkov.ua/cmps/uk/tatarinova-oksana-andriyivna/)
