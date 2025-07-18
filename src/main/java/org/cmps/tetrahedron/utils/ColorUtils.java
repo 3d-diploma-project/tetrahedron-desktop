@@ -13,7 +13,7 @@ public class ColorUtils {
         TreeSet<LegendItemData> legend = new TreeSet<>(Legend.getInstance().getItems().get());
 
         return values.parallelStream()
-                     .map(value -> legend.floor(new LegendItemData(value)))
+                     .map(value -> legend.ceiling(new LegendItemData(value)))
                      .filter(Objects::nonNull)
                      .map(LegendItemData::color)
                      .toList();

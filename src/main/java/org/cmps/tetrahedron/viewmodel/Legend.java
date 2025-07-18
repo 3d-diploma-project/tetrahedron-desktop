@@ -35,6 +35,10 @@ public class Legend {
     }
 
     public void updateValuesRange(float min, float max) {
+        if (this.min == min && this.max == max) {
+            return;
+        }
+
         this.min = min;
         this.max = max;
         regenerateLegend();
@@ -55,6 +59,10 @@ public class Legend {
         items.setValue(null);
     }
 
+    public void updateLegendItems(List<LegendItemData> itemData) {
+        items.setValue(itemData);
+    }
+
     private void regenerateLegend() {
         List<LegendItemData> legendItemData = new ArrayList<>();
 
@@ -63,7 +71,7 @@ public class Legend {
         float valuesRange = max - min;
         float stressChunk = valuesRange / colorsCount;
 
-        for (int i = 0; i < colorsCount; i++) {
+        for (int i = colorsCount - 1; i >= 0; i--) {
             float[] color = colors.get(colorsCount - i - 1);
 
             float minValue = min + (stressChunk * i);

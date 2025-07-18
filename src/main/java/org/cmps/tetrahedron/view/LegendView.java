@@ -59,28 +59,25 @@ public class LegendView extends VBox {
 
         getChildren().clear();
         itemControllers.clear();
-        var reversedLegendItems = items.reversed();
 
         for (int i = 0; i < items.size(); i++) {
-            LegendItemData itemData = reversedLegendItems.get(i);
+            LegendItemData itemData = items.get(i);
 
             Pair<VBox, LegendItem> legendItem
                     = ResourceReader.readComponent("/view/component/LegendItem.fxml", VBox.class, LegendItem.class);
             LegendItem itemController = legendItem.getValue();
 
             itemController.setEditable(editable.getValue());
-            itemController.setStart(itemData.min());
+            itemController.setStart(itemData.max());
             itemController.setColor(itemData.color());
             if (i == items.size() - 1) {
-                itemController.setEnd(itemData.max());
+                itemController.setEnd(itemData.min());
             }
 
             itemControllers.add(itemController);
             getChildren().add(legendItem.getKey());
         }
 
-        //TODO: reverse legend in store and remove reverse from this method
-        itemControllers = itemControllers.reversed();
         Legend.getInstance().setVisible(true);
     }
 }

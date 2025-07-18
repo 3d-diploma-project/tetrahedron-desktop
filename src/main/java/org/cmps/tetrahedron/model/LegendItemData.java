@@ -2,12 +2,12 @@ package org.cmps.tetrahedron.model;
 
 public record LegendItemData(float[] color, float min, float max) implements Comparable<LegendItemData> {
 
-    public LegendItemData(float min) {
-        this(null, min, 0);
+    public LegendItemData(float max) {
+        this(null, 0, max);
     }
 
     @Override
     public int compareTo(LegendItemData o) {
-        return Float.compare(min, o.min);
+        return Float.compare(max, o.max);
     }
 }
