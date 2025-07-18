@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.model.LegendItemData;
 import org.cmps.tetrahedron.viewmodel.Legend;
 
 import java.awt.*;
@@ -9,12 +10,12 @@ import java.util.List;
 public class ColorUtils {
 
     public static List<float[]> matchColorsWithValues(List<Float> values) {
-        TreeSet<Legend.LegendItem> legend = new TreeSet<>(Legend.getInstance().getItems().get());
+        TreeSet<LegendItemData> legend = new TreeSet<>(Legend.getInstance().getItems().get());
 
         return values.parallelStream()
-                     .map(value -> legend.floor(new Legend.LegendItem(value)))
+                     .map(value -> legend.floor(new LegendItemData(value)))
                      .filter(Objects::nonNull)
-                     .map(Legend.LegendItem::color)
+                     .map(LegendItemData::color)
                      .toList();
     }
 

@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.viewmodel;
 import javafx.beans.property.*;
 import lombok.Getter;
 import org.cmps.tetrahedron.enums.LegendTheme;
+import org.cmps.tetrahedron.model.LegendItemData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class Legend {
     private static final Legend instance = new Legend();
 
     private final BooleanProperty visible = new SimpleBooleanProperty(false);
-    private final ObjectProperty<List<LegendItem>> items = new SimpleObjectProperty<>();
+    private final ObjectProperty<List<LegendItemData>> items = new SimpleObjectProperty<>();
 
     private int colorsCount = 7;
     private LegendTheme theme = RAINBOW;
@@ -55,7 +56,7 @@ public class Legend {
     }
 
     private void regenerateLegend() {
-        List<LegendItem> legendItems = new ArrayList<>();
+        List<LegendItemData> legendItemData = new ArrayList<>();
 
         var colors = theme == RAINBOW ? getHSVColors(colorsCount) : getGrayColors(colorsCount);
 
@@ -71,22 +72,10 @@ public class Legend {
                 maxValue = max;
             }
 
-            LegendItem item = new LegendItem(color, minValue, maxValue);
-            legendItems.add(item);
+            LegendItemData item = new LegendItemData(color, minValue, maxValue);
+            legendItemData.add(item);
         }
 
-        items.setValue(legendItems);
-    }
-
-    public record LegendItem(float[] color, float min, float max) implements Comparable<LegendItem> {
-
-        public LegendItem(float min) {
-            this(null, min, 0);
-        }
-
-        @Override
-        public int compareTo(LegendItem o) {
-            return Float.compare(min, o.min);
-        }
+        items.setValue(legendItemData);
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.AccessibleAttribute;
 import javafx.scene.layout.*;
 import javafx.util.Pair;
 import lombok.Getter;
+import org.cmps.tetrahedron.model.LegendItemData;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.LegendItem;
 import org.cmps.tetrahedron.viewmodel.Legend;
@@ -44,14 +45,14 @@ public class LegendView extends VBox {
         generateLegendItems(Legend.getInstance().getItems().get());
     }
 
-    private void handleLegendUpdate(ObservableValue<? extends List<Legend.LegendItem>> observable,
-                                    List<Legend.LegendItem> oldValue,
-                                    List<Legend.LegendItem> newValue) {
+    private void handleLegendUpdate(ObservableValue<? extends List<LegendItemData>> observable,
+                                    List<LegendItemData> oldValue,
+                                    List<LegendItemData> newValue) {
         generateLegendItems(newValue);
         Legend.getInstance().setVisible(newValue != null);
     }
 
-    private void generateLegendItems(List<Legend.LegendItem> items) {
+    private void generateLegendItems(List<LegendItemData> items) {
         if (items == null) {
             return;
         }
@@ -61,7 +62,7 @@ public class LegendView extends VBox {
         var reversedLegendItems = items.reversed();
 
         for (int i = 0; i < items.size(); i++) {
-            Legend.LegendItem itemData = reversedLegendItems.get(i);
+            LegendItemData itemData = reversedLegendItems.get(i);
 
             Pair<VBox, LegendItem> legendItem
                     = ResourceReader.readComponent("/view/component/LegendItem.fxml", VBox.class, LegendItem.class);
