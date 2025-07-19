@@ -1,12 +1,20 @@
+.item {
+    -fx-pref-height: 25;
+    -fx-min-height: 25;
+}
+
 .color {
     -fx-pref-width: 80;
     -fx-min-width: 80;
     -fx-pref-height: 25;
     -fx-min-height: 25;
+
+    -fx-translate-y: 8;
 }
 
-.label-box {
-    -fx-alignment: center;
+.color-border {
+    -fx-border-color: black;
+    -fx-border-width: 0 0 2 0;
 }
 
 .label {
@@ -26,9 +34,9 @@
 }
 
 .start-label {
-    -fx-translate-y: -33;
+    -fx-translate-y: -26;
 }
 
 .end-label {
-    -fx-translate-y: -28;
+    -fx-translate-y: -20;
 }

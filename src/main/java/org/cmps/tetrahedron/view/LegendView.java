@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.view;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.AccessibleAttribute;
 import javafx.scene.layout.*;
 import javafx.util.Pair;
@@ -22,7 +23,7 @@ public class LegendView extends VBox {
     private List<LegendItem> itemControllers = new ArrayList<>();
 
     public LegendView() {
-        this.setSpacing(-38);
+        this.setPadding(new Insets(25, 0, 0, 0));
 
         visibleProperty().bind(Legend.getInstance().getVisible());
         var itemsProperty = Legend.getInstance().getItems();

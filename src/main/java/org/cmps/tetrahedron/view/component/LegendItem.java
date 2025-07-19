@@ -2,8 +2,7 @@ package org.cmps.tetrahedron.view.component;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import lombok.Getter;
 
 public class LegendItem {
@@ -12,8 +11,6 @@ public class LegendItem {
     private TextField start;
     @FXML
     private TextField end;
-    @FXML
-    private VBox endContainer;
     @FXML
     private HBox color;
     @Getter
@@ -29,7 +26,8 @@ public class LegendItem {
 
     public void setEnd(float endValue) {
         end.setText(String.format("%.2e", endValue));
-        endContainer.setVisible(true);
+        end.setVisible(true);
+        color.getStyleClass().remove("color-border");
     }
 
     public float getEnd() {
