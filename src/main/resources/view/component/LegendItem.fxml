@@ -9,7 +9,7 @@
       stylesheets="@/style/legend-item.css"
       styleClass="item"
       alignment="CENTER">
-    <HBox fx:id="color" styleClass="color, color-border"/>
-    <TextField fx:id="start" styleClass="label, start-label" editable="false"/>
-    <TextField fx:id="end" styleClass="label, end-label" visible="false" editable="false"/>
+    <TextField fx:id="start" styleClass="label" editable="false" viewOrder="1"/>
+    <HBox fx:id="color" styleClass="color, color-border" viewOrder="2"/>
+    <TextField fx:id="end" styleClass="label, end-label" visible="false" editable="false" viewOrder="1"/>
 </VBox>

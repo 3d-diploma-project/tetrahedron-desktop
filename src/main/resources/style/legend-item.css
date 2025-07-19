@@ -9,7 +9,7 @@
     -fx-pref-height: 25;
     -fx-min-height: 25;
 
-    -fx-translate-y: 8;
+    -fx-translate-y: -8;
 }
 
 .color-border {
@@ -31,10 +31,6 @@
     -fx-border-color: black;
     -fx-border-width: 0.4;
     -fx-alignment: center;
-}
-
-.start-label {
-    -fx-translate-y: -26;
 }
 
 .end-label {
