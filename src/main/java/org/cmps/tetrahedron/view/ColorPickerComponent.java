@@ -15,7 +15,7 @@ import org.cmps.tetrahedron.utils.DialogUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.ColorEditor;
 import org.cmps.tetrahedron.view.component.Switch;
-import org.cmps.tetrahedron.viewmodel.Legend;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -58,8 +58,8 @@ public class ColorPickerComponent {
         modelColorPickerController.initialize("model-color", colorSettings.getModelColor());
         backgroundColorPickerController.initialize("background-color", colorSettings.getBackgroundColor());
 
-        legendCountInput.setText(String.valueOf(Legend.getInstance().getColorsCount()));
-        isLegendThemeGrayscale = Legend.getInstance().getTheme() == GREY;
+        legendCountInput.setText(String.valueOf(LegendData.getInstance().getColorsCount()));
+        isLegendThemeGrayscale = LegendData.getInstance().getTheme() == GREY;
 
         elementGridController.setInitialState(
                 local.getString(LocalizationController.COLOR_PICKER_BUNDLE, "legend-theme"),
@@ -100,8 +100,8 @@ public class ColorPickerComponent {
             return;
         }
 
-        Legend.getInstance().updateColorsCount(colorCount);
-        Legend.getInstance().updateTheme(isLegendThemeGrayscale ? GREY : RAINBOW);
+        LegendData.getInstance().updateColorsCount(colorCount);
+        LegendData.getInstance().updateTheme(isLegendThemeGrayscale ? GREY : RAINBOW);
 
         StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
         StressController.getInstance().processStressData(displayOption);

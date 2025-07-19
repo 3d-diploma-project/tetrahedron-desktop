@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.InfoPanel;
-import org.cmps.tetrahedron.view.LegendView;
+import org.cmps.tetrahedron.view.Legend;
 import org.cmps.tetrahedron.graphics.ModelView;
 
 import java.util.Objects;
@@ -36,7 +36,7 @@ public class SceneController {
         HBox navbar = ResourceReader.readComponent("/view/Navbar.fxml", HBox.class);
 
         VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
-        LegendView legend = new LegendView();
+        Legend legend = new Legend();
         Pane pane = new Pane();
         HBox.setHgrow(pane, Priority.ALWAYS);
         VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class,

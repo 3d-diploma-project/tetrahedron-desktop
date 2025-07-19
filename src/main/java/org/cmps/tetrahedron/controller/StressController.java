@@ -6,7 +6,7 @@ import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.Stress;
 import org.cmps.tetrahedron.utils.DataReader;
-import org.cmps.tetrahedron.viewmodel.Legend;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class StressController {
         }
 
         stress.setStressToDisplay(stressToDisplay);
-        Legend.getInstance().updateValuesRange(stress.getMinStress(), stress.getMaxStress());
+        LegendData.getInstance().updateValuesRange(stress.getMinStress(), stress.getMaxStress());
 
         stress.setColors(matchColorsWithValues(stressToDisplay));
         ModelController.getInstance().setModelColors(stress.getColors());

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import org.cmps.tetrahedron.view.LegendView?>
+<?import org.cmps.tetrahedron.view.Legend?>
 
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -12,7 +12,7 @@
             fx:controller="org.cmps.tetrahedron.view.LegendDialog">
     <content>
         <VBox spacing="14">
-            <LegendView fx:id="legend" editable="true"/>
+            <Legend fx:id="legend" editable="true"/>
 
             <HBox alignment="CENTER" styleClass="button-box">
                 <Button text="save" styleClass="save-button" onAction="#updateLegend"/>

@@ -11,22 +11,22 @@ import lombok.Getter;
 import org.cmps.tetrahedron.model.LegendItemData;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.LegendItem;
-import org.cmps.tetrahedron.viewmodel.Legend;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.util.*;
 
-public class LegendView extends VBox {
+public class Legend extends VBox {
 
     private final BooleanProperty editable = new SimpleBooleanProperty(this, "editable", false);
 
     @Getter
     private List<LegendItem> itemControllers = new ArrayList<>();
 
-    public LegendView() {
+    public Legend() {
         this.setPadding(new Insets(25, 0, 0, 0));
 
-        visibleProperty().bind(Legend.getInstance().getVisible());
-        var itemsProperty = Legend.getInstance().getItems();
+        visibleProperty().bind(LegendData.getInstance().getVisible());
+        var itemsProperty = LegendData.getInstance().getItems();
         itemsProperty.addListener(this::handleLegendUpdate);
         generateLegendItems(itemsProperty.get());
     }
@@ -43,14 +43,14 @@ public class LegendView extends VBox {
 
     public final void setEditable(boolean value) {
         editable.setValue(value);
-        generateLegendItems(Legend.getInstance().getItems().get());
+        generateLegendItems(LegendData.getInstance().getItems().get());
     }
 
     private void handleLegendUpdate(ObservableValue<? extends List<LegendItemData>> observable,
                                     List<LegendItemData> oldValue,
                                     List<LegendItemData> newValue) {
         generateLegendItems(newValue);
-        Legend.getInstance().setVisible(newValue != null);
+        LegendData.getInstance().setVisible(newValue != null);
     }
 
     private void generateLegendItems(List<LegendItemData> items) {
@@ -79,6 +79,6 @@ public class LegendView extends VBox {
             getChildren().add(legendItem.getKey());
         }
 
-        Legend.getInstance().setVisible(true);
+        LegendData.getInstance().setVisible(true);
     }
 }

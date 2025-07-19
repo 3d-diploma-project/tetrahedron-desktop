@@ -13,10 +13,10 @@ import static org.cmps.tetrahedron.utils.ColorUtils.getGrayColors;
 import static org.cmps.tetrahedron.utils.ColorUtils.getHSVColors;
 
 @Getter
-public class Legend {
+public class LegendData {
 
     @Getter
-    private static final Legend instance = new Legend();
+    private static final LegendData instance = new LegendData();
 
     private final BooleanProperty visible = new SimpleBooleanProperty(false);
     private final ObjectProperty<List<LegendItemData>> items = new SimpleObjectProperty<>();
@@ -27,7 +27,7 @@ public class Legend {
     private float min;
     private float max;
 
-    private Legend() {
+    private LegendData() {
     }
 
     public void setVisible(boolean visibleValue) {

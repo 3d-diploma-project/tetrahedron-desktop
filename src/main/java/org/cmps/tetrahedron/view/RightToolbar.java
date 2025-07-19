@@ -16,7 +16,7 @@ import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
 import org.cmps.tetrahedron.view.component.Switch;
-import org.cmps.tetrahedron.viewmodel.Legend;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
 
@@ -107,7 +107,7 @@ public class RightToolbar implements LocalizationListener {
                 StressController.getInstance().applyStress(file);
                 Stress stressModel = StressController.getInstance().getStress();
 
-                Legend.getInstance().updateValuesRange(stressModel.getMinStress(), stressModel.getMaxStress());
+                LegendData.getInstance().updateValuesRange(stressModel.getMinStress(), stressModel.getMaxStress());
                 stressSettings.setVisible(true);
             }
         } catch (ModelValidationException e) {
@@ -133,7 +133,7 @@ public class RightToolbar implements LocalizationListener {
                 ModelController.getInstance().initCustomCharacteristic(file);
                 CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
 
-                Legend.getInstance().updateValuesRange(customModel.getMinValue(), customModel.getMaxValue());
+                LegendData.getInstance().updateValuesRange(customModel.getMinValue(), customModel.getMaxValue());
             }
         } catch (ModelValidationException e) {
             new ErrorDialog(e);

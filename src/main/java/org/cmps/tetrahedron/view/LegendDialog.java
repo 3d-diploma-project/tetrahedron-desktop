@@ -9,14 +9,14 @@ import org.cmps.tetrahedron.model.LegendItemData;
 import org.cmps.tetrahedron.utils.DialogUtils;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.LegendItem;
-import org.cmps.tetrahedron.viewmodel.Legend;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.util.List;
 
 public class LegendDialog {
 
     @FXML
-    private LegendView legend;
+    private Legend legend;
 
     public static void showDialog(double x, double y) {
         DialogPane pane = ResourceReader.readComponent("/view/LegendDialog.fxml", DialogPane.class);
@@ -48,7 +48,7 @@ public class LegendDialog {
             return;
         }
 
-        Legend.getInstance().updateLegendItems(items);
+        LegendData.getInstance().updateLegendItems(items);
 
         //TODO: process all data not just stress
         StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();

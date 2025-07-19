@@ -10,7 +10,7 @@ import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.view.ModelFilesPicker;
-import org.cmps.tetrahedron.viewmodel.Legend;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
 import java.util.*;
@@ -61,7 +61,7 @@ public class ModelController {
     public void initCustomCharacteristic(File customDataFile) throws ModelValidationException {
         customCharacteristic = DataReader.readCustomCharacteristic(customDataFile);
 
-        Legend.getInstance().updateValuesRange(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());
+        LegendData.getInstance().updateValuesRange(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());
 
         customCharacteristic.setColors(matchColorsWithValues(customCharacteristic.getValues()));
         modelColors = customCharacteristic.getColors();
@@ -78,7 +78,7 @@ public class ModelController {
         model.clear();
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
-        Legend.getInstance().resetLegend();
+        LegendData.getInstance().resetLegend();
 
         Platform.runLater(ModelFilesPicker::openDialogWindow);
     }
