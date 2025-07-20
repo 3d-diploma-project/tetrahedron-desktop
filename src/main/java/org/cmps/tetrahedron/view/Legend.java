@@ -62,7 +62,7 @@ public class Legend extends VBox {
             return;
         }
 
-        this.setPadding(new Insets(25, 0, 0, 0));
+        this.setPadding(new Insets(20, 0, 0, 0));
 
         getChildren().clear();
         itemControllers.clear();
