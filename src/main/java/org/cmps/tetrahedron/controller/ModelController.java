@@ -13,9 +13,10 @@ import org.cmps.tetrahedron.view.ModelFilesPicker;
 import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
-import java.util.*;
-
-import static org.cmps.tetrahedron.utils.ColorUtils.matchColorsWithValues;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 public class ModelController {
@@ -28,7 +29,8 @@ public class ModelController {
     private boolean modelReady = false;
     @Getter
     private CustomCharacteristic customCharacteristic;
-    private List<float[]> modelColors = null;
+    @Getter
+    private List<Float> valuesToDisplay = null;
 
     private ModelController() {
         model = Model.builder()
@@ -60,20 +62,24 @@ public class ModelController {
 
     public void initCustomCharacteristic(File customDataFile) throws ModelValidationException {
         customCharacteristic = DataReader.readCustomCharacteristic(customDataFile);
-
-        LegendData.getInstance().updateValuesRange(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());
-
-        customCharacteristic.setColors(matchColorsWithValues(customCharacteristic.getValues()));
-        modelColors = customCharacteristic.getColors();
+        LegendData.getInstance()
+                  .updateValuesRange(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());
+        setValuesToDisplay(customCharacteristic.getValues());
     }
 
-    public void setModelColors(List<float[]> modelColors) {
-        this.modelColors = modelColors;
+    public void setValuesToDisplay(List<Float> valuesToDisplay) {
+        this.valuesToDisplay = valuesToDisplay;
+
         ColorSettings.getInstance().setColoredInSelectedColor(false);
-        ModelController.getInstance().setModelReady(true);
+        modelReady = true;
+
+        LegendData.getInstance().getItems().addListener((e1, e2, e3) -> {
+            modelReady = true;
+        });
     }
 
     public void clearModel() {
+        valuesToDisplay = null;
         modelReady = true;
         model.clear();
 
@@ -85,6 +91,6 @@ public class ModelController {
 
     public void clearDisplacement() {
         model.updateVertices(model.getOriginalVertices());
-        setModelReady(true);
+        modelReady = true;
     }
 }

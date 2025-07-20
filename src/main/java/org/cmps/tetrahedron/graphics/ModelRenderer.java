@@ -17,6 +17,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
 
+import static org.cmps.tetrahedron.utils.ColorUtils.getColorsForValues;
 import static org.cmps.tetrahedron.utils.ShaderLoader.createShader;
 import static org.lwjgl.opengles.GLES30.*;
 
@@ -154,11 +155,10 @@ public class ModelRenderer {
             initVao();
             createNormalsBuffer(modelController.getModel().getNormals());
             modelController.setModelReady(false);
-        }
 
-        if (modelController.getModelColors() != null) {
-            createColorBuffer(modelController.getModelColors());
-            modelController.setModelColors(null);
+            if (modelController.getValuesToDisplay() != null) {
+                createColorBuffer(getColorsForValues(modelController.getValuesToDisplay()));
+            }
         }
 
         glDrawArrays(GL_TRIANGLES, 0, modelController.getFaces().size() * 3);

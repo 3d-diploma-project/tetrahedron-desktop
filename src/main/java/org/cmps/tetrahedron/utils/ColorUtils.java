@@ -9,13 +9,11 @@ import java.util.List;
 
 public class ColorUtils {
 
-    public static List<float[]> matchColorsWithValues(List<Float> values) {
+    public static List<float[]> getColorsForValues(List<Float> values) {
         TreeSet<LegendItemData> legend = new TreeSet<>(LegendData.getInstance().getItems().get());
 
         return values.parallelStream()
-                     .map(value -> legend.ceiling(new LegendItemData(value)))
-                     .filter(Objects::nonNull)
-                     .map(LegendItemData::color)
+                     .map(value -> getColorForValue(legend,value))
                      .toList();
     }
 
@@ -42,5 +40,14 @@ public class ColorUtils {
         }
 
         return colors;
+    }
+
+    private static float[] getColorForValue(TreeSet<LegendItemData> legend, float value) {
+        LegendItemData legendItem = legend.ceiling(new LegendItemData(value));
+        if (legendItem != null) {
+            return legendItem.color();
+        }
+
+        return legend.last().color();
     }
 }
