@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.view.component;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 
@@ -13,6 +14,7 @@ public class Switch {
     @FXML
     private Label label;
 
+    @Getter
     private boolean state;
     Consumer<Boolean> updateState;
 
@@ -20,7 +22,9 @@ public class Switch {
     void onClick() {
         state = !state;
         updateStyle();
-        updateState.accept(state);
+        if (updateState != null) {
+            updateState.accept(state);
+        }
     }
 
     public void setInitialState(String text, Boolean state, Consumer<Boolean> updateState) {
