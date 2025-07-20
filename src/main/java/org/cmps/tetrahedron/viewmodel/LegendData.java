@@ -26,7 +26,7 @@ public class LegendData {
 
     private int colorsCount = 7;
     private LegendTheme theme = RAINBOW;
-    
+
     private float min;
     private float max;
 
@@ -66,7 +66,22 @@ public class LegendData {
     }
 
     public void updateLegendItems(List<LegendItemData> itemData) {
-        items.setValue(itemData);
+        List<LegendItemData> newItems = new ArrayList<>(itemData);
+
+        // set max and min value to not have loses when parsing text from input
+        LegendItemData firstItem = itemData.getFirst().toBuilder().max(max).build();
+        newItems.set(0, firstItem);
+        LegendItemData lastItem = itemData.getLast().toBuilder().min(min).build();
+        newItems.set(itemData.size() - 1, lastItem);
+
+        // preserve currently set colors
+        for (int i = 0; i < itemData.size(); i++) {
+            LegendItemData oldItem = items.get().get(i);
+            LegendItemData newItem = itemData.get(i).toBuilder().color(oldItem.color()).build();
+            newItems.set(i, newItem);
+        }
+
+        items.setValue(newItems);
     }
 
     private void generateLegend() {
