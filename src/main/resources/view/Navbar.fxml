@@ -28,7 +28,7 @@
         <ComboBox fx:id="languageSelector" styleClass="language-selector" onAction="#changeLanguage">
             <items>
                 <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="UA"/>
+                    <String fx:value="UK"/>
                     <String fx:value="EN"/>
                     <String fx:value="DE"/>
                     <String fx:value="PL"/>

@@ -48,9 +48,9 @@ public class LegendDialog {
     @FXML
     private void initialize() {
         if (legend.getItemControllers().isEmpty()) {
-            info.setText("Load some data to display to see legend");
+            info.setText(locale.getString(LocalizationController.LEGEND_BUNDLE, "info-empty-legend"));
         } else {
-            info.setText("Values in ranges should be from the highest to the lowest");
+            info.setText(locale.getString(LocalizationController.LEGEND_BUNDLE, "info-ranges-order"));
         }
 
         legendCountInput.setText(String.valueOf(LegendData.getInstance().getColorsCount()));

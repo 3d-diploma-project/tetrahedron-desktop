@@ -46,7 +46,7 @@
 }
 
 .info-text {
-    -fx-max-width: 200;
+    -fx-max-width: 250;
     -fx-wrap-text: true;
 }
 
