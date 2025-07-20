@@ -49,7 +49,6 @@ public class LegendItem {
 
     public void setEditable(boolean editable) {
         start.setEditable(editable);
-        end.setEditable(editable);
     }
 
     private String toHex(float[] rgbColor) {

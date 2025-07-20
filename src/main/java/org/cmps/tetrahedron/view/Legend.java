@@ -47,6 +47,11 @@ public class Legend extends VBox {
     private void handleLegendUpdate(ObservableValue<? extends List<LegendItemData>> observable,
                                     List<LegendItemData> oldValue,
                                     List<LegendItemData> newValue) {
+        if (editable.get() && !itemControllers.isEmpty()) {
+            // skip regeneration to let user update ranges manually
+            return;
+        }
+
         generateLegendItems(newValue);
         LegendData.getInstance().setVisible(newValue != null);
     }
@@ -69,7 +74,9 @@ public class Legend extends VBox {
                     = ResourceReader.readComponent("/view/component/LegendItem.fxml", VBox.class, LegendItem.class);
             LegendItem itemController = legendItem.getValue();
 
-            itemController.setEditable(editable.getValue());
+            if (i != 0) {
+                itemController.setEditable(editable.getValue());
+            }
             itemController.setStart(itemData.max());
             itemController.setColor(itemData.color());
             if (i == items.size() - 1) {
