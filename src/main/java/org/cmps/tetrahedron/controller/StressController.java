@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.cmps.tetrahedron.utils.ColorUtils.matchColorsWithValues;
-
 @Setter
 public class StressController {
 
@@ -65,8 +63,7 @@ public class StressController {
         stress.setStressToDisplay(stressToDisplay);
         LegendData.getInstance().updateValuesRange(stress.getMinStress(), stress.getMaxStress());
 
-        stress.setColors(matchColorsWithValues(stressToDisplay));
-        ModelController.getInstance().setModelColors(stress.getColors());
+        ModelController.getInstance().setValuesToDisplay(stressToDisplay);
     }
 
     private float calculateStress(float[] stressValues, StressDisplayOption option) {

@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 public class CustomCharacteristic {
     private List<Float> values;
-    private List<float[]> colors;
     @Builder.Default
     private float minValue = Float.MAX_VALUE;
     @Builder.Default

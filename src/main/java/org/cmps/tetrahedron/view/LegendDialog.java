@@ -6,8 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.cmps.tetrahedron.controller.LocalizationController;
-import org.cmps.tetrahedron.controller.StressController;
-import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.LegendItemData;
 import org.cmps.tetrahedron.utils.DialogUtils;
@@ -41,7 +39,6 @@ public class LegendDialog {
 
         DialogPane pane = ResourceReader.readComponent("/view/LegendDialog.fxml", DialogPane.class,
                                                        ResourceBundle.getBundle(LocalizationController.LEGEND_BUNDLE));
-
         DialogUtils.displayDialogOnRight(pane, x, y);
     }
 
@@ -74,7 +71,6 @@ public class LegendDialog {
         }
 
         if (legendItemsCountChanged || legendItemsChanged) {
-            displayUpdatedLegend();
             closeDialog();
         }
     }
@@ -86,16 +82,6 @@ public class LegendDialog {
 
     private LegendItemData mapToLegendItem(LegendItem legendItem) {
         return new LegendItemData(legendItem.getRgbColor(), legendItem.getMin(), legendItem.getMax());
-    }
-
-    private void displayUpdatedLegend() {
-        if (legend.getItemControllers().isEmpty()) {
-            return;
-        }
-
-        //TODO: update also when other characteristic is shown
-        StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
-        StressController.getInstance().processStressData(displayOption);
     }
 
     private boolean updateLegendItemsCount() {
