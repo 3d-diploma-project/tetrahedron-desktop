@@ -61,6 +61,9 @@ public class LegendData {
     }
 
     public void resetLegend() {
+        min = 0;
+        max = 0;
+
         visible.set(false);
         items.setValue(null);
     }
