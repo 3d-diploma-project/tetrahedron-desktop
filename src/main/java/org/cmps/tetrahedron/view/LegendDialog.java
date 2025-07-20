@@ -133,10 +133,10 @@ public class LegendDialog {
 
         boolean legendItemsValid = validateLegendItems(items);
         if  (!legendItemsValid) {
-            info.getStyleClass().add("legend-error");
+            info.getStyleClass().add("info-text-error");
             return false;
         } else {
-            info.getStyleClass().removeAll("legend-error");
+            info.getStyleClass().removeAll("info-text-error");
         }
 
         LegendData.getInstance().updateLegendItems(items);
