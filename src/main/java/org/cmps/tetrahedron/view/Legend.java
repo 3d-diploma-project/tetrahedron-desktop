@@ -23,8 +23,6 @@ public class Legend extends VBox {
     private List<LegendItem> itemControllers = new ArrayList<>();
 
     public Legend() {
-        this.setPadding(new Insets(25, 0, 0, 0));
-
         visibleProperty().bind(LegendData.getInstance().getVisible());
         var itemsProperty = LegendData.getInstance().getItems();
         itemsProperty.addListener(this::handleLegendUpdate);
@@ -55,8 +53,11 @@ public class Legend extends VBox {
 
     private void generateLegendItems(List<LegendItemData> items) {
         if (items == null) {
+            this.setPadding(new Insets(0));
             return;
         }
+
+        this.setPadding(new Insets(25, 0, 0, 0));
 
         getChildren().clear();
         itemControllers.clear();
