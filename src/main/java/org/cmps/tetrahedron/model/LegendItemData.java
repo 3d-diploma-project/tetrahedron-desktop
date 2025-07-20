@@ -1,5 +1,8 @@
 package org.cmps.tetrahedron.model;
 
+import lombok.Builder;
+
+@Builder(toBuilder = true)
 public record LegendItemData(float[] color, float min, float max) implements Comparable<LegendItemData> {
 
     public LegendItemData(float max) {

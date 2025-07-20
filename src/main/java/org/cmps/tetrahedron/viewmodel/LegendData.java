@@ -1,6 +1,9 @@
 package org.cmps.tetrahedron.viewmodel;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import lombok.Getter;
 import org.cmps.tetrahedron.enums.LegendTheme;
 import org.cmps.tetrahedron.model.LegendItemData;
@@ -46,12 +49,15 @@ public class LegendData {
 
     public void updateColorsCount(int colorsCount) {
         this.colorsCount = colorsCount;
-        regenerateLegend();
+        if (items.getValue() == null) {
+            return;
+        }
+        generateLegend();
     }
 
     public void updateTheme(LegendTheme theme) {
         this.theme = theme;
-        regenerateLegend();
+        regenerateColors();
     }
 
     public void resetLegend() {
@@ -61,13 +67,6 @@ public class LegendData {
 
     public void updateLegendItems(List<LegendItemData> itemData) {
         items.setValue(itemData);
-    }
-
-    private void regenerateLegend() {
-        if (items.getValue() == null) {
-            return;
-        }
-        generateLegend();
     }
 
     private void generateLegend() {
@@ -92,5 +91,24 @@ public class LegendData {
         }
 
         items.setValue(legendItemData);
+    }
+
+    private void regenerateColors() {
+        if (items.getValue() == null) {
+            return;
+        }
+
+        var colors = theme == RAINBOW ? getHSVColors(colorsCount) : getGrayColors(colorsCount);
+        List<LegendItemData> legendItems = new ArrayList<>(items.getValue());
+
+        for (int i = 0; i < colorsCount; i++) {
+            LegendItemData item = legendItems.get(i)
+                                             .toBuilder()
+                                             .color(colors.get(i))
+                                             .build();
+            legendItems.set(i, item);
+        }
+
+        items.setValue(legendItems);
     }
 }
