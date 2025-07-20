@@ -41,7 +41,7 @@ public class LegendData {
 
         this.min = min;
         this.max = max;
-        regenerateLegend();
+        generateLegend();
     }
 
     public void updateColorsCount(int colorsCount) {
@@ -64,6 +64,13 @@ public class LegendData {
     }
 
     private void regenerateLegend() {
+        if (items.getValue() == null) {
+            return;
+        }
+        generateLegend();
+    }
+
+    private void generateLegend() {
         List<LegendItemData> legendItemData = new ArrayList<>();
 
         var colors = theme == RAINBOW ? getHSVColors(colorsCount) : getGrayColors(colorsCount);
