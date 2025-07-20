@@ -85,7 +85,7 @@ public class LegendDialog {
     }
 
     private LegendItemData mapToLegendItem(LegendItem legendItem) {
-        return new LegendItemData(legendItem.getRgbColor(), legendItem.getEnd(), legendItem.getStart());
+        return new LegendItemData(legendItem.getRgbColor(), legendItem.getMin(), legendItem.getMax());
     }
 
     private void displayUpdatedLegend() {

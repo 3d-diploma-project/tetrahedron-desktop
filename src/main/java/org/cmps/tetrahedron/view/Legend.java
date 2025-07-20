@@ -77,10 +77,10 @@ public class Legend extends VBox {
             if (i != 0) {
                 itemController.setEditable(editable.getValue());
             }
-            itemController.setStart(itemData.max());
+            itemController.setMax(itemData.max());
             itemController.setColor(itemData.color());
             if (i == items.size() - 1) {
-                itemController.setEnd(itemData.min());
+                itemController.setMin(itemData.min());
             }
 
             itemControllers.add(itemController);

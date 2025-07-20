@@ -8,30 +8,30 @@ import lombok.Getter;
 public class LegendItem {
 
     @FXML
-    private TextField start;
+    private TextField max;
     @FXML
-    private TextField end;
+    private TextField min;
     @FXML
     private HBox color;
     @Getter
     private float[] rgbColor;
 
-    public void setStart(float startValue) {
-        start.setText(String.format("%.2e", startValue));
+    public void setMax(float startValue) {
+        max.setText(String.format("%.2e", startValue));
     }
 
-    public float getStart() {
-        return parseNumber(start.getText());
+    public float getMax() {
+        return parseNumber(max.getText());
     }
 
-    public void setEnd(float endValue) {
-        end.setText(String.format("%.2e", endValue));
-        end.setVisible(true);
+    public void setMin(float endValue) {
+        min.setText(String.format("%.2e", endValue));
+        min.setVisible(true);
         color.getStyleClass().remove("color-border");
     }
 
-    public float getEnd() {
-        return parseNumber(end.getText());
+    public float getMin() {
+        return parseNumber(min.getText());
     }
 
     private float parseNumber(String number) {
@@ -48,7 +48,7 @@ public class LegendItem {
     }
 
     public void setEditable(boolean editable) {
-        start.setEditable(editable);
+        max.setEditable(editable);
     }
 
     private String toHex(float[] rgbColor) {
