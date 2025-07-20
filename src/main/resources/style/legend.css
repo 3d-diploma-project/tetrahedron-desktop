@@ -1,0 +1,83 @@
+.dialog-pane {
+    -fx-background-color: TRANSPARENT;
+    -fx-padding: 10px 10px;
+}
+
+.content {
+    -fx-background-color: #e7edf2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 20px 16px;
+    -fx-font-family: "Geologica Roman";
+}
+
+.main-label {
+    -fx-font-family: "Geologica Roman Medium";
+    -fx-font-size: 13px;
+    -fx-text-fill: #0e0e0e;
+}
+
+.secondary-label {
+    -fx-font-family: "Geologica Roman";
+    -fx-font-size: 13px;
+    -fx-text-fill: #0e0e0e;
+}
+
+.third-label {
+    -fx-font-family: "Geologica Roman Light";
+    -fx-font-size: 10px;
+    -fx-text-fill: #727272;
+}
+
+.text-field {
+    -fx-min-width: 58px;
+    -fx-max-width: 58px;
+    -fx-min-height: 18px;
+    -fx-max-height: 18px;
+    -fx-border-radius: 2px;
+    -fx-background-color: white;
+    -fx-alignment: center;
+    -fx-padding: 2px 8px;
+}
+
+.text-field:hover {
+    -fx-background-color: #e5e5e6;
+}
+
+.info-text {
+    -fx-max-width: 200;
+    -fx-wrap-text: true;
+}
+
+.info-text-error {
+    -fx-text-fill: red;
+}
+
+.save-button {
+    -fx-background-color: #1e0094;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 66px;
+    -fx-margin: 8px 16px;
+    -fx-pref-width: 92px;
+    -fx-pref-height: 32px;
+
+    -fx-border-color: #1e0094;
+    -fx-border-radius: 66px;
+    -fx-border-width: 1px;
+}
+
+.save-button:hover,
+.save-button:focused {
+    -fx-background-color: #e7edf2;
+    -fx-border-color: #1e0094;
+    -fx-text-fill: #1e0094;
+}
+
+.save-button:pressed {
+    -fx-background-color: #1d0070;
+    -fx-border-color: #1d0070;
+    -fx-text-fill: white;
+}

@@ -6,16 +6,40 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.cmps.tetrahedron.view.Legend?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            stylesheets="@/style/deformation-scale-dialog.css"
+            stylesheets="@/style/legend.css"
             fx:controller="org.cmps.tetrahedron.view.LegendDialog">
     <content>
         <VBox spacing="14">
-            <Legend fx:id="legend" editable="true"/>
+            <VBox spacing="14">
+                <HBox alignment="CENTER">
+                    <Label styleClass="main-label" text="%legend-label"/>
+                </HBox>
 
-            <HBox alignment="CENTER" styleClass="button-box">
-                <Button text="save" styleClass="save-button" onAction="#updateLegend"/>
+                <VBox spacing="10">
+                    <HBox spacing="5">
+                        <Label styleClass="secondary-label" text="%legend-count" wrapText="true"/>
+                        <Pane HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="legendCountInput" styleClass="text-field" text=" "/>
+                    </HBox>
+
+                    <VBox spacing="2">
+                        <fx:include fx:id="legendTheme" source="./component/Switch.fxml"/>
+                        <Label styleClass="third-label" text="%legend-theme-secondary"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+
+            <Legend fx:id="legend" editable="true"/>
+            <Label fx:id="info" styleClass="info-text"/>
+
+            <HBox alignment="CENTER">
+                <Button styleClass="save-button" text="%save-button" onAction="#updateLegendSettings"/>
             </HBox>
         </VBox>
     </content>
