@@ -4,17 +4,18 @@ import javafx.application.Platform;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.exception.InternalValidationException;
+import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.utils.DataReader;
-import org.cmps.tetrahedron.utils.LegendUtils;
-import org.cmps.tetrahedron.exception.ModelValidationException;
-import org.cmps.tetrahedron.view.LegendView;
 import org.cmps.tetrahedron.view.ModelFilesPicker;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
 import java.util.*;
+
+import static org.cmps.tetrahedron.utils.ColorUtils.matchColorsWithValues;
 
 @Getter
 public class ModelController {
@@ -31,18 +32,18 @@ public class ModelController {
 
     private ModelController() {
         model = Model.builder()
-                .vertices(new HashMap<>())
-                .faces(new ArrayList<>())
-                .build();
+                     .vertices(new HashMap<>())
+                     .faces(new ArrayList<>())
+                     .build();
     }
 
     public void initModelData(File nodes, File indices) throws ModelValidationException, InternalValidationException {
         Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
 
         model = Model.builder()
-                .vertices(vertices)
-                .faces(DataReader.readIndexesAndConvertToFaces(indices, vertices))
-                .build();
+                     .vertices(vertices)
+                     .faces(DataReader.readIndexesAndConvertToFaces(indices, vertices))
+                     .build();
         modelReady = true;
     }
 
@@ -60,12 +61,9 @@ public class ModelController {
     public void initCustomCharacteristic(File customDataFile) throws ModelValidationException {
         customCharacteristic = DataReader.readCustomCharacteristic(customDataFile);
 
-        TreeMap<Float, Integer> legend = LegendUtils.buildLegend(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());
-        customCharacteristic.setColors(customCharacteristic.getValues()
-                .stream()
-                .map(value -> LegendUtils.getColorsLegend().get(legend.get(legend.floorKey(value))))
-                .toList());
+        LegendData.getInstance().updateValuesRange(customCharacteristic.getMinValue(), customCharacteristic.getMaxValue());
 
+        customCharacteristic.setColors(matchColorsWithValues(customCharacteristic.getValues()));
         modelColors = customCharacteristic.getColors();
     }
 
@@ -80,7 +78,7 @@ public class ModelController {
         model.clear();
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
-        LegendView.getInstance().reset();
+        LegendData.getInstance().resetLegend();
 
         Platform.runLater(ModelFilesPicker::openDialogWindow);
     }

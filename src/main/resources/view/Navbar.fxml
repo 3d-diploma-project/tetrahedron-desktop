@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -30,7 +28,7 @@
         <ComboBox fx:id="languageSelector" styleClass="language-selector" onAction="#changeLanguage">
             <items>
                 <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="UA"/>
+                    <String fx:value="UK"/>
                     <String fx:value="EN"/>
                     <String fx:value="DE"/>
                     <String fx:value="PL"/>

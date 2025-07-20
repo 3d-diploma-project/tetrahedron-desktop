@@ -1,12 +1,11 @@
 package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.utils.DataReader;
-import org.cmps.tetrahedron.view.LegendView;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
 import java.util.*;
@@ -39,7 +38,7 @@ public class DeformationController {
         System.out.println("[DEBUG] Deformations loaded: " + lastAppliedDeformations.size());
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
-        LegendView.getInstance().setVisible(false);
+        LegendData.getInstance().setVisible(false);
         applyDeformationScale(DEFAULT_SCALE, null);
     }
 

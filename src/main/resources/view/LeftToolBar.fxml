@@ -34,6 +34,12 @@
         </graphic>
     </Button>
 
+    <Button styleClass="button" fx:id="legendSettings" onMouseClicked="#clickOnLegendSettings">
+        <graphic>
+            <fx:include source="/icon/Legend.fxml"/>
+        </graphic>
+    </Button>
+
     <Button styleClass="button" fx:id="deleteModel" onMouseClicked="#clickOnDelete">
         <graphic>
             <fx:include source="/icon/Delete.fxml"/>

@@ -16,6 +16,7 @@ import org.cmps.tetrahedron.model.Stress;
 
 import javafx.scene.input.MouseEvent;
 import org.cmps.tetrahedron.view.component.Switch;
+import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
 
@@ -95,19 +96,18 @@ public class RightToolbar implements LocalizationListener {
     }
 
     @FXML
-    private void selectStressFile(MouseEvent mouseEvent) {
+    private void selectStressFile() {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
-        LegendView legendView = LegendView.getInstance();
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
                 StressController.getInstance().applyStress(file);
                 Stress stressModel = StressController.getInstance().getStress();
 
-                legendView.updateLegend(stressModel.getMinStress(), stressModel.getMaxStress());
+                LegendData.getInstance().updateValuesRange(stressModel.getMinStress(), stressModel.getMaxStress());
                 stressSettings.setVisible(true);
             }
         } catch (ModelValidationException e) {
@@ -122,19 +122,18 @@ public class RightToolbar implements LocalizationListener {
     }
 
     @FXML
-    private void selectCustomCharacteristicFile(MouseEvent mouseEvent) {
+    private void selectCustomCharacteristicFile() {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
         File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
 
-        LegendView legendView = LegendView.getInstance();
         try {
             if (file != null) {
                 fileChooserController.saveLastUsedDirectory(file);
                 ModelController.getInstance().initCustomCharacteristic(file);
                 CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
 
-                legendView.updateLegend(customModel.getMinValue(), customModel.getMaxValue());
+                LegendData.getInstance().updateValuesRange(customModel.getMinValue(), customModel.getMaxValue());
             }
         } catch (ModelValidationException e) {
             new ErrorDialog(e);

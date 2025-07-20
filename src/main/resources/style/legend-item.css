@@ -1,0 +1,38 @@
+.item {
+    -fx-pref-height: 25;
+    -fx-min-height: 25;
+}
+
+.color {
+    -fx-pref-width: 80;
+    -fx-min-width: 80;
+    -fx-pref-height: 25;
+    -fx-min-height: 25;
+
+    -fx-translate-y: -8;
+}
+
+.color-border {
+    -fx-border-color: black;
+    -fx-border-width: 0 0 2 0;
+}
+
+.label {
+    -fx-font-family: "Geologica Roman";
+    -fx-font-size: 10;
+
+    -fx-pref-width: 55;
+    -fx-max-width: 55;
+    -fx-pref-height: 17;
+    -fx-max-height: 17;
+
+    -fx-background-color: #FAFAFA;
+    -fx-padding: 2;
+    -fx-border-color: black;
+    -fx-border-width: 0.4;
+    -fx-alignment: center;
+}
+
+.end-label {
+    -fx-translate-y: -20;
+}

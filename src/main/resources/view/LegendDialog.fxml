@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.cmps.tetrahedron.view.Legend?>
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@/style/legend.css"
+            fx:controller="org.cmps.tetrahedron.view.LegendDialog">
+    <content>
+        <VBox spacing="14">
+            <HBox alignment="CENTER">
+                <Label styleClass="main-label" text="%legend-label"/>
+            </HBox>
+
+            <VBox spacing="10">
+                <HBox spacing="5">
+                    <Label styleClass="secondary-label" text="%legend-count" wrapText="true"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="legendCountInput" styleClass="text-field" text=" "/>
+                </HBox>
+
+                <fx:include fx:id="legendTheme" source="./component/Switch.fxml"/>
+
+                <VBox>
+                    <Legend fx:id="legend" editable="true"/>
+                    <Label fx:id="info" styleClass="info-text"/>
+                </VBox>
+            </VBox>
+
+
+            <HBox alignment="CENTER">
+                <Button styleClass="save-button" text="%save-button" onAction="#updateLegendSettings"/>
+            </HBox>
+        </VBox>
+    </content>
+</DialogPane>

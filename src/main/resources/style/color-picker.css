@@ -61,27 +61,6 @@
   -fx-text-fill: #0e0e0e;
 }
 
-.third-label {
-  -fx-font-family: "Geologica Roman Light";
-  -fx-font-size: 10px;
-  -fx-text-fill: #727272;
-}
-
-.text-field {
-  -fx-min-width: 58px;
-  -fx-max-width: 58px;
-  -fx-min-height: 18px;
-  -fx-max-height: 18px;
-  -fx-border-radius: 2px;
-  -fx-background-color: white;
-  -fx-alignment: center;
-  -fx-padding: 2px 8px;
-}
-
-.text-field:hover {
-  -fx-background-color: #e5e5e6;
-}
-
 .save-button {
   -fx-background-color: #1e0094;
   -fx-text-fill: white;

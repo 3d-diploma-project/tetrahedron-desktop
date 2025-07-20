@@ -18,35 +18,9 @@
                 <fx:include fx:id="backgroundColorPicker" source="component/ColorEditor.fxml"/>
             </VBox>
 
-            <VBox spacing="14">
-                <HBox alignment="CENTER">
-                    <Label styleClass="main-label" text="%legend-label"/>
-                </HBox>
-
-                <VBox spacing="10">
-                    <HBox spacing="44">
-                        <VBox minWidth="95" maxWidth="95" alignment="CENTER_LEFT">
-                            <Label styleClass="secondary-label" text="%legend-count" wrapText="true"/>
-                        </VBox>
-
-                        <TextField fx:id="legendCountInput" styleClass="text-field" text=" "/>
-                    </HBox>
-
-                    <VBox spacing="2">
-                        <fx:include fx:id="elementGrid" source="./component/Switch.fxml"/>
-
-                        <HBox>
-                            <Label styleClass="third-label" text="%legend-theme-secondary"/>
-                        </HBox>
-                    </VBox>
-                </VBox>
-            </VBox>
-
             <HBox alignment="CENTER">
                 <Button fx:id="saveButton" styleClass="save-button" text="%save-button" onAction="#applyColor"/>
             </HBox>
-
         </VBox>
     </content>
-
 </DialogPane>
