@@ -93,6 +93,7 @@ public class LegendDialog {
             return;
         }
 
+        //TODO: update also when other characteristic is shown
         StressDisplayOption displayOption = StressController.getInstance().getStress().getDisplayOption();
         StressController.getInstance().processStressData(displayOption);
     }
