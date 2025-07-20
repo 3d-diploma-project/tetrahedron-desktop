@@ -28,10 +28,7 @@
                         <TextField fx:id="legendCountInput" styleClass="text-field" text=" "/>
                     </HBox>
 
-                    <VBox spacing="2">
-                        <fx:include fx:id="legendTheme" source="./component/Switch.fxml"/>
-                        <Label styleClass="third-label" text="%legend-theme-secondary"/>
-                    </VBox>
+                    <fx:include fx:id="legendTheme" source="./component/Switch.fxml"/>
                 </VBox>
             </VBox>
 

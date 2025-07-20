@@ -56,7 +56,7 @@ public class LegendDialog {
         legendCountInput.setText(String.valueOf(LegendData.getInstance().getColorsCount()));
 
         legendThemeController.setInitialState(
-                locale.getString(LocalizationController.COLOR_PICKER_BUNDLE, "legend-theme"),
+                locale.getString(LocalizationController.LEGEND_BUNDLE, "legend-grey-theme"),
                 LegendData.getInstance().getTheme() == GREY,
                 null
         );
