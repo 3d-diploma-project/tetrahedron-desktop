@@ -57,7 +57,20 @@ public class LegendData {
 
     public void updateTheme(LegendTheme theme) {
         this.theme = theme;
-        regenerateColors();
+
+        if (items.getValue() == null) {
+            return;
+        }
+
+        var colors = theme == RAINBOW ? getHSVColors(colorsCount) : getGrayColors(colorsCount);
+        List<LegendItemData> legendItems = new ArrayList<>(items.getValue());
+
+        for (int i = 0; i < colorsCount; i++) {
+            LegendItemData item = legendItems.get(i).toBuilder().color(colors.get(i)).build();
+            legendItems.set(i, item);
+        }
+
+        items.setValue(legendItems);
     }
 
     public void resetLegend() {
@@ -109,24 +122,5 @@ public class LegendData {
         }
 
         items.setValue(legendItemData);
-    }
-
-    private void regenerateColors() {
-        if (items.getValue() == null) {
-            return;
-        }
-
-        var colors = theme == RAINBOW ? getHSVColors(colorsCount) : getGrayColors(colorsCount);
-        List<LegendItemData> legendItems = new ArrayList<>(items.getValue());
-
-        for (int i = 0; i < colorsCount; i++) {
-            LegendItemData item = legendItems.get(i)
-                                             .toBuilder()
-                                             .color(colors.get(i))
-                                             .build();
-            legendItems.set(i, item);
-        }
-
-        items.setValue(legendItems);
     }
 }
