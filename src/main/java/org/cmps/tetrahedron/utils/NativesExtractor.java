@@ -7,7 +7,6 @@ import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class NativesExtractor {
 
@@ -50,35 +49,16 @@ public class NativesExtractor {
 
     private static class TemporaryDirectory {
 
-        private static final String TETRAHEDRON_PREFIX = "tetrahedron-";
+        private static final String TETRAHEDRON_PATH = "tetrahedron-natives";
 
         @Getter
         final Path path;
 
         public TemporaryDirectory() throws IOException {
-            this.path = Files.createTempDirectory(TETRAHEDRON_PREFIX);
+            Path tempDir = Path.of(System.getProperty("java.io.tmpdir")).resolve(TETRAHEDRON_PATH);
 
-            if (Platform.get() == Platform.WINDOWS) {
-                deleteOldInstancesOnStart();
-            } else {
-                markDeleteOnExit();
-            }
-        }
-
-        private void deleteOldInstancesOnStart() {
-            Path tempDirectory = this.path.getParent();
-
-            try (Stream<Path> paths = Files.walk(tempDirectory)) {
-                paths.filter(Files::isDirectory)
-                        .filter(path -> path.getFileName().toString().startsWith(TETRAHEDRON_PREFIX))
-                        .forEach(this::delete);
-            } catch (IOException e) {
-               throw new RuntimeException(e);
-            }
-        }
-
-        private void markDeleteOnExit() {
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> this.delete(this.path)));
+            delete(tempDir);
+            this.path = Files.createDirectory(tempDir);
         }
 
         private void delete(Path path) {
