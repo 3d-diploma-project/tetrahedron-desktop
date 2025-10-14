@@ -1,5 +1,5 @@
 #version 300 es
-precision mediump float;
+precision highp float;
 
 const vec3 edgeColor = vec3(0.918, 0.956, 1.0);
 
@@ -10,11 +10,33 @@ uniform mat4 modelMatrix;
 uniform int showElementMesh;
 uniform int showLight;
 uniform int coloredInSelectedColor;
+uniform int isDepthReading;
 uniform vec3 modelColor;
 
 in vec3 fragmentColor;
 in vec3 barycentricCoords;
 in vec3 triangleNormal;
+in float depth;
+
+// Packs a float value into a 4-component vector of 8-bit values.
+// This allows storing high precision data in a standard RGBA8 texture.
+vec4 packDepth(const in float depth) {
+    // These constants are used to shift the bits of the float
+    const vec4 bitShift = vec4(1.0, 255.0, 255.0 * 255.0, 255.0 * 255.0 * 255.0);
+    const vec4 bitMask  = vec4(1.0/255.0, 1.0/255.0, 1.0/255.0, 0.0);
+
+    // Multiply the depth by the bit shifts, then get the fractional part.
+    // This isolates the bits for each channel.
+    vec4 res = fract(depth * bitShift);
+
+    // The `res -= res.xxyz * bitMask` step is crucial. It subtracts the
+    // "carried-over" part from the higher-order components.
+    // For example, res.y (the green channel) contains the value for its
+    // byte, but also a fractional part of what's in res.x. This removes it.
+    res -= res.xxyz * bitMask;
+
+    return res;
+}
 
 out vec4 color;
 
@@ -55,5 +77,10 @@ void main(void) {
     pixelColor = calculateLighting(pixelColor);
   }
 
-  color = vec4(pixelColor, 1.0);
+  if (isDepthReading == 1) {
+    vec4 packedDepth = packDepth(depth);
+    color = vec4(packedDepth.z, packedDepth.y, packedDepth.x, packedDepth.a);
+  } else {
+    color = vec4(pixelColor, 1.0);
+  }
 }
