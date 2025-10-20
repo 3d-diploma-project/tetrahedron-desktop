@@ -10,6 +10,7 @@ uniform mat4 modelMatrix;
 uniform int showElementMesh;
 uniform int showLight;
 uniform int coloredInSelectedColor;
+// If this is set to 1 shader will render depth value packed in 4 channels (RGBA) instead of a color
 uniform int isDepthReading;
 uniform vec3 modelColor;
 

@@ -82,6 +82,7 @@ public class ModelRenderer {
 
         VertexInfoController vertexInfoController = VertexInfoController.getInstance();
         if (vertexInfoController.isClicked()) {
+            // Reading depth value packed as 4 channel color (RGBA)
             ByteBuffer depthBuffer = BufferUtils.createByteBuffer(4);
             glReadPixels(vertexInfoController.getX(), vertexInfoController.getY(),
                     1, 1, GL_BGRA_EXT, GL_UNSIGNED_BYTE, depthBuffer);
@@ -116,8 +117,6 @@ public class ModelRenderer {
 
         // Combine the channels back into a single float value.
         // Each successive term represents finer precision bits of the depth value.
-        //
-        // Result is typically between 0.0 and 1.0 (slightly above 1.0 if all 255).
         return vecR
                 + vecG / 255.0f
                 + vecB / (255.0f * 255.0f)
