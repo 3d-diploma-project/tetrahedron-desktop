@@ -13,12 +13,13 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.List;
 
 import static org.cmps.tetrahedron.utils.ColorUtils.getColorsForValues;
 import static org.cmps.tetrahedron.utils.ShaderLoader.createShader;
+import static org.lwjgl.opengles.EXTTextureFormatBGRA8888.GL_BGRA_EXT;
 import static org.lwjgl.opengles.GLES30.*;
 
 /**
@@ -42,6 +43,7 @@ public class ModelRenderer {
     private int modelColor;
     private int showElementMesh;
     private int showLight;
+    private int isDepthReading;
 
     private final Matrix4f modelMatrix = new Matrix4f();
     private final Matrix4f viewMatrix = new Matrix4f();
@@ -80,16 +82,45 @@ public class ModelRenderer {
 
         VertexInfoController vertexInfoController = VertexInfoController.getInstance();
         if (vertexInfoController.isClicked()) {
-            IntBuffer depthBuffer = BufferUtils.createIntBuffer(1);
+            // Reading depth value packed as 4 channel color (RGBA)
+            ByteBuffer depthBuffer = BufferUtils.createByteBuffer(4);
             glReadPixels(vertexInfoController.getX(), vertexInfoController.getY(),
-                    1, 1, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, depthBuffer);
+                    1, 1, GL_BGRA_EXT, GL_UNSIGNED_BYTE, depthBuffer);
 
-            long unsignedDepth = Integer.toUnsignedLong(depthBuffer.get(0));
-            long maxUnsignedInt = Integer.toUnsignedLong(-1);
-            float normalizedDepth = (float) unsignedDepth / maxUnsignedInt;
+            float depth = unpackDepth(depthBuffer);
 
-            vertexInfoController.updateVertexInfoToDisplay(normalizedDepth);
+            vertexInfoController.updateVertexInfoToDisplay(depth);
+            paintGL();
         }
+    }
+
+    /**
+     * Reconstructs a floating-point depth value from four 8-bit RGBA components.
+     * <p>
+     * This reverses the operation of a typical GLSL "pack depth into RGBA" shader,
+     * which spreads a 32-bit float across four 8-bit channels.
+     */
+    private float unpackDepth(ByteBuffer buffer) {
+        // Read four unsigned bytes (0–255) from the buffer in RGBA order.
+        // '& 0xFF' converts the signed Java byte (-128..127) to an unsigned int (0..255).
+        int r = buffer.get() & 0xFF;
+        int g = buffer.get() & 0xFF;
+        int b = buffer.get() & 0xFF;
+        int a = buffer.get() & 0xFF;
+
+        // Normalize each byte to [0, 1] by dividing by 255.0f.
+        // This matches how the shader encodes the values as normalized floats.
+        float vecR = r / 255.0f;
+        float vecG = g / 255.0f;
+        float vecB = b / 255.0f;
+        float vecA = a / 255.0f;
+
+        // Combine the channels back into a single float value.
+        // Each successive term represents finer precision bits of the depth value.
+        return vecR
+                + vecG / 255.0f
+                + vecB / (255.0f * 255.0f)
+                + vecA / (255.0f * 255.0f * 255.0f);
     }
 
     private void updateMatrix(float zoomFactor, float x, float y) {
@@ -257,6 +288,7 @@ public class ModelRenderer {
         modelColor = glGetUniformLocation(program, "modelColor");
         showElementMesh = glGetUniformLocation(program, "showElementMesh");
         showLight = glGetUniformLocation(program, "showLight");
+        isDepthReading  = glGetUniformLocation(program, "isDepthReading");
     }
 
     private void initColors() {
@@ -269,5 +301,8 @@ public class ModelRenderer {
     private void initModelSettings() {
         glUniform1i(showElementMesh, ModelViewSettings.getInstance().isShowElementMesh() ? 1 : 0);
         glUniform1i(showLight, ModelViewSettings.getInstance().isShowLight() ? 1 : 0);
+
+        VertexInfoController vertexInfoController = VertexInfoController.getInstance();
+        glUniform1i(isDepthReading, vertexInfoController.isClicked() ? 1 : 0);
     }
 }
