@@ -39,6 +39,11 @@ public class Legend extends VBox {
 
     public final boolean isEditable() { return editable.getValue(); }
 
+    /**
+     * Used by JavaFX to open legend menu.
+     *
+     * @param value - value to set for editable flag
+     */
     public final void setEditable(boolean value) {
         editable.setValue(value);
         generateLegendItems(LegendData.getInstance().getItems().get());
