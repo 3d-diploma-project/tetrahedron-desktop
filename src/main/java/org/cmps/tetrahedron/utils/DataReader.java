@@ -3,7 +3,7 @@ package org.cmps.tetrahedron.utils;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
-import org.cmps.tetrahedron.view.WarningDialog;
+import org.cmps.tetrahedron.view.common.WarningDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -9,7 +9,7 @@ import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.utils.DataReader;
-import org.cmps.tetrahedron.view.ModelFilesPicker;
+import org.cmps.tetrahedron.view.model.ModelFilesPickerDialog;
 import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
@@ -86,7 +86,7 @@ public class ModelController {
         ColorSettings.getInstance().setColoredInSelectedColor(true);
         LegendData.getInstance().resetLegend();
 
-        Platform.runLater(ModelFilesPicker::openDialogWindow);
+        Platform.runLater(ModelFilesPickerDialog::openDialogWindow);
     }
 
     public void clearDisplacement() {

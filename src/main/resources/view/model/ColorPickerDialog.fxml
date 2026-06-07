@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cmps.tetrahedron.view.model.ColorPickerDialog"
+            stylesheets="@/style/color-picker.css">
+    <content>
+        <VBox spacing="10">
+            <VBox spacing="14">
+                <HBox alignment="CENTER">
+                    <Label styleClass="main-label" text="%model-label"/>
+                </HBox>
+
+                <fx:include fx:id="modelColorPicker" source="component/ColorEditor.fxml"/>
+                <fx:include fx:id="backgroundColorPicker" source="component/ColorEditor.fxml"/>
+            </VBox>
+
+            <HBox alignment="CENTER">
+                <Button fx:id="saveButton" styleClass="save-button" text="%save-button" onAction="#applyColor"/>
+            </HBox>
+        </VBox>
+    </content>
+</DialogPane>

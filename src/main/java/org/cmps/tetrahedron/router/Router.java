@@ -1,30 +1,20 @@
 package org.cmps.tetrahedron.router;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.cmps.tetrahedron.Tetrahedron;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.MouseController;
-import org.cmps.tetrahedron.graphics.ModelView;
 import org.cmps.tetrahedron.utils.ResourceReader;
-import org.cmps.tetrahedron.view.InfoPanel;
-import org.cmps.tetrahedron.view.Legend;
+import org.cmps.tetrahedron.view.model.ModelPage;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/**
- * TODO: add description.
- *
- * @author Mariia Borodin (HappyMary16)
- * @since 1.0
- */
 public class Router {
 
     @Getter
@@ -73,27 +63,6 @@ public class Router {
 
     private Parent getModelPage() {
         Locale.setDefault(locale.getCurrentLocale());
-        HBox navbar = ResourceReader.readComponent("/view/Navbar.fxml", HBox.class);
-
-        VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
-        Legend legend = new Legend();
-        Pane pane = new Pane();
-        HBox.setHgrow(pane, Priority.ALWAYS);
-        VBox rightToolbar = ResourceReader.readComponent("/view/RightToolbar.fxml", VBox.class,
-                                                         ResourceBundle.getBundle("i18n.right-toolbar"));
-
-        HBox mainBlock = new HBox(30, instrumentSidebar, legend, pane, rightToolbar);
-        mainBlock.setPadding(new Insets(0, 15, 0, 15));
-        mainBlock.setAlignment(Pos.CENTER);
-        mainBlock.setFillHeight(false);
-        VBox.setVgrow(mainBlock, Priority.ALWAYS);
-
-        InfoPanel infoPanel = InfoPanel.getInstance();
-        infoPanel.setPadding(new Insets(0, 0, 30, 0));
-
-        VBox controls = new VBox(navbar, mainBlock, infoPanel);
-        controls.getStyleClass().add("model-view-page");
-
-        return new StackPane(new ModelView(), controls);
+        return new ModelPage();
     }
 }

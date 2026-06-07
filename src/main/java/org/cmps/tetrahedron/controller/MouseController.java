@@ -5,7 +5,7 @@ import javafx.scene.input.ScrollEvent;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.enums.VerticeMoveMode;
-import org.cmps.tetrahedron.view.InfoPanel;
+import org.cmps.tetrahedron.view.model.component.InfoPanel;
 
 public class MouseController {
 

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cmps.tetrahedron.view.model.component.RightToolbar"
+      stylesheets="@/style/right-toolbar.css"
+      styleClass="root-box">
+
+    <VBox styleClass="data-section-container">
+        <fx:include fx:id="elementGrid" source="/view/common/Switch.fxml"/>
+        <fx:include fx:id="light" source="/view/common/Switch.fxml"/>
+    </VBox>
+
+    <VBox styleClass="data-section-container">
+        <VBox styleClass="vbox-label-button">
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Label fx:id="stressLabel" styleClass="data-label" text="%stress-label"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button fx:id="stressSettings" onAction="#openStressScaleDialog" styleClass="small-button">
+                    <graphic>
+                        <fx:include source="/icon/SmallButton.fxml"/>
+                    </graphic>
+                </Button>
+            </HBox>
+            <Label fx:id="stressSecondaryLabel" styleClass="secondary-label" text="%stress-secondaryLabel"/>
+            <Button fx:id="stressButton" styleClass="load-button" text="%load-button"
+                    onMouseClicked="#selectStressFile"/>
+        </VBox>
+
+        <VBox styleClass="vbox-label-button">
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Label fx:id="displacementLabel" styleClass="data-label" text="%displacement-label"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button onAction="#openDeformationScaleDialog" styleClass="small-button">
+                    <graphic>
+                        <fx:include source="/icon/SmallButton.fxml"/>
+                    </graphic>
+                </Button>
+            </HBox>
+            <Label fx:id="displacementSecondaryLabel" styleClass="secondary-label" text="%displacement-secondaryLabel"/>
+            <Button fx:id="displacementButton" styleClass="load-button" text="%load-button"
+                    onMouseClicked="#selectDisplacementsFile"/>
+        </VBox>
+
+        <VBox styleClass="vbox-label-button">
+            <Label fx:id="characteristicLabel" styleClass="data-label" text="%characteristic-label"/>
+            <Button fx:id="characteristicButton" styleClass="load-button" text="%load-button"
+                    onMouseClicked="#selectCustomCharacteristicFile"/>
+        </VBox>
+    </VBox>
+</VBox>

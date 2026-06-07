@@ -4,10 +4,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <VBox styleClass="home-page" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.cmps.tetrahedron.view.HomePage"
+      fx:controller="org.cmps.tetrahedron.view.home.HomePage"
       stylesheets="@/style/home.css">
 
-    <fx:include source="./../Navbar.fxml"/>
+    <fx:include source="/view/common/Navbar.fxml"/>
 
     <HBox styleClass="menu-items">
         <VBox styleClass="menu-item">

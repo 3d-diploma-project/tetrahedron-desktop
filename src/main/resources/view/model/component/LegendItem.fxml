@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cmps.tetrahedron.view.model.component.LegendItem"
+      stylesheets="@/style/legend-item.css"
+      styleClass="item"
+      alignment="CENTER">
+    <TextField fx:id="max" styleClass="label" editable="false" viewOrder="1"/>
+    <HBox fx:id="color" styleClass="color, color-border" viewOrder="2"/>
+    <TextField fx:id="min" styleClass="label, end-label" visible="false" editable="false" viewOrder="1"/>
+</VBox>

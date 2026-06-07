@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cmps.tetrahedron.view.common.Navbar"
+      stylesheets="@/style/navbar.css"
+      styleClass="navbar">
+
+    <VBox alignment="CENTER">
+        <ImageView fx:id="logoImage">
+            <Image url="@/logo.png"/>
+        </ImageView>
+        <Label fx:id="logoText" text="TETRAHEDRON" styleClass="logo-text"/>
+    </VBox>
+
+    <Region HBox.hgrow="ALWAYS"/>
+
+    <HBox spacing="20">
+        <ComboBox fx:id="languageSelector" styleClass="language-selector" onAction="#changeLanguage">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="UK"/>
+                    <String fx:value="EN"/>
+                    <String fx:value="DE"/>
+                    <String fx:value="PL"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <Button styleClass="instruction-button" fx:id="instructionButton" onAction="#openInstructions">
+            <graphic>
+                <fx:include source="/icon/Instruction.fxml"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+</HBox>
