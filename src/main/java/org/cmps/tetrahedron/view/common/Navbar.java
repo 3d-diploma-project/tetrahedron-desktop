@@ -13,6 +13,7 @@ import javafx.scene.shape.SVGPath;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.enums.Language;
+import org.cmps.tetrahedron.router.Page;
 import org.cmps.tetrahedron.router.Router;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
@@ -74,5 +75,9 @@ public class Navbar {
         } catch (Exception e) {
             System.out.println("Failed to open the browser: " + e.getMessage());
         }
+    }
+
+    public void openHomePage() {
+        Router.getInstance().openPage(Page.HOME);
     }
 }
