@@ -14,7 +14,7 @@ import org.cmps.tetrahedron.view.component.ColorEditor;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class ColorPickerComponent {
+public class ColorPicker {
 
     private static final LocalizationController locale = LocalizationController.getInstance();
 

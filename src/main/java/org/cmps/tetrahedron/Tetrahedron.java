@@ -5,13 +5,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import lombok.Getter;
-import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.exception.InternalValidationException;
-import org.cmps.tetrahedron.exception.ModelValidationException;
+import org.cmps.tetrahedron.router.Router;
 import org.cmps.tetrahedron.utils.ResourceReader;
-import org.cmps.tetrahedron.view.home.HomePage;
 
-import java.io.File;
 import java.util.Objects;
 
 /**
@@ -31,24 +27,10 @@ public class Tetrahedron extends Application {
     @Override
     public void start(Stage primaryStage) {
         Tetrahedron.primaryStage = primaryStage;
-        Scene scene = new Scene(HomePage.getScene());
+        Scene scene = new Scene(Router.getInstance().getHomePage());
         scene.getStylesheets()
-             .add(Objects.requireNonNull(HomePage.class.getResource("/styles.css")).toExternalForm());
-
+             .add(Objects.requireNonNull(Tetrahedron.class.getResource("/styles.css")).toExternalForm());
         primaryStage.setScene(scene);
-
-//        primaryStage.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-//            MouseController.getInstance().mousePressed(e);
-//        });
-//        primaryStage.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
-//            MouseController.getInstance().mouseReleased(e);
-//        });
-//        primaryStage.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
-//            MouseController.getInstance().mouseDragged(e);
-//        });
-//        primaryStage.addEventFilter(ScrollEvent.SCROLL, e -> {
-//            MouseController.getInstance().mouseWheelMoved(e);
-//        });
 
         primaryStage.setTitle("Tetrahedron");
 

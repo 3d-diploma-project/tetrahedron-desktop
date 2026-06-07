@@ -1,6 +1,5 @@
 package org.cmps.tetrahedron.view;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,14 +9,14 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.Setter;
-import org.cmps.tetrahedron.Tetrahedron;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
+import org.cmps.tetrahedron.router.Page;
+import org.cmps.tetrahedron.router.Router;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.FilePicker;
-import org.cmps.tetrahedron.view.home.HomePage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,7 +43,8 @@ public class ModelFilesPicker {
         Dialog<Scene> dialog = new Dialog<>();
 
         URL fxmlUrl = ModelFilesPicker.class.getClassLoader().getResource("view/ModelFilesPicker.fxml");
-        FXMLLoader loader = new FXMLLoader(fxmlUrl, ResourceBundle.getBundle(LocalizationController.MODEL_FILES_PICKER_BUNDLE));
+        FXMLLoader loader = new FXMLLoader(fxmlUrl,
+                                           ResourceBundle.getBundle(LocalizationController.MODEL_FILES_PICKER_BUNDLE));
 
         try {
             dialog.setDialogPane(loader.load());
@@ -89,7 +89,7 @@ public class ModelFilesPicker {
     }
 
     private void onClose(WindowEvent dialogEvent) {
-        Tetrahedron.getPrimaryStage().getScene().setRoot(HomePage.getScene());
+        Router.getInstance().openPage(Page.HOME);
     }
 
     private boolean validateFileExistence(FilePicker filePicker) {

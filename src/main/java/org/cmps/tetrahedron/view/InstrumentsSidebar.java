@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.enums.VerticeMoveMode;
@@ -13,7 +12,6 @@ public class InstrumentsSidebar {
 
     private final MouseController mouseController = MouseController.getInstance();
     private final ModelController modelController = ModelController.getInstance();
-
 
     @FXML
     private Button cursor;
@@ -56,7 +54,7 @@ public class InstrumentsSidebar {
     @FXML
     public void clickOnColorPicker() {
         Bounds bounds = colorPicker.localToScreen(colorPicker.getBoundsInParent());
-        ColorPickerComponent.showColorPicker(bounds.getMinX(), bounds.getMinY());
+        ColorPicker.showColorPicker(bounds.getMinX(), bounds.getMinY());
     }
 
     public void clickOnLegendSettings() {

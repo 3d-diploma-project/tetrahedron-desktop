@@ -12,6 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.shape.SVGPath;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.enums.Language;
+import org.cmps.tetrahedron.router.Router;
 import org.cmps.tetrahedron.utils.ResourceReader;
 
 import java.awt.*;
@@ -58,6 +59,8 @@ public class Navbar {
     public void changeLanguage() {
         Language selectedLanguage = Language.valueOf(languageSelector.getValue());
         LocalizationController.getInstance().setLocale(selectedLanguage.getLocale());
+
+        Router.getInstance().reloadCurrentPage();
     }
 
     public void openInstructions() {
