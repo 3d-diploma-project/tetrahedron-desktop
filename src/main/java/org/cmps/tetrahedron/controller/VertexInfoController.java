@@ -3,11 +3,11 @@ package org.cmps.tetrahedron.controller;
 import javafx.application.Platform;
 import lombok.Getter;
 import lombok.Setter;
-import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
 import org.joml.Vector3f;
 
-import java.util.*;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.cmps.tetrahedron.controller.LocalizationController.VERTEX_INFO_BUNDLE;
@@ -18,7 +18,7 @@ import static org.cmps.tetrahedron.controller.LocalizationController.VERTEX_INFO
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
  */
-public class VertexInfoController implements LocalizationListener {
+public class VertexInfoController {
 
     @Getter
     private static final VertexInfoController instance = new VertexInfoController();
@@ -40,7 +40,6 @@ public class VertexInfoController implements LocalizationListener {
     private String lastInfoToDisplay = "";
 
     private VertexInfoController() {
-        localizationController.registerListener(this);
         updateDefaultInfo();
     }
 
@@ -92,19 +91,6 @@ public class VertexInfoController implements LocalizationListener {
 
     private void updateDefaultInfo() {
         lastInfoToDisplay = "";
-
-        if (displayInfo != null) {
-            Platform.runLater(() -> displayInfo.accept(lastInfoToDisplay));
-        }
-    }
-
-    @Override
-    public void onUpdateLanguage() {
-        if (!clicked) {
-            lastInfoToDisplay = buildNodeInfo(coordinatesConvertor.getWorldCoordinates(x, y, 1.0f));
-        } else {
-            lastInfoToDisplay = "";
-        }
 
         if (displayInfo != null) {
             Platform.runLater(() -> displayInfo.accept(lastInfoToDisplay));

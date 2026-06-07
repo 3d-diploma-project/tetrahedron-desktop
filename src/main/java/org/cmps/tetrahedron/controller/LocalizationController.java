@@ -2,11 +2,12 @@ package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
 import org.cmps.tetrahedron.enums.Language;
-import org.cmps.tetrahedron.i18n.LocalizationListener;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
-
 
 public class LocalizationController {
 
@@ -15,7 +16,6 @@ public class LocalizationController {
     @Getter
     private Locale currentLocale;
     private final Map<String, ResourceBundle> bundles = new HashMap<>();
-    private final List<LocalizationListener> listeners = new ArrayList<>();
 
     public static final String RIGHT_TOOLBAR_BUNDLE = "i18n.right-toolbar";
     public static final String INDEX_FILE_SELECTOR_BUNDLE = "i18n.index-file-selector";
@@ -53,21 +53,9 @@ public class LocalizationController {
         return (bundle != null && bundle.containsKey(key)) ? bundle.getString(key) : "!" + key + "!";
     }
 
-    public void registerListener(LocalizationListener listener) {
-        listeners.add(listener);
-        listener.onUpdateLanguage();
-    }
-
     public void setLocale(Locale locale) {
         currentLocale = locale;
         Locale.setDefault(locale);
         loadBundles();
-        notifyListeners();
-    }
-
-    private void notifyListeners() {
-        for (LocalizationListener listener : listeners) {
-            listener.onUpdateLanguage();
-        }
     }
 }

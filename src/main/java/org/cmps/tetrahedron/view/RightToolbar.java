@@ -4,17 +4,15 @@ import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import lombok.Getter;
 import org.cmps.tetrahedron.controller.*;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
-import org.cmps.tetrahedron.i18n.LocalizationListener;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.ModelViewSettings;
 import org.cmps.tetrahedron.model.Stress;
-
-import javafx.scene.input.MouseEvent;
 import org.cmps.tetrahedron.view.component.Switch;
 import org.cmps.tetrahedron.viewmodel.LegendData;
 
@@ -22,7 +20,7 @@ import java.io.File;
 
 import static org.cmps.tetrahedron.enums.StressDisplayOption.MISES;
 
-public class RightToolbar implements LocalizationListener {
+public class RightToolbar {
 
     @Getter
     private static RightToolbar instance;
@@ -47,34 +45,15 @@ public class RightToolbar implements LocalizationListener {
         LocalizationController localization = LocalizationController.getInstance();
         ModelViewSettings modelViewSettings = ModelViewSettings.getInstance();
 
-        localization.registerListener(this);
-        elementGridController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"),
-                                              modelViewSettings.isShowElementMesh(),
-                                              modelViewSettings::setShowElementMesh);
+        elementGridController.setInitialState(
+                localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"),
+                modelViewSettings.isShowElementMesh(),
+                modelViewSettings::setShowElementMesh);
         lightController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "light"),
                                         modelViewSettings.isShowLight(),
                                         modelViewSettings::setShowLight);
 
         stressSettings.setVisible(false);
-    }
-
-    @Override
-    public void onUpdateLanguage() {
-        LocalizationController localization = LocalizationController.getInstance();
-
-        stressLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-label"));
-        stressSecondaryLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "stress-secondaryLabel"));
-        stressButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
-
-        displacementLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "displacement-label"));
-        displacementSecondaryLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "displacement-secondaryLabel"));
-        displacementButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
-
-        characteristicLabel.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "characteristic-label"));
-        characteristicButton.setText(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "load-button"));
-
-        elementGridController.setLabel(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "elements-mesh"));
-        lightController.setLabel(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "light"));
     }
 
     public void setStressDisplayOption(StressDisplayOption stressDisplayOption) {
