@@ -99,7 +99,7 @@ public class RightToolbar implements LocalizationListener {
     private void selectStressFile() {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
-        File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
         try {
             if (file != null) {
@@ -125,7 +125,7 @@ public class RightToolbar implements LocalizationListener {
     private void selectCustomCharacteristicFile() {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
-        File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
         try {
             if (file != null) {
@@ -150,7 +150,7 @@ public class RightToolbar implements LocalizationListener {
     private void selectDisplacementsFile(MouseEvent event) {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         FileChooser fileChooser = fileChooserController.createFileChooser();
-        File file = fileChooser.showOpenDialog(SceneController.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
         try {
             if (file != null) {

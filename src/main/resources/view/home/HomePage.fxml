@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<VBox styleClass="home-page" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.cmps.tetrahedron.controller.HomePageController"
+      stylesheets="@/style/home.css">
+
+    <fx:include source="./../Navbar.fxml"/>
+
+    <HBox styleClass="menu-items">
+        <VBox styleClass="menu-item">
+            <HBox styleClass="centered-box">
+                <fx:include source="/icon/Mesh.fxml"/>
+            </HBox>
+
+            <Label maxWidth="260" fx:id="meshLabel" styleClass="label" text="%mesh" wrapText="true"/>
+
+            <HBox styleClass="centered-box">
+                <Button fx:id="meshButton" onMouseClicked="#onClick" styleClass="plus-button" text="%start-button"/>
+            </HBox>
+        </VBox>
+
+        <VBox styleClass="menu-item">
+            <HBox styleClass="centered-box">
+                <fx:include source="/icon/Model.fxml"/>
+            </HBox>
+
+            <Label maxWidth="260" fx:id="modelLabel" styleClass="label" text="%model" wrapText="true"/>
+
+            <HBox styleClass="centered-box">
+                <HBox styleClass="centered-box">
+                    <Button fx:id="modelButton" onMouseClicked="#onClick" styleClass="plus-button" text="%start-button"/>
+                </HBox>
+            </HBox>
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <Region VBox.vgrow="ALWAYS"/>
+</VBox>

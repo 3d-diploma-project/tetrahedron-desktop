@@ -10,12 +10,14 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.Setter;
+import org.cmps.tetrahedron.Tetrahedron;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.component.FilePicker;
+import org.cmps.tetrahedron.view.home.HomePage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -87,7 +89,7 @@ public class ModelFilesPicker {
     }
 
     private void onClose(WindowEvent dialogEvent) {
-        Platform.exit();
+        Tetrahedron.getPrimaryStage().getScene().setRoot(HomePage.getScene());
     }
 
     private boolean validateFileExistence(FilePicker filePicker) {

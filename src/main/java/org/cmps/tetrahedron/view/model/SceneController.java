@@ -1,15 +1,14 @@
-package org.cmps.tetrahedron.controller;
+package org.cmps.tetrahedron.view.model;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.layout.*;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.InfoPanel;
 import org.cmps.tetrahedron.view.Legend;
 import org.cmps.tetrahedron.graphics.ModelView;
 
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -22,17 +21,17 @@ public class SceneController {
 
     private static final SceneController instance = new SceneController();
 
-    private final Scene scene;
+    private final Parent scene;
 
     private SceneController() {
         scene = buildScene();
     }
 
-    public static Scene getScene() {
+    public static Parent getScene() {
         return instance.scene;
     }
 
-    private Scene buildScene() {
+    private Parent buildScene() {
         HBox navbar = ResourceReader.readComponent("/view/Navbar.fxml", HBox.class);
 
         VBox instrumentSidebar = ResourceReader.readComponent("/view/LeftToolBar.fxml", VBox.class);
@@ -54,11 +53,6 @@ public class SceneController {
         VBox controls = new VBox(navbar, mainBlock, infoPanel);
         controls.getStyleClass().add("model-view-page");
 
-        StackPane root = new StackPane(new ModelView(), controls);
-
-        Scene scene = new Scene(root);
-        scene.getStylesheets()
-             .add(Objects.requireNonNull(SceneController.class.getResource("/styles.css")).toExternalForm());
-        return scene;
+        return new StackPane(new ModelView(), controls);
     }
 }

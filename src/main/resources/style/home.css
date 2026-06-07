@@ -1,0 +1,57 @@
+.home-page {
+    -fx-background-color: #EAF4FF;
+}
+
+.menu-items {
+    -fx-alignment: center;
+    -fx-spacing: 33px;
+    -fx-padding: 0 0 0 50px;
+}
+
+.menu-item {
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+    -fx-min-width: 300px;
+    -fx-min-height: 280px;
+    -fx-background-color: #E5EEFF;
+    -fx-background-radius: 40px;
+}
+
+.plus-button {
+    -fx-background-color: #1E0094;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 5px;
+    -fx-text-fill: white;
+}
+
+.plus-button:hover {
+    -fx-background-color: #E5EEFF;
+    -fx-border-size: 1px;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 5px;
+    -fx-text-fill: #1E0094;
+}
+
+.plus-button:pressed {
+    -fx-background-color: #E5EEFF;
+    -fx-background-radius: 66px;
+    -fx-text-fill: #1E0094;
+    -fx-border-size: 1px;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 5px;
+}
+.centered-box {
+    -fx-alignment: center;
+}
+
+.label {
+    -fx-text-alignment: center;
+    -fx-font-size: 17px;
+}
+
+.header {
+    -fx-text-fill: #1E0094;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 0 50px;
+}
