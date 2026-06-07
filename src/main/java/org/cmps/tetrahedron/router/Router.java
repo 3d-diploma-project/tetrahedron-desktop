@@ -3,6 +3,7 @@ package org.cmps.tetrahedron.router;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -57,12 +58,19 @@ public class Router {
         return switch (page) {
             case HOME -> getHomePage();
             case MODEL -> getModelPage();
-            case MESH -> getModelPage();
+            case MESH -> getMeshPage();
         };
     }
 
     private Parent getModelPage() {
         Locale.setDefault(locale.getCurrentLocale());
         return new ModelPage();
+    }
+
+    public Parent getMeshPage() {
+        Locale.setDefault(locale.getCurrentLocale());
+
+        return ResourceReader.readComponent("/view/mesh/MeshPage.fxml", StackPane.class,
+                                            ResourceBundle.getBundle("i18n.home"));
     }
 }

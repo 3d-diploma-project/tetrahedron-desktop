@@ -18,7 +18,7 @@
             <Label maxWidth="260" fx:id="meshLabel" styleClass="label" text="%mesh" wrapText="true"/>
 
             <HBox styleClass="centered-box">
-                <Button fx:id="meshButton" onMouseClicked="#onClick" styleClass="plus-button" text="%start-button"/>
+                <Button fx:id="meshButton" onMouseClicked="#openMeshPage" styleClass="plus-button" text="%start-button"/>
             </HBox>
         </VBox>
 
@@ -31,7 +31,7 @@
 
             <HBox styleClass="centered-box">
                 <HBox styleClass="centered-box">
-                    <Button fx:id="modelButton" onMouseClicked="#onClick" styleClass="plus-button" text="%start-button"/>
+                    <Button fx:id="modelButton" onMouseClicked="#openModelPage" styleClass="plus-button" text="%start-button"/>
                 </HBox>
             </HBox>
         </VBox>

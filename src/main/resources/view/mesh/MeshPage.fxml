@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.cmps.tetrahedron.graphics.ModelView?>
+<StackPane styleClass="home-page" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.cmps.tetrahedron.view.mesh.MeshPage"
+           stylesheets="@/style/home.css">
+
+    <ModelView/>
+    <VBox>
+        <fx:include source="/view/common/Navbar.fxml"/>
+        <Region VBox.vgrow="ALWAYS"/>
+    </VBox>
+</StackPane>
