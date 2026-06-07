@@ -8,6 +8,7 @@ import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
+import org.cmps.tetrahedron.model.TetraModelApi;
 import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.view.model.ModelFilesPickerDialog;
 import org.cmps.tetrahedron.viewmodel.LegendData;
@@ -45,6 +46,32 @@ public class ModelController {
         model = Model.builder()
                      .vertices(vertices)
                      .faces(DataReader.readIndexesAndConvertToFaces(indices, vertices))
+                     .build();
+        modelReady = true;
+    }
+
+    public void initModelData(TetraModelApi tetraModelApi) {
+        Map<Integer, float[]> coordinates = tetraModelApi.coordinates();
+
+        List<float[][]> faces = new ArrayList<>();
+
+        int[][] indices = tetraModelApi.indices();
+        for (int[] index : indices) {
+            float[] vertex1 = coordinates.get(index[0]);
+            float[] vertex2 = coordinates.get(index[1]);
+            float[] vertex3 = coordinates.get(index[2]);
+            faces.add(new float[][]{vertex1, vertex2, vertex3});
+            if (index.length == 4) {
+                float[] vertex4 = coordinates.get(index[3]);
+                faces.add(new float[][]{vertex1, vertex2, vertex4});
+                faces.add(new float[][]{vertex1, vertex4, vertex3});
+                faces.add(new float[][]{vertex4, vertex2, vertex3});
+            }
+        }
+
+        model = Model.builder()
+                     .vertices(coordinates)
+                     .faces(faces)
                      .build();
         modelReady = true;
     }

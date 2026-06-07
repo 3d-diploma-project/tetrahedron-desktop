@@ -86,8 +86,7 @@ public class ModelView extends Pane {
     }
 
     private void initGl() {
-        Path extractedNatives = NativesExtractor.extractNatives();
-        Configuration.LIBRARY_PATH.set(extractedNatives.toString());
+        Configuration.LIBRARY_PATH.set(NativesExtractor.getNativesDir().toString());
 
         display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
         eglInitialize(display, (IntBuffer) null, null);

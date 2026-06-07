@@ -11,16 +11,18 @@ import javafx.stage.WindowEvent;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
+import org.cmps.tetrahedron.model.TetraModelApi;
 import org.cmps.tetrahedron.router.Page;
 import org.cmps.tetrahedron.router.Router;
 import org.cmps.tetrahedron.utils.ResourceReader;
+import org.cmps.tetrahedron.utils.StlToTetraMesh;
 import org.cmps.tetrahedron.view.common.ErrorDialog;
 import org.cmps.tetrahedron.view.common.FilePicker;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -79,11 +81,10 @@ public class MeshFilesPickerDialog {
         }
 
         try {
-            modelController.initModelData(stlController.getFile(), stlController.getFile());
-        } catch (ModelValidationException e) {
-            new ErrorDialog(e);
-            return;
-        } catch (InternalValidationException e) {
+            TetraModelApi tetraModelApi = StlToTetraMesh.extractStlData(stlController.getFile().getAbsolutePath());
+            modelController.initModelData(tetraModelApi);
+        } catch (Throwable e) {
+            new ErrorDialog(new ModelValidationException("Error when creating mesh. " + e.getMessage()));
             return;
         }
 

@@ -5,9 +5,10 @@ import javafx.fxml.FXML;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
-import org.cmps.tetrahedron.view.model.ModelFilesPickerDialog;
+import org.cmps.tetrahedron.utils.NativesExtractor;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Objects;
 
 /**
@@ -20,6 +21,10 @@ public class MeshPage {
 
     @FXML
     private void initialize() {
+        String gmshName = System.mapLibraryName("gmsh");
+        Path gmshPath = NativesExtractor.getNativesDir().resolve(gmshName);
+        System.load(gmshPath.toString());
+
         if (Objects.equals(System.getProperty("debug"), "true")) {
             initModelIfInDebug();
         } else {

@@ -16,6 +16,7 @@
         <lwjgl.version>3.3.5</lwjgl.version>
         <joml.version>1.10.8</joml.version>
         <lombok.version>1.18.46</lombok.version>
+        <gmsh.version>4.15.2</gmsh.version>
     </properties>
 
     <profiles>
@@ -28,6 +29,10 @@
             </activation>
             <properties>
                 <platform>windows</platform>
+                <gmsh.sdk.url>https://gmsh.info/bin/Windows/gmsh-${gmsh.version}-Windows64-sdk.zip</gmsh.sdk.url>
+                <gmsh.sdk.folder>gmsh-${gmsh.version}-Windows64-sdk</gmsh.sdk.folder>
+                <gmsh.native.lib.name>gmsh-${gmsh.version}.dll</gmsh.native.lib.name>
+                <gmsh.native.lib.target_name>gmsh.dll</gmsh.native.lib.target_name>
             </properties>
         </profile>
         <profile>
@@ -39,6 +44,10 @@
             </activation>
             <properties>
                 <platform>macos-arm64</platform>
+                <gmsh.sdk.url>https://gmsh.info/bin/MacOSX/gmsh-${gmsh.version}-MacOSARM-sdk.tgz</gmsh.sdk.url>
+                <gmsh.sdk.folder>gmsh-${gmsh.version}-MacOSARM-sdk</gmsh.sdk.folder>
+                <gmsh.native.lib.name>libgmsh.dylib</gmsh.native.lib.name>
+                <gmsh.native.lib.target_name>libgmsh.dylib</gmsh.native.lib.target_name>
             </properties>
         </profile>
         <profile>
@@ -50,6 +59,10 @@
             </activation>
             <properties>
                 <platform>linux</platform>
+                <gmsh.sdk.url>https://gmsh.info/bin/Linux/gmsh-${gmsh.version}-Linux-sdk.tgz</gmsh.sdk.url>
+                <gmsh.sdk.folder>gmsh-${gmsh.version}-Linux-sdk</gmsh.sdk.folder>
+                <gmsh.native.lib.name>libgmsh.so</gmsh.native.lib.name>
+                <gmsh.native.lib.target_name>libgmsh.so</gmsh.native.lib.target_name>
             </properties>
         </profile>
     </profiles>
@@ -138,7 +151,114 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.13.0</version>
+                <executions>
+                    <execution>
+                        <id>download-gmsh-sdk</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>${gmsh.sdk.url}</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.basedir}/.gmsh-sdk</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-native-library</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.directory}/generated-resources/natives" />
+                                <copy file="${project.basedir}/.gmsh-sdk/${gmsh.sdk.folder}/lib/${gmsh.native.lib.name}"
+                                      tofile="${project.build.directory}/generated-resources/natives/${gmsh.native.lib.target_name}" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>run-jextract</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>jextract</executable>
+                            <arguments>
+                                <argument>-I</argument>
+                                <argument>${project.basedir}/.gmsh-sdk/${gmsh.sdk.folder}/include</argument>
+                                <argument>--output</argument>
+                                <argument>${project.build.directory}/generated-sources/jextract</argument>
+                                <argument>-t</argument>
+                                <argument>org.gmsh</argument>
+                                <argument>--header-class-name</argument>
+                                <argument>Gmsh</argument>
+                                <argument>${project.basedir}/.gmsh-sdk/${gmsh.sdk.folder}/include/gmshc.h</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/jextract</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-resource</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>add-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-resources</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

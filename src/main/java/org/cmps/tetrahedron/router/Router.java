@@ -23,6 +23,7 @@ public class Router {
     private static final LocalizationController locale = LocalizationController.getInstance();
 
     private Page currentPage = Page.HOME;
+    private boolean modelListenersInitialized = false;
 
     public void openPage(Page page) {
         currentPage = page;
@@ -31,7 +32,7 @@ public class Router {
         Stage stage = Tetrahedron.getPrimaryStage();
         stage.getScene().setRoot(root);
 
-        if (page == Page.MODEL) {
+        if (page != Page.HOME && !modelListenersInitialized) {
             stage.addEventFilter(MouseEvent.MOUSE_PRESSED,
                                  MouseController.getInstance()::mousePressed);
             stage.addEventFilter(MouseEvent.MOUSE_RELEASED,
@@ -40,6 +41,7 @@ public class Router {
                                  MouseController.getInstance()::mouseDragged);
             stage.addEventFilter(ScrollEvent.SCROLL,
                                  MouseController.getInstance()::mouseWheelMoved);
+            modelListenersInitialized = true;
         }
     }
 

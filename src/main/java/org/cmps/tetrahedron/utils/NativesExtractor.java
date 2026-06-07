@@ -1,7 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
 import lombok.Getter;
-import org.lwjgl.system.Platform;
 
 import java.io.*;
 import java.nio.file.*;
@@ -10,35 +9,35 @@ import java.util.List;
 
 public class NativesExtractor {
 
-    private static final List<String> WINDOWS_NATIVES = List.of("/natives/libEGL.dll", "/natives/libGLESv2.dll");
-    private static final List<String> MACOS_NATIVES = List.of("/natives/libEGL.dylib", "/natives/libGLESv2.dylib");
-    private static final List<String> LINUX_NATIVES = List.of("/natives/libEGL.so", "/natives/libGLESv2.so");
+    private static final List<String> NATIVES = List.of("EGL", "GLESv2", "gmsh");
 
-    public static Path extractNatives() {
-        try {
-            return switch (Platform.get()) {
-                case LINUX -> extractResourcesToTempDir(LINUX_NATIVES);
-                case MACOSX -> extractResourcesToTempDir(MACOS_NATIVES);
-                case WINDOWS -> extractResourcesToTempDir(WINDOWS_NATIVES);
-                default -> throw new RuntimeException("Unsupported platform: " + Platform.get());
-            };
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public static Path NATIVES_DIR;
+
+    public static Path getNativesDir() {
+        if (NATIVES_DIR == null) {
+            try {
+                NATIVES_DIR = extractResourcesToTempDir();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
+        return NATIVES_DIR;
     }
 
-    private static Path extractResourcesToTempDir(List<String> resourcePaths) throws IOException {
+    private static Path extractResourcesToTempDir() throws IOException {
         Path destination = new TemporaryDirectory().getPath();
         Files.createDirectories(destination);
 
-        for (String resourcePath : resourcePaths) {
-            InputStream binary = NativesExtractor.class.getResourceAsStream(resourcePath);
+        for (String library : NativesExtractor.NATIVES) {
+            String libraryName = System.mapLibraryName(library);
+            String libraryPath = "/natives/" + libraryName;
+            InputStream binary = NativesExtractor.class.getResourceAsStream(libraryPath);
             if (binary == null) {
-                throw new IOException("Cannot find resource " + resourcePath);
+                throw new IOException("Cannot find resource " + libraryPath);
             }
 
-            Path fileName = Paths.get(resourcePath).getFileName();
-            Path fileDestination = destination.resolve(fileName);
+            Path fileDestination = destination.resolve(libraryName);
             Files.copy(binary, fileDestination, StandardCopyOption.REPLACE_EXISTING);
 
             binary.close();
