@@ -1,6 +1,6 @@
 .navbar {
     -fx-alignment: center;
-    -fx-padding: 50;
+    -fx-padding: 30 50;
 }
 
 .logo-text {
@@ -33,7 +33,7 @@
     -fx-padding: 0 0 0 1;
 }
 
-.language-selector .list-cell:hover{
+.language-selector .list-cell:hover {
     -fx-background-color: #E5E5E5;
 }
 

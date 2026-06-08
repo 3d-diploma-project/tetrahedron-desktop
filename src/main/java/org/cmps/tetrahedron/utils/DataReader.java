@@ -48,7 +48,7 @@ public class DataReader {
 
                 float[] vertex = new float[3];
                 for (int j = startIndex; j < elements.length; j++) {
-                    vertex[j - startIndex] = Float.parseFloat(elements[j]);
+                    vertex[j - startIndex] = Float.parseFloat(elements[j].replace(",", "."));
                 }
 
                 coordinates.put(index, vertex);
@@ -114,7 +114,7 @@ public class DataReader {
             unusedVertices.removeAll(usedIndices);
 
             if (!unusedVertices.isEmpty()) {
-                WarningDialog dialog = new WarningDialog("attention", "vertices-not-used-in-faces","continue");
+                WarningDialog dialog = new WarningDialog("attention", "vertices-not-used-in-faces", "continue");
                 boolean userChoice = dialog.showAndWait();
 
                 if (!userChoice) {
@@ -124,7 +124,7 @@ public class DataReader {
 
             return faces;
         } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException("faces-read", "check-string",line);
+            throw new ModelValidationException("faces-read", "check-string", line);
         }
     }
 
@@ -273,7 +273,8 @@ public class DataReader {
         }
 
         if (deformationsMap.size() != expectedVerticesCount) {
-            throw new ModelValidationException("displacements-nodes", "check", deformationsMap.size(), expectedVerticesCount);
+            throw new ModelValidationException("displacements-nodes", "check", deformationsMap.size(),
+                                               expectedVerticesCount);
         }
 
         List<float[]> result = new ArrayList<>(Collections.nCopies(expectedVerticesCount, null));

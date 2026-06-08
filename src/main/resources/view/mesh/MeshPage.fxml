@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import org.cmps.tetrahedron.graphics.ModelView?>
-<StackPane styleClass="home-page" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+<StackPane styleClass="mesh-page" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.cmps.tetrahedron.view.mesh.MeshPage"
-           stylesheets="@/style/home.css">
-
+           stylesheets="@/style/mesh.css">
     <ModelView/>
     <VBox>
         <fx:include source="/view/common/Navbar.fxml"/>
+        <Region VBox.vgrow="ALWAYS"/>
+        <HBox styleClass="tool-bar-block">
+            <VBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <fx:include source="/view/mesh/component/LeftToolBar.fxml"/>
+                <Region VBox.vgrow="ALWAYS"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <fx:include source="/view/mesh/component/RightToolbar.fxml" resources="i18n/mesh-right-toolbar"/>
+        </HBox>
         <Region VBox.vgrow="ALWAYS"/>
     </VBox>
 </StackPane>

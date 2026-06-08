@@ -78,3 +78,16 @@
     -fx-max-height: 14px;
 }
 
+.input-field {
+    -fx-pref-width: 75px;
+    -fx-font-size: 12;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 4px;
+    -fx-padding: 6px;
+    -fx-background-color: white;
+}
+
+.input-field:hover {
+    -fx-background-color: #E5E5E6;
+}
+

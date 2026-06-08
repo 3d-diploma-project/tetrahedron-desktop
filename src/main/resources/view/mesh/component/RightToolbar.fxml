@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cmps.tetrahedron.view.mesh.component.RightToolbar"
+      stylesheets="@/style/right-toolbar.css"
+      styleClass="root-box">
+
+    <VBox styleClass="data-section-container">
+        <fx:include fx:id="elementGrid" source="/view/common/Switch.fxml"/>
+        <fx:include fx:id="light" source="/view/common/Switch.fxml"/>
+    </VBox>
+
+    <VBox styleClass="data-section-container">
+        <VBox styleClass="vbox-label-button">
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Label styleClass="data-label" text="%stl-file"/>
+            </HBox>
+            <Label fx:id="stlFileNameLabel" styleClass="secondary-label" text="%selected-stl-file-name"/>
+            <Button styleClass="load-button" text="%change-model"
+                    onMouseClicked="#changeStlFile"/>
+        </VBox>
+
+        <VBox spacing="5">
+            <VBox>
+                <Label styleClass="data-label" text="%min-mesh-size"/>
+                <TextField fx:id="minElementSize" text="1.0" styleClass="input-field"/>
+            </VBox>
+            <VBox>
+                <Label styleClass="data-label" text="%max-mesh-size"/>
+                <TextField fx:id="maxElementSize" text="5.0" styleClass="input-field"/>
+            </VBox>
+            <VBox>
+                <Label styleClass="data-label" text="%angel-to-define-surface"/>
+                <TextField fx:id="engel" text="40.0" styleClass="input-field"/>
+            </VBox>
+            <Button styleClass="load-button" text="%mesh" onMouseClicked="#meshModel"/>
+        </VBox>
+
+        <VBox spacing="5">
+            <HBox spacing="5">
+                <Label styleClass="data-label" text="%nodes-count"/>
+                <Label fx:id="nodesCount" styleClass="data-label" text="-"/>
+            </HBox>
+            <HBox spacing="5">
+                <Label styleClass="data-label" text="%elements-count"/>
+                <Label fx:id="elementsCount" styleClass="data-label" text="-"/>
+            </HBox>
+            <Button fx:id="saveModelButton" styleClass="load-button" text="%save" onMouseClicked="#saveModel"/>
+        </VBox>
+    </VBox>
+</VBox>

@@ -16,11 +16,15 @@ import org.cmps.tetrahedron.enums.Language;
 import org.cmps.tetrahedron.router.Page;
 import org.cmps.tetrahedron.router.Router;
 import org.cmps.tetrahedron.utils.ResourceReader;
+import org.cmps.tetrahedron.viewmodel.MeshViewModel;
 
 import java.awt.*;
 import java.util.Locale;
 
 public class Navbar {
+
+    private final ModelController modelController = ModelController.getInstance();
+    private final MeshViewModel meshViewModel = MeshViewModel.getInstance();
 
     @FXML
     private ComboBox<String> languageSelector;
@@ -79,5 +83,7 @@ public class Navbar {
 
     public void openHomePage() {
         Router.getInstance().openPage(Page.HOME);
+        modelController.clearModel();
+        meshViewModel.getStlFileName().set(null);
     }
 }

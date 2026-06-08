@@ -1,6 +1,5 @@
 package org.cmps.tetrahedron.controller;
 
-import javafx.application.Platform;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.exception.InternalValidationException;
@@ -10,7 +9,6 @@ import org.cmps.tetrahedron.model.CustomCharacteristic;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.model.TetraModelApi;
 import org.cmps.tetrahedron.utils.DataReader;
-import org.cmps.tetrahedron.view.model.ModelFilesPickerDialog;
 import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
@@ -112,8 +110,6 @@ public class ModelController {
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
         LegendData.getInstance().resetLegend();
-
-        Platform.runLater(ModelFilesPickerDialog::openDialogWindow);
     }
 
     public void clearDisplacement() {

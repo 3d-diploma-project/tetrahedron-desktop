@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cmps.tetrahedron.view.mesh.MeshFilesPickerDialog"
@@ -14,10 +16,10 @@
             <VBox styleClass="file-selectors-block" minHeight="366">
                 <HBox styleClass="file-selectors-block" minWidth="613">
                     <fx:include fx:id="stl" source="/view/common/FilePicker.fxml"
-                                resources="i18n/node-file-selector"/>
+                                resources="i18n/mesh-file-picker"/>
                 </HBox>
                 <HBox styleClass="file-selectors-block" minWidth="613">
-                    <Button fx:id="createModelButton" styleClass="create-model-button" text="%create-button"
+                    <Button fx:id="createModelButton" styleClass="create-model-button" text="%open-model"
                             onMouseClicked="#onClick"/>
                 </HBox>
             </VBox>

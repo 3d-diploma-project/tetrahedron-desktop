@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.controller;
 
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.Getter;
 
@@ -28,6 +29,19 @@ public class FileChooserController {
             }
         }
         return fileChooser;
+    }
+
+    public DirectoryChooser createDirectoryChooser() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        String lastDir = prefs.get(LAST_USED_DIRECTORY_KEY, null);
+
+        if (lastDir != null) {
+            File lastDirFile = new File(lastDir);
+            if (lastDirFile.exists() && lastDirFile.isDirectory()) {
+                directoryChooser.setInitialDirectory(lastDirFile);
+            }
+        }
+        return directoryChooser;
     }
 
     public void saveLastUsedDirectory(File file) {

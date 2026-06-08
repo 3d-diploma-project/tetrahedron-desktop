@@ -12,23 +12,13 @@ import static java.lang.foreign.ValueLayout.*;
 
 public class StlToTetraMesh {
 
-    public static TetraModelApi generateMesh(String inputStl) {
+    public static TetraModelApi generateMesh(String inputStl, double minMeshSize, double maxMeshSize,
+                                             double angleToFindSurfaces) {
         try (Arena arena = Arena.ofConfined()) {
             MemorySegment ierr = arena.allocate(JAVA_INT);
 
             // 1. Initialize
-            System.out.println("Step 1: gmshInitialize");
-            MemorySegment arg0 = arena.allocateFrom("gmsh");
-            MemorySegment arg1 = arena.allocateFrom("-no_signal_handler");
-            MemorySegment argv = arena.allocate(ADDRESS, 3);
-            argv.setAtIndex(ADDRESS, 0, arg0);
-            argv.setAtIndex(ADDRESS, 1, arg1);
-            argv.setAtIndex(ADDRESS, 2, MemorySegment.NULL);
-            Gmsh.gmshInitialize(2, argv, 0, 0, ierr);
-            if (ierr.get(JAVA_INT, 0) != 0) {
-                System.err.println("gmshInitialize failed");
-                throw new RuntimeException("gmshInitialize failed");
-            }
+            gmshInit(arena, ierr);
 
             System.out.println("Step 2: gmshModelAdd");
             Gmsh.gmshModelAdd(arena.allocateFrom("STL_Converter"), ierr);
@@ -44,7 +34,7 @@ public class StlToTetraMesh {
 
             // 2. Classify Surfaces & Create Geometry
             System.out.println("Step 4: classifySurfaces");
-            double angle = 40.0 * Math.PI / 180.0;
+            double angle = angleToFindSurfaces * Math.PI / 180.0;
             Gmsh.gmshModelMeshClassifySurfaces(angle, 1, 1, Math.PI, 1, ierr);
             System.out.println("Step 5: createGeometry");
             Gmsh.gmshModelMeshCreateGeometry(MemorySegment.NULL, 0, ierr);
@@ -85,8 +75,8 @@ public class StlToTetraMesh {
             System.out.println("Step 11: options");
             // Use HXT (Algorithm 10) for high-quality tetrahedral meshing
             Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.Algorithm3D"), 10.0, ierr);
-            Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.MeshSizeMin"), 1.0, ierr);
-            Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.MeshSizeMax"), 5.0, ierr);
+            Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.MeshSizeMin"), minMeshSize, ierr);
+            Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.MeshSizeMax"), maxMeshSize, ierr);
 
             // 5. Generate 3D Mesh
             System.out.println("Step 12: meshGenerate");
@@ -96,38 +86,8 @@ public class StlToTetraMesh {
             Gmsh.gmshModelMeshOptimize(arena.allocateFrom("Netgen"), 0, 1, MemorySegment.NULL, 0, ierr);
 
             // 6. EXPORT NODES
-            System.out.println("Step 14: getNodes");
-            MemorySegment nodeTagsPtr = arena.allocate(ADDRESS);
-            MemorySegment nodeTags_n = arena.allocate(JAVA_LONG);
-            MemorySegment coordsPtr = arena.allocate(ADDRESS);
-            MemorySegment coords_n = arena.allocate(JAVA_LONG);
-            MemorySegment parametricCoordPtr = arena.allocate(ADDRESS);
-            MemorySegment parametricCoord_n = arena.allocate(JAVA_LONG);
-
-            Gmsh.gmshModelMeshGetNodes(nodeTagsPtr, nodeTags_n, coordsPtr, coords_n, parametricCoordPtr,
-                                       parametricCoord_n, -1, -1, 0, 0, ierr);
-
-            long numNodes = nodeTags_n.get(JAVA_LONG, 0);
-            MemorySegment nodeTagsArray = nodeTagsPtr.get(ADDRESS, 0).reinterpret(numNodes * 8);
-            MemorySegment coordsArray = coordsPtr.get(ADDRESS, 0).reinterpret(numNodes * 3 * 8); // 3 doubles per node
-
-            System.out.println("Step 15: write nodes");
             TetraModelApi.TetraModelApiBuilder modelApi = TetraModelApi.builder();
-            Map<Integer, float[]> coordinates = new HashMap<>();
-            modelApi.coordinates(coordinates);
-
-            for (long i = 0; i < numNodes; i++) {
-                int tag = Math.toIntExact(nodeTagsArray.getAtIndex(JAVA_LONG, i));
-                float x = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3);
-                float y = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3 + 1);
-                float z = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3 + 2);
-                coordinates.put(tag, new float[]{x, y, z});
-            }
-
-            System.out.println("Step 16: free nodes");
-            Gmsh.gmshFree(nodeTagsPtr.get(ADDRESS, 0));
-            Gmsh.gmshFree(coordsPtr.get(ADDRESS, 0));
-            Gmsh.gmshFree(parametricCoordPtr.get(ADDRESS, 0));
+            modelApi.coordinates(exportNodes(arena, ierr));
 
             // 7. EXPORT TETRAHEDRONS
             System.out.println("Step 17: getElements");
@@ -193,7 +153,7 @@ public class StlToTetraMesh {
             Gmsh.gmshFree(elementTags_n.get(ADDRESS, 0));
             Gmsh.gmshFree(elementNodeTagsPtr.get(ADDRESS, 0));
             Gmsh.gmshFree(elementNodeTags_n.get(ADDRESS, 0));
-            System.out.printf("Done! Nodes: %d, Elements: %d\n", numNodes, totalElems);
+            System.out.printf("Elements exported! Elements: %d\n", totalElems);
 
             System.out.println("Step 20: finalize");
             Gmsh.gmshFinalize(ierr);
@@ -208,18 +168,7 @@ public class StlToTetraMesh {
             MemorySegment ierr = arena.allocate(JAVA_INT);
 
             // 1. Initialize
-            System.out.println("Step 1: gmshInitialize");
-            MemorySegment arg0 = arena.allocateFrom("gmsh");
-            MemorySegment arg1 = arena.allocateFrom("-no_signal_handler");
-            MemorySegment argv = arena.allocate(ADDRESS, 3);
-            argv.setAtIndex(ADDRESS, 0, arg0);
-            argv.setAtIndex(ADDRESS, 1, arg1);
-            argv.setAtIndex(ADDRESS, 2, MemorySegment.NULL);
-            Gmsh.gmshInitialize(2, argv, 0, 0, ierr);
-            if (ierr.get(JAVA_INT, 0) != 0) {
-                System.err.println("gmshInitialize failed");
-                throw new RuntimeException("gmshInitialize failed");
-            }
+            gmshInit(arena, ierr);
 
             // 2. Load the STL file
             System.out.println("Step 2: gmshMerge");
@@ -230,43 +179,9 @@ public class StlToTetraMesh {
                 throw new RuntimeException("Error loading STL");
             }
 
-            // --- SKIPPED: Geometry creation, volume classification, and mesh generation ---
-            // An STL already consists of 2D surface triangles. We can read them directly.
-
             // 3. EXPORT NODES (Vertices)
-            System.out.println("Step 3: getNodes");
-            MemorySegment nodeTagsPtr = arena.allocate(ADDRESS);
-            MemorySegment nodeTags_n = arena.allocate(JAVA_LONG);
-            MemorySegment coordsPtr = arena.allocate(ADDRESS);
-            MemorySegment coords_n = arena.allocate(JAVA_LONG);
-            MemorySegment parametricCoordPtr = arena.allocate(ADDRESS);
-            MemorySegment parametricCoord_n = arena.allocate(JAVA_LONG);
-
-            // Fetch nodes for all entities (dim = -1)
-            Gmsh.gmshModelMeshGetNodes(nodeTagsPtr, nodeTags_n, coordsPtr, coords_n, parametricCoordPtr,
-                                       parametricCoord_n, -1, -1, 0, 0, ierr);
-
-            long numNodes = nodeTags_n.get(JAVA_LONG, 0);
-            MemorySegment nodeTagsArray = nodeTagsPtr.get(ADDRESS, 0).reinterpret(numNodes * 8);
-            MemorySegment coordsArray = coordsPtr.get(ADDRESS, 0).reinterpret(numNodes * 3 * 8); // 3 doubles per node
-
-            System.out.println("Step 4: write nodes");
             TetraModelApi.TetraModelApiBuilder modelApi = TetraModelApi.builder();
-            Map<Integer, float[]> coordinates = new HashMap<>();
-            modelApi.coordinates(coordinates);
-
-            for (long i = 0; i < numNodes; i++) {
-                int tag = Math.toIntExact(nodeTagsArray.getAtIndex(JAVA_LONG, i));
-                float x = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3);
-                float y = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3 + 1);
-                float z = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3 + 2);
-                coordinates.put(tag, new float[]{x, y, z});
-            }
-
-            System.out.println("Step 5: free nodes");
-            Gmsh.gmshFree(nodeTagsPtr.get(ADDRESS, 0));
-            Gmsh.gmshFree(coordsPtr.get(ADDRESS, 0));
-            Gmsh.gmshFree(parametricCoordPtr.get(ADDRESS, 0));
+            modelApi.coordinates(exportNodes(arena, ierr));
 
             // 4. EXPORT TRIANGLES (Indices)
             System.out.println("Step 6: getElements");
@@ -334,7 +249,7 @@ public class StlToTetraMesh {
             Gmsh.gmshFree(elementTags_n.get(ADDRESS, 0));
             Gmsh.gmshFree(elementNodeTagsPtr.get(ADDRESS, 0));
             Gmsh.gmshFree(elementNodeTags_n.get(ADDRESS, 0));
-            System.out.printf("Done! Nodes: %d, Elements (Triangles): %d\n", numNodes, totalElems);
+            System.out.printf("Elements exported! Elements (Triangles): %d\n", totalElems);
 
             System.out.println("Step 9: finalize");
             Gmsh.gmshFinalize(ierr);
@@ -342,5 +257,57 @@ public class StlToTetraMesh {
 
             return modelApi.build();
         }
+    }
+
+    private static void gmshInit(Arena arena, MemorySegment ierr) {
+        System.out.println("Step 1: gmshInitialize");
+        MemorySegment arg0 = arena.allocateFrom("gmsh");
+        MemorySegment arg1 = arena.allocateFrom("-no_signal_handler");
+        MemorySegment argv = arena.allocate(ADDRESS, 3);
+        argv.setAtIndex(ADDRESS, 0, arg0);
+        argv.setAtIndex(ADDRESS, 1, arg1);
+        argv.setAtIndex(ADDRESS, 2, MemorySegment.NULL);
+        Gmsh.gmshInitialize(2, argv, 0, 0, ierr);
+        if (ierr.get(JAVA_INT, 0) != 0) {
+            System.err.println("gmshInitialize failed");
+            throw new RuntimeException("gmshInitialize failed");
+        }
+    }
+
+    private static Map<Integer, float[]> exportNodes(Arena arena, MemorySegment ierr) {
+        System.out.println("Step 14: getNodes");
+        MemorySegment nodeTagsPtr = arena.allocate(ADDRESS);
+        MemorySegment nodeTags_n = arena.allocate(JAVA_LONG);
+        MemorySegment coordsPtr = arena.allocate(ADDRESS);
+        MemorySegment coords_n = arena.allocate(JAVA_LONG);
+        MemorySegment parametricCoordPtr = arena.allocate(ADDRESS);
+        MemorySegment parametricCoord_n = arena.allocate(JAVA_LONG);
+
+        Gmsh.gmshModelMeshGetNodes(nodeTagsPtr, nodeTags_n, coordsPtr, coords_n, parametricCoordPtr,
+                                   parametricCoord_n, -1, -1, 0, 0, ierr);
+
+        long numNodes = nodeTags_n.get(JAVA_LONG, 0);
+        MemorySegment nodeTagsArray = nodeTagsPtr.get(ADDRESS, 0).reinterpret(numNodes * 8);
+        MemorySegment coordsArray = coordsPtr.get(ADDRESS, 0).reinterpret(numNodes * 3 * 8); // 3 doubles per node
+
+        System.out.println("Step 15: write nodes");
+        Map<Integer, float[]> coordinates = new HashMap<>();
+
+        for (long i = 0; i < numNodes; i++) {
+            int tag = Math.toIntExact(nodeTagsArray.getAtIndex(JAVA_LONG, i));
+            float x = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3);
+            float y = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3 + 1);
+            float z = (float) coordsArray.getAtIndex(JAVA_DOUBLE, i * 3 + 2);
+            coordinates.put(tag, new float[]{x, y, z});
+        }
+
+        System.out.println("Step 16: free nodes");
+        Gmsh.gmshFree(nodeTagsPtr.get(ADDRESS, 0));
+        Gmsh.gmshFree(coordsPtr.get(ADDRESS, 0));
+        Gmsh.gmshFree(parametricCoordPtr.get(ADDRESS, 0));
+
+
+        System.out.printf("Nodes exported! Nodes: %d\n", numNodes);
+        return coordinates;
     }
 }

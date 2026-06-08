@@ -10,31 +10,22 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.LocalizationController;
-import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.ModelValidationException;
-import org.cmps.tetrahedron.model.TetraModelApi;
 import org.cmps.tetrahedron.router.Page;
 import org.cmps.tetrahedron.router.Router;
 import org.cmps.tetrahedron.utils.ResourceReader;
-import org.cmps.tetrahedron.utils.StlToTetraMesh;
 import org.cmps.tetrahedron.view.common.ErrorDialog;
 import org.cmps.tetrahedron.view.common.FilePicker;
+import org.cmps.tetrahedron.viewmodel.MeshViewModel;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/**
- * TODO: add description.
- *
- * @author Mariia Borodin (HappyMary16)
- * @since 1.0
- */
 public class MeshFilesPickerDialog {
 
-    private final ModelController modelController = ModelController.getInstance();
+    private final MeshViewModel meshViewModel = MeshViewModel.getInstance();
 
     @FXML
     private FilePicker stlController;
@@ -50,8 +41,7 @@ public class MeshFilesPickerDialog {
         Dialog<Scene> dialog = new Dialog<>();
 
         URL fxmlUrl = MeshFilesPickerDialog.class.getClassLoader().getResource("view/mesh/MeshFilesPickerDialog.fxml");
-        FXMLLoader loader = new FXMLLoader(fxmlUrl,
-                                           ResourceBundle.getBundle(LocalizationController.MODEL_FILES_PICKER_BUNDLE));
+        FXMLLoader loader = new FXMLLoader(fxmlUrl, ResourceBundle.getBundle("i18n.mesh-file-picker"));
 
         try {
             dialog.setDialogPane(loader.load());
@@ -80,13 +70,7 @@ public class MeshFilesPickerDialog {
             return;
         }
 
-        try {
-            TetraModelApi tetraModelApi = StlToTetraMesh.extractStlData(stlController.getFile().getAbsolutePath());
-            modelController.initModelData(tetraModelApi);
-        } catch (Throwable e) {
-            new ErrorDialog(new ModelValidationException("Error when creating mesh. " + e.getMessage()));
-            return;
-        }
+        meshViewModel.getStlFileName().set(stlController.getFile().getAbsolutePath());
 
         if (dialog != null) {
             dialog.close();

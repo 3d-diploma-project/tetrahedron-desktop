@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.cmps.tetrahedron.view.common.FilePicker"
@@ -16,11 +15,13 @@
         <fx:include fx:id="icon" source="/icon/FileUpload.fxml"/>
     </HBox>
 
-    <Label fx:id="label"
-           text="%file-picker-label"
-           wrapText="true"
-           styleClass="label"
-           maxWidth="218"/>
+    <HBox styleClass="centered-box">
+        <Label fx:id="label"
+               text="%file-picker-label"
+               wrapText="true"
+               styleClass="label"
+               maxWidth="218"/>
+    </HBox>
 
     <HBox styleClass="centered-box">
         <Button styleClass="plus-button" onMouseClicked="#onClick">
