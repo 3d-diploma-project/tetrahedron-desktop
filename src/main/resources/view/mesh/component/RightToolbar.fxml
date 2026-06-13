@@ -26,17 +26,17 @@
         <VBox spacing="5">
             <VBox>
                 <Label styleClass="data-label" text="%min-mesh-size"/>
-                <TextField fx:id="minElementSize" text="1.0" styleClass="input-field"/>
+                <TextField fx:id="minElementSize" text="-" styleClass="input-field"/>
             </VBox>
             <VBox>
                 <Label styleClass="data-label" text="%max-mesh-size"/>
-                <TextField fx:id="maxElementSize" text="5.0" styleClass="input-field"/>
+                <TextField fx:id="maxElementSize" text="-" styleClass="input-field"/>
             </VBox>
             <VBox>
                 <Label styleClass="data-label" text="%angel-to-define-surface"/>
                 <TextField fx:id="engel" text="40.0" styleClass="input-field"/>
             </VBox>
-            <Button styleClass="load-button" text="%mesh" onMouseClicked="#meshModel"/>
+            <Button fx:id="meshButton" styleClass="load-button" text="%mesh" onMouseClicked="#meshModel"/>
         </VBox>
 
         <VBox spacing="5">

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cmps.tetrahedron.view.mesh.MeshProgressDialog"
+            minHeight="366" minWidth="613"
+            maxHeight="366" maxWidth="613"
+            stylesheets="@/style/mesh-progress-dialog.css"
+            styleClass="root-box">
+    <children>
+        <VBox>
+            <VBox spacing="10" styleClass="main-container">
+                <HBox spacing="10" alignment="CENTER" styleClass="mesh-status">
+                    <Label text="Mesh status:"/>
+                    <Label fx:id="meshStatus" text="test"/>
+                </HBox>
+
+                <Label text="Gmsh output:" style="-fx-font-weight: bold;"/>
+                <TextArea fx:id="logArea" editable="false" VBox.vgrow="ALWAYS" prefHeight="300" prefWidth="400"
+                          wrapText="true" style="-fx-font-family: monospace;"/>
+
+                <HBox alignment="CENTER" spacing="10">
+                    <Button text="Close" onAction="#closeModal" styleClass="create-model-button"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </children>
+    <ButtonType fx:constant="OK"/>
+</DialogPane>

@@ -5,3 +5,21 @@
 .tool-bar-block {
     -fx-padding: 0 15 60 15;
 }
+
+.info-panel {
+    -fx-padding: 15 15;
+}
+
+.progress-container {
+    -fx-padding: 10 15;
+    -fx-pref-width: 200px;
+    -fx-background-color: #e7edf2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-font-family: "Geologica Roman";
+}
+
+.mesh-status {
+    -fx-font-family: "Geologica Roman Medium";
+}

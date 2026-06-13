@@ -11,6 +11,7 @@ import java.util.Map;
  * @since 1.0
  */
 @Builder
-public record TetraModelApi(Map<Integer, float[]> coordinates, int[][] indices) {
+public record TetraModelApi(Map<Integer, float[]> coordinates, int[][] indices, double minMeshSize,
+                            double maxMeshSize) {
 
 }

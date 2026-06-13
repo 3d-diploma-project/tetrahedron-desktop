@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 <?import org.cmps.tetrahedron.graphics.ModelView?>
 <StackPane styleClass="mesh-page" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.cmps.tetrahedron.view.mesh.MeshPage"
@@ -19,5 +20,12 @@
             <fx:include source="/view/mesh/component/RightToolbar.fxml" resources="i18n/mesh-right-toolbar"/>
         </HBox>
         <Region VBox.vgrow="ALWAYS"/>
+        <HBox styleClass="info-panel">
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox fx:id="progressContainer" styleClass="progress-container" spacing="10" visible="false" onMouseClicked="#onProgressClicked">
+                <Label text="Mesh status:"/>
+                <Label fx:id="meshStatus" styleClass="mesh-status"/>
+            </HBox>
+        </HBox>
     </VBox>
 </StackPane>

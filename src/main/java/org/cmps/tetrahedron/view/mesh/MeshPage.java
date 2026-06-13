@@ -2,13 +2,11 @@ package org.cmps.tetrahedron.view.mesh;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import org.cmps.tetrahedron.controller.ModelController;
-import org.cmps.tetrahedron.exception.InternalValidationException;
-import org.cmps.tetrahedron.exception.ModelValidationException;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import org.cmps.tetrahedron.utils.NativesExtractor;
 import org.cmps.tetrahedron.viewmodel.MeshViewModel;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -17,7 +15,19 @@ public class MeshPage {
     private final MeshViewModel meshViewModel = MeshViewModel.getInstance();
 
     @FXML
+    private HBox progressContainer;
+
+    @FXML
+    private Label meshStatus;
+
+    @FXML
     private void initialize() {
+        meshViewModel.getMeshStatus().addListener((_, _, newValue) -> {
+            boolean progressBarVisible = newValue != null && !newValue.isEmpty();
+            progressContainer.visibleProperty().set(progressBarVisible);
+        });
+        meshStatus.textProperty().bind(meshViewModel.getMeshStatus());
+
         String gmshName = System.mapLibraryName("gmsh");
         Path gmshPath = NativesExtractor.getNativesDir().resolve(gmshName);
         System.load(gmshPath.toString());
@@ -34,12 +44,13 @@ public class MeshPage {
     }
 
     private void initModelIfInDebug() {
-        try {
-            ModelController.getInstance()
-                           .initModelData(new File("models/Vertices (model 1).txt"),
-                                          new File("models/Indices (model 1).txt"));
-        } catch (ModelValidationException | InternalValidationException e) {
-            throw new RuntimeException(e);
-        }
+        meshViewModel.getStlFileName().set("/Users/mborodin/Desktop/models/three-layer plate stl/file (2).stl");
+    }
+
+    @FXML
+    private void onProgressClicked() {
+        var dialog = MeshProgressDialog.openDialogWindow();
+        dialog.appendLog(meshViewModel.getMesherLogs().toString());
+        meshViewModel.setMeshProgressDialog(dialog);
     }
 }

@@ -13,6 +13,7 @@ import org.cmps.tetrahedron.view.common.Switch;
 import org.cmps.tetrahedron.viewmodel.MeshViewModel;
 
 import java.io.File;
+import java.util.Objects;
 
 public class RightToolbar {
 
@@ -39,7 +40,8 @@ public class RightToolbar {
     private Label elementsCount;
     @FXML
     private Button saveModelButton;
-
+    @FXML
+    private Button meshButton;
 
     public void initialize() {
         LocalizationController localization = LocalizationController.getInstance();
@@ -52,9 +54,9 @@ public class RightToolbar {
         lightController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "light"),
                                         modelViewSettings.isShowLight(),
                                         modelViewSettings::setShowLight);
-        meshViewModel.getMinMeshSize().bind(minElementSize.textProperty());
-        meshViewModel.getMaxMeshSize().bind(maxElementSize.textProperty());
-        meshViewModel.getAngel().bind(engel.textProperty());
+        meshViewModel.getMinMeshSize().bindBidirectional(minElementSize.textProperty());
+        meshViewModel.getMaxMeshSize().bindBidirectional(maxElementSize.textProperty());
+        meshViewModel.getAngle().bind(engel.textProperty());
 
         nodesCount.textProperty().bind(meshViewModel.getNodesCount());
         elementsCount.textProperty().bind(meshViewModel.getElementsCount());
@@ -62,6 +64,14 @@ public class RightToolbar {
         if (meshViewModel.getStlFileName().get() == null) {
             saveModelButton.setDisable(true);
         }
+
+        meshViewModel.getMeshStatus().addListener((_, _, newValue) -> {
+            boolean meshButtonDisabled = Objects.equals(newValue, "In progress");
+            meshButton.setDisable(meshButtonDisabled);
+
+            boolean saveButtonDisabled = !Objects.equals(newValue, "Success");
+            saveModelButton.setDisable(saveButtonDisabled);
+        });
     }
 
     @FXML
@@ -76,7 +86,6 @@ public class RightToolbar {
     @FXML
     private void meshModel() {
         meshViewModel.meshModel();
-        saveModelButton.setDisable(false);
     }
 
     @FXML

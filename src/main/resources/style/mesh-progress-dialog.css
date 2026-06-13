@@ -1,0 +1,46 @@
+.root-box {
+    -fx-background-color: #E7EDF2;
+}
+
+.main-container {
+    -fx-background-color: #E7EDF2;
+    -fx-padding: 10;
+    -fx-min-width: 613;
+    -fx-min-height: 366;
+    -fx-max-width: 613;
+    -fx-max-height: 366;
+
+    -fx-font: "Geologica Roman Medium";
+}
+
+.button {
+    -fx-background-radius: 66px;
+    -fx-background-color: #1E0094;
+    -fx-padding: 8px 40px;
+    -fx-text-fill: white;
+    -fx-border-size: 1px;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+}
+
+.button:hover, .button:focused {
+    -fx-background-color: white;
+    -fx-border-size: 1px;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+    -fx-text-fill: #1E0094;
+}
+
+.button:pressed {
+    -fx-background-color: #1D0070;
+    -fx-background-radius: 66px;
+    -fx-text-fill: white;
+    -fx-border-size: 1px;
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 66px;
+}
+
+.mesh-status {
+    -fx-font-size: 14;
+    -fx-font-family: "Geologica Roman Medium";
+}
