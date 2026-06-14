@@ -70,7 +70,9 @@ public class MeshFilesPickerDialog {
             return;
         }
 
-        meshViewModel.getStlFileName().set(stlController.getFile().getAbsolutePath());
+        String filePath = stlController.getFile().getAbsolutePath();
+        meshViewModel.getStlFileName().set(filePath);
+        meshViewModel.displayStlModel(filePath);
 
         if (dialog != null) {
             dialog.close();

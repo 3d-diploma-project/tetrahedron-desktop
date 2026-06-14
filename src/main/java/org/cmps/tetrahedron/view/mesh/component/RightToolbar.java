@@ -81,6 +81,7 @@ public class RightToolbar {
         File file = fileChooser.showOpenDialog(stlFileNameLabel.getScene().getWindow());
 
         meshViewModel.getStlFileName().set(file.getAbsolutePath());
+        meshViewModel.displayStlModel(file.getAbsolutePath());
     }
 
     @FXML

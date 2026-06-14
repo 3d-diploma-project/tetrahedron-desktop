@@ -55,62 +55,27 @@ public class MeshViewModel {
     @Getter
     private StringJoiner mesherLogs;
 
-    private MeshViewModel() {
-        stlFileName.addListener((_, oldValue, newValue) -> {
-            if (newValue == null || newValue.isEmpty() || Objects.equals(newValue, oldValue)) {
-                return;
-            }
-
-            try {
-                tetraModelApi = StlToTetraMesh.extractStlData(newValue, null);
-                nodesCount.set(String.valueOf(tetraModelApi.coordinates().size()));
-                elementsCount.set("-");
-                minMeshSize.set(String.format("%.5f", tetraModelApi.minMeshSize()));
-                maxMeshSize.set(String.format("%.5f", tetraModelApi.maxMeshSize()));
-                modelController.initModelData(tetraModelApi);
-            } catch (Throwable e) {
-                new ErrorDialog(new ModelValidationException("Error when creating mesh. " + e.getMessage()));
-            }
-        });
+    public void displayStlModel(String filePath) {
+        try {
+            tetraModelApi = StlToTetraMesh.extractStlData(filePath, null);
+            nodesCount.set(String.valueOf(tetraModelApi.coordinates().size()));
+            elementsCount.set("-");
+            minMeshSize.set(String.format("%.5f", tetraModelApi.minMeshSize()));
+            maxMeshSize.set(String.format("%.5f", tetraModelApi.maxMeshSize()));
+            modelController.initModelData(tetraModelApi);
+        } catch (Throwable e) {
+            new ErrorDialog(new ModelValidationException("Error when creating mesh. " + e.getMessage()));
+        }
     }
 
     public void meshModel() {
         meshStatus.set("In progress");
 
-        double minMeshSize = Double.parseDouble(this.minMeshSize.getValue().replace(",", "."));
-        double maxMeshSize = Double.parseDouble(this.maxMeshSize.getValue().replace(",", "."));
-        double angle = Double.parseDouble(this.angle.getValue().replace(",", "."));
-
         meshProgressDialog = MeshProgressDialog.openDialogWindow();
         mesherLogs = new StringJoiner(System.lineSeparator());
 
-        Task<TetraModelApi> meshingProcess = new Task<>() {
-            @Override
-            protected TetraModelApi call() {
-                tetraModelApi = StlToTetraMesh.generateMesh(stlFileName.get(), minMeshSize, maxMeshSize, angle,
-                                                   this::appendLog);
-                Platform.runLater(() -> {
-                    meshStatus.set("Success");
-                    modelController.clearModel();
-                    modelController.initModelData(tetraModelApi);
-                    nodesCount.set(String.valueOf(tetraModelApi.coordinates().size()));
-                    elementsCount.set(String.valueOf(tetraModelApi.indices().length));
-                });
-                return tetraModelApi;
-            }
-
-            private void appendLog(String log) {
-                mesherLogs.add(log);
-                Platform.runLater(() -> meshProgressDialog.appendLog(log));
-            }
-        };
-
-        meshThread = new Thread(meshingProcess);
+        meshThread = new Thread(new MeshTask());
         meshThread.start();
-
-        meshingProcess.setOnFailed(e -> {
-            meshStatus.set("Fail");
-        });
     }
 
     public void saveModel(File directory) {
@@ -190,4 +155,37 @@ public class MeshViewModel {
             }
         }
     }
+
+    private class MeshTask extends Task<Void> {
+
+        private MeshTask() {
+            this.setOnFailed(_ -> {
+                meshStatus.set("Fail");
+            });
+        }
+
+        @Override
+        protected Void call() {
+            double processedMinMesh = Double.parseDouble(minMeshSize.getValue().replace(",", "."));
+            double processedMaxMesh = Double.parseDouble(maxMeshSize.getValue().replace(",", "."));
+            double processedAngle = Double.parseDouble(angle.getValue().replace(",", "."));
+
+            tetraModelApi = StlToTetraMesh.generateMesh(stlFileName.get(), processedMinMesh, processedMaxMesh,
+                                                        processedAngle, this::appendLog);
+            Platform.runLater(() -> {
+                meshStatus.set("Success");
+                modelController.clearModel();
+                modelController.initModelData(tetraModelApi);
+                nodesCount.set(String.valueOf(tetraModelApi.coordinates().size()));
+                elementsCount.set(String.valueOf(tetraModelApi.indices().length));
+            });
+            return null;
+        }
+
+        private void appendLog(String log) {
+            mesherLogs.add(log);
+            Platform.runLater(() -> meshProgressDialog.appendLog(log));
+        }
+    }
+
 }
