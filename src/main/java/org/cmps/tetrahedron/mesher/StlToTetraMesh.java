@@ -88,6 +88,42 @@ public class StlToTetraMesh {
         }
     }
 
+    public static TetraModelApi generate2dMesh(String inputStl, double minMeshSize, double maxMeshSize,
+                                               double angleToFindSurfaces, Consumer<String> logger) {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment ierr = arena.allocate(JAVA_INT);
+            gmshInit(arena, ierr, logger);
+            Thread logPoller = startGmshLoggerPoller(ierr, logger);
+
+            try {
+                loadStl(arena, inputStl, ierr, logger);
+                runCadRemeshing2d(arena, ierr, inputStl, minMeshSize, maxMeshSize, angleToFindSurfaces,
+                                  logger);
+
+                Map<Integer, float[]> finalCoords = exportNodes(arena, ierr, logger);
+                int[][] finalIndices = exportTriangles(arena, ierr, logger);
+
+                if (logger != null) logger.accept(
+                        String.format("Finished successfully! Nodes: %d, Elements: %d\n", finalCoords.size(),
+                                      finalIndices.length));
+
+                return TetraModelApi.builder()
+                                    .coordinates(finalCoords)
+                                    .indices(finalIndices)
+                                    .build();
+
+            } finally {
+                logPoller.interrupt();
+                try {
+                    logPoller.join(1000);
+                } catch (InterruptedException ignored) {
+                }
+                Gmsh.gmshLoggerStop(ierr);
+                Gmsh.gmshFinalize(ierr);
+            }
+        }
+    }
+
     public static TetraModelApi extractStlData(String inputStl, Consumer<String> logger) {
         try (Arena arena = Arena.ofConfined()) {
             MemorySegment ierr = arena.allocate(JAVA_INT);
@@ -621,6 +657,63 @@ public class StlToTetraMesh {
                 Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.Algorithm3D"), 1.0, ierr); // Delaunay 3D
 
                 Gmsh.gmshModelMeshGenerate(3, ierr);
+                if (ierr.get(JAVA_INT, 0) != 0) {
+                    throw new RuntimeException("Meshing failed with error code " + ierr.get(JAVA_INT, 0) + ".");
+                }
+
+                Gmsh.gmshModelMeshOptimize(arena.allocateFrom("Netgen"), 0, 1, MemorySegment.NULL, 0, ierr);
+
+                success = true;
+                break;
+            } catch (Exception e) {
+                if (logger != null)
+                    logger.accept("Meshing attempt " + (attempt + 1) + " failed: " + e.getMessage() + ". Retrying...");
+                initialMin /= 1.5;
+                initialMax /= 1.5;
+            }
+        }
+
+        if (!success) {
+            throw new RuntimeException("Mesh generation failed after all attempts.");
+        }
+    }
+
+    private static void runCadRemeshing2d(Arena arena, MemorySegment ierr, String inputStl,
+                                          double minMeshSize, double maxMeshSize, double angleToFindSurfaces,
+                                          Consumer<String> logger) {
+        double initialMin = minMeshSize;
+        double initialMax = maxMeshSize;
+        boolean success = false;
+
+        for (int attempt = 0; attempt < 4; attempt++) {
+            try {
+                Gmsh.gmshClear(ierr);
+                Gmsh.gmshModelAdd(arena.allocateFrom("STL_Converter"), ierr);
+
+                if (logger != null) logger.accept("Merging STL file: " + inputStl);
+                Gmsh.gmshMerge(arena.allocateFrom(inputStl), ierr);
+                if (ierr.get(JAVA_INT, 0) != 0) {
+                    throw new RuntimeException("Error loading STL");
+                }
+
+                if (logger != null) logger.accept("Classifying surfaces and creating CAD geometry...");
+                double angle = angleToFindSurfaces * Math.PI / 180.0;
+                Gmsh.gmshModelMeshClassifySurfaces(angle, 1, 1, Math.PI, 1, ierr);
+                Gmsh.gmshModelMeshCreateGeometry(MemorySegment.NULL, 0, ierr);
+
+                Gmsh.gmshModelGeoSynchronize(ierr);
+
+                double meshMin = initialMin / Math.pow(1.5, attempt);
+                double meshMax = initialMax / Math.pow(1.5, attempt);
+                if (logger != null) logger.accept(
+                        String.format("Attempt %d: target size range %.3f - %.3f\n", attempt + 1, meshMin, meshMax));
+
+                Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.MeshSizeMin"), meshMin, ierr);
+                Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.MeshSizeMax"), meshMax, ierr);
+                Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.MeshSizeFromCurvature"), 12.0, ierr);
+                Gmsh.gmshOptionSetNumber(arena.allocateFrom("Mesh.Algorithm"), 6.0, ierr); // Frontal-Delaunay 2D
+
+                Gmsh.gmshModelMeshGenerate(2, ierr);
                 if (ierr.get(JAVA_INT, 0) != 0) {
                     throw new RuntimeException("Meshing failed with error code " + ierr.get(JAVA_INT, 0) + ".");
                 }

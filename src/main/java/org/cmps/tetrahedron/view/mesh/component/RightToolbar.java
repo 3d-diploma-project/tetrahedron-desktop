@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.view.mesh.component;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +11,7 @@ import org.cmps.tetrahedron.controller.FileChooserController;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.model.ModelViewSettings;
 import org.cmps.tetrahedron.view.common.Switch;
+import org.cmps.tetrahedron.view.mesh.MeshFilesPickerDialog;
 import org.cmps.tetrahedron.viewmodel.MeshViewModel;
 
 import java.io.File;
@@ -76,12 +78,7 @@ public class RightToolbar {
 
     @FXML
     private void changeStlFile() {
-        FileChooserController fileChooserController = FileChooserController.getInstance();
-        FileChooser fileChooser = fileChooserController.createFileChooser();
-        File file = fileChooser.showOpenDialog(stlFileNameLabel.getScene().getWindow());
-
-        meshViewModel.getStlFileName().set(file.getAbsolutePath());
-        meshViewModel.displayStlModel(file.getAbsolutePath());
+        Platform.runLater(MeshFilesPickerDialog::openDialogWindow);
     }
 
     @FXML

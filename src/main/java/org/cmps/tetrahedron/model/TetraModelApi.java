@@ -10,8 +10,8 @@ import java.util.Map;
  * @author Mariia Borodin (HappyMary16)
  * @since 1.0
  */
-@Builder
+@Builder(toBuilder = true)
 public record TetraModelApi(Map<Integer, float[]> coordinates, int[][] indices, double minMeshSize,
-                            double maxMeshSize) {
+                            double maxMeshSize, int zeroCoordinateIndex) {
 
 }

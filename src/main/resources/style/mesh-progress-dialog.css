@@ -1,9 +1,9 @@
 .root-box {
-    -fx-background-color: #E7EDF2;
+    -fx-background-color: white;
 }
 
 .main-container {
-    -fx-background-color: #E7EDF2;
+    -fx-background-color: white;
     -fx-padding: 10;
     -fx-min-width: 613;
     -fx-min-height: 366;
@@ -43,4 +43,22 @@
 .mesh-status {
     -fx-font-size: 14;
     -fx-font-family: "Geologica Roman Medium";
+}
+
+.gmsh-logs {
+    -fx-font-family: monospace;
+    -fx-wrap-text: true;
+
+    -fx-pref-width: 400;
+    -fx-pref-height: 300;
+
+    -fx-border-color: #1E0094;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.text-area .content {
+    -fx-background-color: #EAF4FF;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }

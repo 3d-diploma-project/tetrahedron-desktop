@@ -18,8 +18,7 @@
                 </HBox>
 
                 <Label text="Gmsh output:" style="-fx-font-weight: bold;"/>
-                <TextArea fx:id="logArea" editable="false" VBox.vgrow="ALWAYS" prefHeight="300" prefWidth="400"
-                          wrapText="true" style="-fx-font-family: monospace;"/>
+                <TextArea fx:id="logArea" editable="false" VBox.vgrow="ALWAYS" styleClass="gmsh-logs"/>
 
                 <HBox alignment="CENTER" spacing="10">
                     <Button text="Close" onAction="#closeModal" styleClass="create-model-button"/>

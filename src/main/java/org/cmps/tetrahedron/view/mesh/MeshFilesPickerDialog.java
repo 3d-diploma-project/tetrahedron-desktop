@@ -4,12 +4,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.LocalizationController;
+import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.router.Page;
 import org.cmps.tetrahedron.router.Router;
@@ -26,9 +28,12 @@ import java.util.ResourceBundle;
 public class MeshFilesPickerDialog {
 
     private final MeshViewModel meshViewModel = MeshViewModel.getInstance();
+    private final ModelController modelController = ModelController.getInstance();
 
     @FXML
     private FilePicker stlController;
+    @FXML
+    private ComboBox<String> modelDimension;
 
     @Setter
     private Dialog<Scene> dialog;
@@ -70,9 +75,8 @@ public class MeshFilesPickerDialog {
             return;
         }
 
-        String filePath = stlController.getFile().getAbsolutePath();
-        meshViewModel.getStlFileName().set(filePath);
-        meshViewModel.displayStlModel(filePath);
+        meshViewModel.getIs2D().set(modelDimension.getValue().equals("2D"));
+        meshViewModel.displayStlModel(stlController.getFile().getAbsolutePath());
 
         if (dialog != null) {
             dialog.close();
@@ -80,6 +84,11 @@ public class MeshFilesPickerDialog {
     }
 
     private void onClose(WindowEvent dialogEvent) {
+        if (meshViewModel.getStlFileName().get() != null) {
+            return;
+        }
+
+        modelController.clearModel();
         Router.getInstance().openPage(Page.HOME);
     }
 
@@ -94,6 +103,7 @@ public class MeshFilesPickerDialog {
 
     @FXML
     public void initialize() {
+        modelDimension.setValue(meshViewModel.getIs2D().get() ? "2D" : "3D");
         stlController.setOnFileSelectedCallback(this::updateCreateButtonState);
         updateCreateButtonState();
     }

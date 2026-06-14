@@ -44,9 +44,8 @@ public class MeshPage {
     }
 
     private void initModelIfInDebug() {
-        String filePath = "/Users/mborodin/Desktop/models/three-layer plate stl/file (2).stl";
-        meshViewModel.getStlFileName().set(filePath);
-        meshViewModel.displayStlModel(filePath);
+        meshViewModel.getIs2D().set(false);
+        meshViewModel.displayStlModel("models/model-3d.stl");
     }
 
     @FXML

@@ -1,6 +1,8 @@
 package org.cmps.tetrahedron.viewmodel;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
@@ -10,21 +12,15 @@ import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.mesher.StlToTetraMesh;
 import org.cmps.tetrahedron.model.TetraModelApi;
-import org.cmps.tetrahedron.utils.FileUtils;
+import org.cmps.tetrahedron.utils.DataWriter;
 import org.cmps.tetrahedron.view.common.ErrorDialog;
 import org.cmps.tetrahedron.view.mesh.MeshProgressDialog;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
 public class MeshViewModel {
-
-    private static final String CONSTANTS_FILE = "0_constants.txt";
-    private static final String COORDINATES_FILE = "1_coordinates_matrix.txt";
-    private static final String ELEMENTS_FILE = "2_elements_matrix.txt";
 
     @Getter
     private static final MeshViewModel instance = new MeshViewModel();
@@ -33,6 +29,9 @@ public class MeshViewModel {
 
     @Getter
     private final StringProperty stlFileName = new SimpleStringProperty();
+    @Getter
+    private final BooleanProperty is2D = new SimpleBooleanProperty(false);
+
     @Getter
     private final StringProperty minMeshSize = new SimpleStringProperty("-");
     @Getter
@@ -57,7 +56,13 @@ public class MeshViewModel {
 
     public void displayStlModel(String filePath) {
         try {
-            tetraModelApi = StlToTetraMesh.extractStlData(filePath, null);
+            TetraModelApi model = StlToTetraMesh.extractStlData(filePath, null);
+            if (is2D.get()) {
+                model = setInfoAboutZeroCoordinate(model);
+            }
+            tetraModelApi = model;
+            stlFileName.set(filePath);
+
             nodesCount.set(String.valueOf(tetraModelApi.coordinates().size()));
             elementsCount.set("-");
             minMeshSize.set(String.format("%.5f", tetraModelApi.minMeshSize()));
@@ -86,9 +91,9 @@ public class MeshViewModel {
         }
 
         try {
-            writeConstantsToFile(directory);
-            writeCoordinatesToFile(directory, sortedNodeIndices);
-            writeIndicesToFile(directory, indexToSortedIndex);
+            DataWriter.writeConstantsToFile(directory, tetraModelApi);
+            DataWriter.writeCoordinatesToFile(directory, tetraModelApi, sortedNodeIndices);
+            DataWriter.writeIndicesToFile(directory, tetraModelApi, indexToSortedIndex);
         } catch (IOException | RuntimeException e) {
             new ErrorDialog(new ModelValidationException("Error when saving model. " + e.getMessage()));
         }
@@ -106,54 +111,30 @@ public class MeshViewModel {
                 .toList();
     }
 
-    private void writeConstantsToFile(File directory) throws IOException {
-        File file = FileUtils.createFile(directory, CONSTANTS_FILE);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(String.format("FiniteElementNodesCount=%d", tetraModelApi.indices()[0].length));
-            writer.newLine();
-            writer.write(String.format("NodesCount=%d", tetraModelApi.coordinates().size()));
-            writer.newLine();
-            writer.write(String.format("ElementsCunt=%d", tetraModelApi.indices().length));
-            writer.newLine();
-        }
-    }
+    private TetraModelApi setInfoAboutZeroCoordinate(TetraModelApi model) {
+        float[] firstCoord = model.coordinates().get(1);
 
-    private void writeCoordinatesToFile(File directory, List<Integer> sortedNodeIndices) throws IOException {
-        File file = FileUtils.createFile(directory, COORDINATES_FILE);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            var coordinates = tetraModelApi.coordinates();
-
-            for (int i = 0; i < sortedNodeIndices.size(); i++) {
-                int originalIndex = sortedNodeIndices.get(i);
-
-                writer.write(String.format("%7d ", i + 1));
-
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[0]));
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[1]));
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[2]));
-
-                writer.newLine();
+        Set<Integer> usedIn2dModelCoordinates = new HashSet<>();
+        for (float[] coordinate : model.coordinates().values()) {
+            for (int i = 0; i < coordinate.length; i++) {
+                if (coordinate[i] != firstCoord[i]) {
+                    usedIn2dModelCoordinates.add(i);
+                }
+            }
+            if (usedIn2dModelCoordinates.size() == 3) {
+                break;
             }
         }
-    }
 
-    private void writeIndicesToFile(File directory, Map<Integer, Integer> indexToSortedIndex) throws IOException {
-        File file = FileUtils.createFile(directory, ELEMENTS_FILE);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            var elements = tetraModelApi.indices();
-
-            for (int i = 0; i < elements.length; i++) {
-                writer.write(String.format("%7d ", i + 1));
-
-                int[] element = elements[i];
-                writer.write(String.format("%7d ", indexToSortedIndex.get(element[0])));
-                writer.write(String.format("%7d ", indexToSortedIndex.get(element[1])));
-                writer.write(String.format("%7d ", indexToSortedIndex.get(element[2])));
-                writer.write(String.format("%7d ", indexToSortedIndex.get(element[3])));
-
-                writer.newLine();
+        for (int i = 0; i < 3; i++) {
+            if (!usedIn2dModelCoordinates.contains(i)) {
+                return model.toBuilder()
+                            .zeroCoordinateIndex(i)
+                            .build();
             }
         }
+
+        throw new RuntimeException("Not 2d mesh was loaded");
     }
 
     private class MeshTask extends Task<Void> {
@@ -170,8 +151,14 @@ public class MeshViewModel {
             double processedMaxMesh = Double.parseDouble(maxMeshSize.getValue().replace(",", "."));
             double processedAngle = Double.parseDouble(angle.getValue().replace(",", "."));
 
-            tetraModelApi = StlToTetraMesh.generateMesh(stlFileName.get(), processedMinMesh, processedMaxMesh,
-                                                        processedAngle, this::appendLog);
+            if (is2D.get()) {
+                tetraModelApi = StlToTetraMesh.generate2dMesh(stlFileName.get(), processedMinMesh, processedMaxMesh,
+                                                              processedAngle, this::appendLog);
+            } else {
+                tetraModelApi = StlToTetraMesh.generateMesh(stlFileName.get(), processedMinMesh, processedMaxMesh,
+                                                            processedAngle, this::appendLog);
+            }
+
             Platform.runLater(() -> {
                 meshStatus.set("Success");
                 modelController.clearModel();
@@ -187,5 +174,4 @@ public class MeshViewModel {
             Platform.runLater(() -> meshProgressDialog.appendLog(log));
         }
     }
-
 }
