@@ -28,7 +28,7 @@ public class MeshPage {
         });
         meshStatus.textProperty().bind(meshViewModel.getMeshStatus());
 
-        String gmshName = System.mapLibraryName("gmsh");
+        String gmshName = "libgmsh" + NativesExtractor.getPlatformExtension();
         Path gmshPath = NativesExtractor.getNativesDir().resolve(gmshName);
         System.load(gmshPath.toString());
 

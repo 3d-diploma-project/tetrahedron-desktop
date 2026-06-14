@@ -31,8 +31,8 @@
                 <platform>windows</platform>
                 <gmsh.sdk.url>https://gmsh.info/bin/Windows/gmsh-${gmsh.version}-Windows64-sdk.zip</gmsh.sdk.url>
                 <gmsh.sdk.folder>gmsh-${gmsh.version}-Windows64-sdk</gmsh.sdk.folder>
-                <gmsh.native.lib.name>gmsh-${gmsh.version}.dll</gmsh.native.lib.name>
-                <gmsh.native.lib.target_name>gmsh.dll</gmsh.native.lib.target_name>
+                <gmsh.native.lib.name>gmsh-4.15.dll</gmsh.native.lib.name>
+                <gmsh.native.lib.target_name>libgmsh.dll</gmsh.native.lib.target_name>
             </properties>
         </profile>
         <profile>

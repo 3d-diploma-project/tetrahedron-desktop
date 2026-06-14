@@ -87,8 +87,16 @@ public class MeshViewModel {
         Task<TetraModelApi> meshingProcess = new Task<>() {
             @Override
             protected TetraModelApi call() {
-                return StlToTetraMesh.generateMesh(stlFileName.get(), minMeshSize, maxMeshSize, angle,
+                tetraModelApi = StlToTetraMesh.generateMesh(stlFileName.get(), minMeshSize, maxMeshSize, angle,
                                                    this::appendLog);
+                Platform.runLater(() -> {
+                    meshStatus.set("Success");
+                    modelController.clearModel();
+                    modelController.initModelData(tetraModelApi);
+                    nodesCount.set(String.valueOf(tetraModelApi.coordinates().size()));
+                    elementsCount.set(String.valueOf(tetraModelApi.indices().length));
+                });
+                return tetraModelApi;
             }
 
             private void appendLog(String log) {
@@ -99,16 +107,6 @@ public class MeshViewModel {
 
         meshThread = new Thread(meshingProcess);
         meshThread.start();
-
-        meshingProcess.setOnSucceeded(e -> {
-            meshStatus.set("Success");
-
-            Platform.runLater(() -> {
-                modelController.initModelData(tetraModelApi);
-                nodesCount.set(String.valueOf(tetraModelApi.coordinates().size()));
-                elementsCount.set(String.valueOf(tetraModelApi.indices().length));
-            });
-        });
 
         meshingProcess.setOnFailed(e -> {
             meshStatus.set("Fail");

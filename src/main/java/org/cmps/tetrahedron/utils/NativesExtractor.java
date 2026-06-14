@@ -1,17 +1,25 @@
 package org.cmps.tetrahedron.utils;
 
 import lombok.Getter;
+import org.lwjgl.system.Platform;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.Map;
 
 public class NativesExtractor {
 
-    private static final List<String> NATIVES = List.of("EGL", "GLESv2", "gmsh");
+    private static final List<String> NATIVES = List.of("libEGL", "libGLESv2", "libgmsh");
+    private static final Map<Platform, String> LIB_EXTENSIONS = Map.of(
+            Platform.WINDOWS, ".dll",
+            Platform.MACOSX, ".dylib",
+            Platform.LINUX, ".so"
+    );
 
-    public static Path NATIVES_DIR;
+    private static Path NATIVES_DIR;
 
     public static Path getNativesDir() {
         if (NATIVES_DIR == null) {
@@ -25,12 +33,16 @@ public class NativesExtractor {
         return NATIVES_DIR;
     }
 
+    public static String getPlatformExtension() {
+        return LIB_EXTENSIONS.get(Platform.get());
+    }
+
     private static Path extractResourcesToTempDir() throws IOException {
         Path destination = new TemporaryDirectory().getPath();
         Files.createDirectories(destination);
 
         for (String library : NativesExtractor.NATIVES) {
-            String libraryName = System.mapLibraryName(library);
+            String libraryName = library + LIB_EXTENSIONS.get(Platform.get());
             String libraryPath = "/natives/" + libraryName;
             InputStream binary = NativesExtractor.class.getResourceAsStream(libraryPath);
             if (binary == null) {

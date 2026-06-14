@@ -141,7 +141,7 @@ public class ModelRenderer {
         Vector4f min = new Vector4f(model.getMin(), 1);
         Vector4f max = new Vector4f(model.getMax(), 1);
         Vector2f planes = getPlanes(min, max, modelMatrix, viewMatrix);
-        projMatrix.setPerspective(45f, aspectRatio, 0.1f, planes.y);
+        projMatrix.setPerspective(45f, aspectRatio, planes.x, planes.y);
     }
 
     private Vector2f getPlanes(Vector4f min, Vector4f max, Matrix4f modelMatrix, Matrix4f viewMatrix) {
