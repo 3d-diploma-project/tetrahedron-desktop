@@ -25,6 +25,8 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static org.cmps.tetrahedron.controller.LocalizationController.MESH_FILE_PICKER_BUNDLE;
+
 public class MeshFilesPickerDialog {
 
     private final MeshViewModel meshViewModel = MeshViewModel.getInstance();
@@ -46,7 +48,7 @@ public class MeshFilesPickerDialog {
         Dialog<Scene> dialog = new Dialog<>();
 
         URL fxmlUrl = MeshFilesPickerDialog.class.getClassLoader().getResource("view/mesh/MeshFilesPickerDialog.fxml");
-        FXMLLoader loader = new FXMLLoader(fxmlUrl, ResourceBundle.getBundle("i18n.mesh-file-picker"));
+        FXMLLoader loader = new FXMLLoader(fxmlUrl, ResourceBundle.getBundle(MESH_FILE_PICKER_BUNDLE));
 
         try {
             dialog.setDialogPane(loader.load());

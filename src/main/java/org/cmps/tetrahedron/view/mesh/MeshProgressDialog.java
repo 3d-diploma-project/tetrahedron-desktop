@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.LocalizationController;
+import org.cmps.tetrahedron.enums.MeshStatus;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.viewmodel.MeshViewModel;
 
@@ -17,6 +18,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static org.cmps.tetrahedron.controller.LocalizationController.MESH_PROGRESS_DIALOG_BUNDLE;
 
 public class MeshProgressDialog {
 
@@ -34,7 +37,7 @@ public class MeshProgressDialog {
         Dialog<Scene> dialog = new Dialog<>();
 
         URL fxmlUrl = MeshProgressDialog.class.getClassLoader().getResource("view/mesh/MeshProgressDialog.fxml");
-        FXMLLoader loader = new FXMLLoader(fxmlUrl, ResourceBundle.getBundle("i18n.mesh-file-picker"));
+        FXMLLoader loader = new FXMLLoader(fxmlUrl, ResourceBundle.getBundle(MESH_PROGRESS_DIALOG_BUNDLE));
 
         try {
             dialog.setDialogPane(loader.load());
@@ -56,7 +59,10 @@ public class MeshProgressDialog {
     }
 
     public void initialize() {
-        meshStatus.textProperty().bind(MeshViewModel.getInstance().getMeshStatus());
+        initMeshStatus(MeshViewModel.getInstance().getMeshStatus().get());
+        MeshViewModel.getInstance().getMeshStatus().addListener((_, _, newValue) -> {
+            initMeshStatus(newValue);
+        });
     }
 
     public void appendLog(String log) {
@@ -66,5 +72,16 @@ public class MeshProgressDialog {
     @FXML
     private void closeModal() {
         dialog.close();
+    }
+
+    private void initMeshStatus(MeshStatus status) {
+        if (status == null) {
+            return;
+        }
+
+        String localizedStatus = LocalizationController
+                .getInstance()
+                .getString(MESH_PROGRESS_DIALOG_BUNDLE, status.getLocalizedTextId());
+        meshStatus.setText(localizedStatus);
     }
 }

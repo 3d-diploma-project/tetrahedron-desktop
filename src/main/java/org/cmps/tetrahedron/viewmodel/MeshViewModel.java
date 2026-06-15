@@ -1,14 +1,12 @@
 package org.cmps.tetrahedron.viewmodel;
 
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.concurrent.Task;
 import lombok.Getter;
 import lombok.Setter;
 import org.cmps.tetrahedron.controller.ModelController;
+import org.cmps.tetrahedron.enums.MeshStatus;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.mesher.StlToTetraMesh;
 import org.cmps.tetrahedron.model.TetraModelApi;
@@ -45,7 +43,7 @@ public class MeshViewModel {
     private final StringProperty elementsCount = new SimpleStringProperty("-");
 
     @Getter
-    private final StringProperty meshStatus = new SimpleStringProperty();
+    private final SimpleObjectProperty<MeshStatus> meshStatus = new SimpleObjectProperty<>();
 
     private TetraModelApi tetraModelApi;
     private Thread meshThread;
@@ -74,7 +72,7 @@ public class MeshViewModel {
     }
 
     public void meshModel() {
-        meshStatus.set("In progress");
+        meshStatus.set(MeshStatus.IN_PROGRESS);
 
         meshProgressDialog = MeshProgressDialog.openDialogWindow();
         mesherLogs = new StringJoiner(System.lineSeparator());
@@ -141,7 +139,7 @@ public class MeshViewModel {
 
         private MeshTask() {
             this.setOnFailed(_ -> {
-                meshStatus.set("Fail");
+                meshStatus.set(MeshStatus.FAILURE);
             });
         }
 
@@ -160,7 +158,7 @@ public class MeshViewModel {
             }
 
             Platform.runLater(() -> {
-                meshStatus.set("Success");
+                meshStatus.set(MeshStatus.SUCCESS);
                 modelController.clearModel();
                 modelController.initModelData(tetraModelApi);
                 nodesCount.set(String.valueOf(tetraModelApi.coordinates().size()));

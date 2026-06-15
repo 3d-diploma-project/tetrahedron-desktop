@@ -6,9 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import org.cmps.tetrahedron.controller.FileChooserController;
 import org.cmps.tetrahedron.controller.LocalizationController;
+import org.cmps.tetrahedron.enums.MeshStatus;
 import org.cmps.tetrahedron.model.ModelViewSettings;
 import org.cmps.tetrahedron.view.common.Switch;
 import org.cmps.tetrahedron.view.mesh.MeshFilesPickerDialog;
@@ -56,8 +56,8 @@ public class RightToolbar {
         lightController.setInitialState(localization.getString(LocalizationController.RIGHT_TOOLBAR_BUNDLE, "light"),
                                         modelViewSettings.isShowLight(),
                                         modelViewSettings::setShowLight);
-        meshViewModel.getMinMeshSize().bindBidirectional(minElementSize.textProperty());
-        meshViewModel.getMaxMeshSize().bindBidirectional(maxElementSize.textProperty());
+        minElementSize.textProperty().bindBidirectional(meshViewModel.getMinMeshSize());
+        maxElementSize.textProperty().bindBidirectional(meshViewModel.getMaxMeshSize());
         meshViewModel.getAngle().bind(engel.textProperty());
 
         nodesCount.textProperty().bind(meshViewModel.getNodesCount());
@@ -68,10 +68,10 @@ public class RightToolbar {
         }
 
         meshViewModel.getMeshStatus().addListener((_, _, newValue) -> {
-            boolean meshButtonDisabled = Objects.equals(newValue, "In progress");
+            boolean meshButtonDisabled = Objects.equals(newValue, MeshStatus.IN_PROGRESS);
             meshButton.setDisable(meshButtonDisabled);
 
-            boolean saveButtonDisabled = !Objects.equals(newValue, "Success");
+            boolean saveButtonDisabled = !Objects.equals(newValue, MeshStatus.SUCCESS);
             saveModelButton.setDisable(saveButtonDisabled);
         });
     }
@@ -91,6 +91,10 @@ public class RightToolbar {
         FileChooserController fileChooserController = FileChooserController.getInstance();
         DirectoryChooser fileChooser = fileChooserController.createDirectoryChooser();
         File directory = fileChooser.showDialog(stlFileNameLabel.getScene().getWindow());
+
+        if (directory == null) {
+            return;
+        }
 
         fileChooserController.saveLastUsedDirectory(directory);
         meshViewModel.saveModel(directory);

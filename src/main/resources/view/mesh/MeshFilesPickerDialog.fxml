@@ -14,7 +14,7 @@
         <VBox>
             <VBox styleClass="file-selectors-block" minHeight="366">
                 <HBox spacing="10" alignment="CENTER">
-                    <Label text="Model dimension:"/>
+                    <Label text="%model-dimension"/>
                     <ComboBox fx:id="modelDimension" styleClass="stress-selector">
                         <items>
                             <FXCollections fx:factory="observableArrayList">

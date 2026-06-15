@@ -23,7 +23,7 @@
         <HBox styleClass="info-panel">
             <Region HBox.hgrow="ALWAYS"/>
             <HBox fx:id="progressContainer" styleClass="progress-container" spacing="10" visible="false" onMouseClicked="#onProgressClicked">
-                <Label text="Mesh status:"/>
+                <Label text="%mesh-status"/>
                 <Label fx:id="meshStatus" styleClass="mesh-status"/>
             </HBox>
         </HBox>

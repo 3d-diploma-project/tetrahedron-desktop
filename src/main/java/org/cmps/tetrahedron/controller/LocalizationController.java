@@ -28,6 +28,9 @@ public class LocalizationController {
     public static final String VERTEX_INFO_BUNDLE = "i18n.vertex-info";
     public static final String COLOR_PICKER_BUNDLE = "i18n.color-picker";
     public static final String LEGEND_BUNDLE = "i18n.legend";
+    public static final String MESH_PAGE_BUNDLE = "i18n.mesh-page";
+    public static final String MESH_FILE_PICKER_BUNDLE = "i18n.mesh-file-picker";
+    public static final String MESH_PROGRESS_DIALOG_BUNDLE = "i18n.mesh-progress-dialog";
 
     private LocalizationController() {
         Language appLanguage = Language.getLanguage(Locale.getDefault());
@@ -40,7 +43,7 @@ public class LocalizationController {
         Stream.of(RIGHT_TOOLBAR_BUNDLE, INDEX_FILE_SELECTOR_BUNDLE, NODE_FILE_SELECTOR_BUNDLE,
                   ERROR_DIALOG_BUNDLE, WARNING_DIALOG_BUNDLE, MODEL_FILES_PICKER_BUNDLE,
                   STRESS_DIALOG_BUNDLE, VERTEX_INFO_BUNDLE, COLOR_PICKER_BUNDLE, DEFORMATION_DIALOG_BUNDLE,
-                  LEGEND_BUNDLE)
+                  LEGEND_BUNDLE, MESH_PAGE_BUNDLE, MESH_FILE_PICKER_BUNDLE, MESH_PROGRESS_DIALOG_BUNDLE)
               .forEach(bundle -> bundles.put(bundle, ResourceBundle.getBundle(bundle, currentLocale)));
     }
 

@@ -16,6 +16,8 @@ import org.cmps.tetrahedron.view.model.ModelPage;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static org.cmps.tetrahedron.controller.LocalizationController.MESH_PAGE_BUNDLE;
+
 public class Router {
 
     @Getter
@@ -73,6 +75,6 @@ public class Router {
         Locale.setDefault(locale.getCurrentLocale());
 
         return ResourceReader.readComponent("/view/mesh/MeshPage.fxml", StackPane.class,
-                                            ResourceBundle.getBundle("i18n.home"));
+                                            ResourceBundle.getBundle(MESH_PAGE_BUNDLE));
     }
 }

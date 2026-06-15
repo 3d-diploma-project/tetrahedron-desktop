@@ -12,7 +12,7 @@
 
 .progress-container {
     -fx-padding: 10 15;
-    -fx-pref-width: 200px;
+    -fx-min-width: 200px;
     -fx-background-color: #e7edf2;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 3);
     -fx-border-radius: 12px;
