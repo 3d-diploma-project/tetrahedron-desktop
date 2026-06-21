@@ -2,7 +2,7 @@ package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.cmps.tetrahedron.exception.InternalValidationException;
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
@@ -35,17 +35,8 @@ public class ModelController {
         model = Model.builder()
                      .vertices(new HashMap<>())
                      .faces(new ArrayList<>())
+                     .dimension(Dimension.THREE_D)
                      .build();
-    }
-
-    public void initModelData(File nodes, File indices) throws ModelValidationException, InternalValidationException {
-        Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
-
-        model = Model.builder()
-                     .vertices(vertices)
-                     .faces(DataReader.readIndexesAndConvertToFaces(indices, vertices))
-                     .build();
-        modelReady = true;
     }
 
     public void initModelData(TetraModelApi tetraModelApi) {
@@ -70,6 +61,7 @@ public class ModelController {
         model = Model.builder()
                      .vertices(coordinates)
                      .faces(faces)
+                     .dimension(tetraModelApi.dimension())
                      .build();
         modelReady = true;
     }

@@ -5,11 +5,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import org.cmps.tetrahedron.controller.ModelController;
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.graphics.ModelView;
-import org.cmps.tetrahedron.router.Page;
-import org.cmps.tetrahedron.router.Router;
+import org.cmps.tetrahedron.model.TetraModelApi;
+import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.model.component.InfoPanel;
 import org.cmps.tetrahedron.view.model.component.Legend;
@@ -59,9 +60,10 @@ public class ModelPage extends StackPane {
 
     private void initModelIfInDebug() {
         try {
-            ModelController.getInstance()
-                           .initModelData(new File("models/Vertices (model 1).txt"),
-                                          new File("models/Indices (model 1).txt"));
+            TetraModelApi model = DataReader.readModel(new File("models/Vertices (model 1).txt"),
+                                                       new File("models/Indices (model 1).txt"),
+                                                       Dimension.THREE_D);
+            ModelController.getInstance().initModelData(model);
         } catch (ModelValidationException | InternalValidationException e) {
             throw new RuntimeException(e);
         }

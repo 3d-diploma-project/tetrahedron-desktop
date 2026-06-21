@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.model.TetraModelApi;
 
 import java.io.BufferedWriter;
@@ -13,7 +14,7 @@ public class DataWriter {
 
     private static final String CONSTANTS_FILE = "0_constants.txt";
     private static final String COORDINATES_FILE = "1_coordinates_matrix.txt";
-    private static final String ELEMENTS_FILE = "2_elements_matrix.txt";
+    private static final String INDICES_FILE = "2_indices_matrix.txt";
 
     public static void writeConstantsToFile(File directory, TetraModelApi tetraModelApi) throws IOException {
         File file = FileUtils.createFile(directory, CONSTANTS_FILE);
@@ -22,7 +23,7 @@ public class DataWriter {
             writer.newLine();
             writer.write(String.format("NodesCount=%d", tetraModelApi.coordinates().size()));
             writer.newLine();
-            writer.write(String.format("ElementsCunt=%d", tetraModelApi.indices().length));
+            writer.write(String.format("ElementsCount=%d", tetraModelApi.indices().length));
             writer.newLine();
         }
     }
@@ -38,9 +39,12 @@ public class DataWriter {
 
                 writer.write(String.format("%7d ", i + 1));
 
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[0]));
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[1]));
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[2]));
+                for (int j = 0; j < 3; j++) {
+                    if (tetraModelApi.dimension() == Dimension.TWO_D && tetraModelApi.zeroCoordinateIndex() == j) {
+                        continue;
+                    }
+                    writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[j]));
+                }
 
                 writer.newLine();
             }
@@ -49,7 +53,7 @@ public class DataWriter {
 
     public static void writeIndicesToFile(File directory, TetraModelApi tetraModelApi,
                                           Map<Integer, Integer> coordIndexToSortedIndex) throws IOException {
-        File file = FileUtils.createFile(directory, ELEMENTS_FILE);
+        File file = FileUtils.createFile(directory, INDICES_FILE);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             var elements = tetraModelApi.indices();
 

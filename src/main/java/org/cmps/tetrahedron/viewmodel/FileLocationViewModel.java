@@ -1,4 +1,4 @@
-package org.cmps.tetrahedron.controller;
+package org.cmps.tetrahedron.viewmodel;
 
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -7,15 +7,15 @@ import lombok.Getter;
 import java.io.File;
 import java.util.prefs.Preferences;
 
-public class FileChooserController {
+public class FileLocationViewModel {
     private static final String LAST_USED_DIRECTORY_KEY = "last_used_directory";
     private final Preferences prefs;
 
     @Getter
-    private static FileChooserController instance = new FileChooserController();
+    private static FileLocationViewModel instance = new FileLocationViewModel();
 
-    private FileChooserController() {
-        this.prefs = Preferences.userNodeForPackage(FileChooserController.class);
+    private FileLocationViewModel() {
+        this.prefs = Preferences.userNodeForPackage(FileLocationViewModel.class);
     }
 
     public FileChooser createFileChooser() {
@@ -46,7 +46,7 @@ public class FileChooserController {
 
     public void saveLastUsedDirectory(File file) {
         if (file != null && file.getParentFile() != null) {
-            prefs.put(LAST_USED_DIRECTORY_KEY, file.getParent());
+            prefs.put(LAST_USED_DIRECTORY_KEY, file.getPath());
         }
     }
 }

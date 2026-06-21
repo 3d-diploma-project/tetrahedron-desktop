@@ -7,7 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import lombok.Getter;
-import org.cmps.tetrahedron.controller.*;
+import org.cmps.tetrahedron.controller.DeformationController;
+import org.cmps.tetrahedron.controller.LocalizationController;
+import org.cmps.tetrahedron.controller.ModelController;
+import org.cmps.tetrahedron.controller.StressController;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
@@ -17,6 +20,7 @@ import org.cmps.tetrahedron.view.common.ErrorDialog;
 import org.cmps.tetrahedron.view.common.Switch;
 import org.cmps.tetrahedron.view.model.DeformationDialog;
 import org.cmps.tetrahedron.view.model.StressDialog;
+import org.cmps.tetrahedron.viewmodel.FileLocationViewModel;
 import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
@@ -29,10 +33,10 @@ public class RightToolbar {
     private static RightToolbar instance;
 
     @FXML
-    private Label stressLabel, stressSecondaryLabel, displacementLabel, displacementSecondaryLabel, characteristicLabel;
+    private Label stressSecondaryLabel;
 
     @FXML
-    private Button stressButton, displacementButton, characteristicButton;
+    private Button stressButton, displacementButton;
 
     @FXML
     private Button stressSettings;
@@ -79,13 +83,13 @@ public class RightToolbar {
 
     @FXML
     private void selectStressFile() {
-        FileChooserController fileChooserController = FileChooserController.getInstance();
-        FileChooser fileChooser = fileChooserController.createFileChooser();
+        FileLocationViewModel fileLocationViewModel = FileLocationViewModel.getInstance();
+        FileChooser fileChooser = fileLocationViewModel.createFileChooser();
         File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
         try {
             if (file != null) {
-                fileChooserController.saveLastUsedDirectory(file);
+                fileLocationViewModel.saveLastUsedDirectory(file.getParentFile());
                 StressController.getInstance().applyStress(file);
                 Stress stressModel = StressController.getInstance().getStress();
 
@@ -105,13 +109,13 @@ public class RightToolbar {
 
     @FXML
     private void selectCustomCharacteristicFile() {
-        FileChooserController fileChooserController = FileChooserController.getInstance();
-        FileChooser fileChooser = fileChooserController.createFileChooser();
+        FileLocationViewModel fileLocationViewModel = FileLocationViewModel.getInstance();
+        FileChooser fileChooser = fileLocationViewModel.createFileChooser();
         File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
         try {
             if (file != null) {
-                fileChooserController.saveLastUsedDirectory(file);
+                fileLocationViewModel.saveLastUsedDirectory(file.getParentFile());
                 ModelController.getInstance().initCustomCharacteristic(file);
                 CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
 
@@ -130,16 +134,17 @@ public class RightToolbar {
 
     @FXML
     private void selectDisplacementsFile(MouseEvent event) {
-        FileChooserController fileChooserController = FileChooserController.getInstance();
-        FileChooser fileChooser = fileChooserController.createFileChooser();
+        FileLocationViewModel fileLocationViewModel = FileLocationViewModel.getInstance();
+        FileChooser fileChooser = fileLocationViewModel.createFileChooser();
         File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
-        try {
-            if (file != null) {
-                fileChooserController.saveLastUsedDirectory(file);
+        if (file == null) {
+            return;
+        }
 
-                DeformationController.getInstance().applyDisplacements(file);
-            }
+        try {
+            fileLocationViewModel.saveLastUsedDirectory(file.getParentFile());
+            DeformationController.getInstance().applyDisplacements(file);
         } catch (ModelValidationException e) {
             new ErrorDialog(e);
         }

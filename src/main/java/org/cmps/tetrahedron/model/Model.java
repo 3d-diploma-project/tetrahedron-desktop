@@ -2,6 +2,7 @@ package org.cmps.tetrahedron.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.cmps.tetrahedron.enums.Dimension;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Model {
     private final Map<Integer, float[]> originalVertices;
     private final Map<Integer, float[]> vertices;
     private final List<float[][]> faces;
+    private final Dimension dimension;
 
     private Vector3f center;
     private Vector3f min;
@@ -24,10 +26,11 @@ public class Model {
     private float[][] normals;
 
     @Builder
-    public Model(Map<Integer, float[]> vertices, List<float[][]> faces) {
+    public Model(Map<Integer, float[]> vertices, List<float[][]> faces, Dimension dimension) {
         this.vertices = vertices != null ? vertices : new HashMap<>();
         this.originalVertices = deepCopyVertices(this.vertices);
         this.faces = faces != null ? faces : new ArrayList<>();
+        this.dimension = dimension;
 
         if (this.vertices.isEmpty()) {
             System.out.println("Model has no vertices");

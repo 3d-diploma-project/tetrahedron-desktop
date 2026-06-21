@@ -47,8 +47,7 @@ public class MeshPage {
     }
 
     private void initModelIfInDebug() {
-        meshViewModel.getIs2D().set(false);
-        meshViewModel.displayStlModel("models/model-3d.stl");
+        meshViewModel.displayStlModel("models/model-2d.stl");
     }
 
     @FXML

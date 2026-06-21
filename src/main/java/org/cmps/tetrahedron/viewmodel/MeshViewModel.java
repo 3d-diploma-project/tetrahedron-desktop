@@ -1,7 +1,9 @@
 package org.cmps.tetrahedron.viewmodel;
 
 import javafx.application.Platform;
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +13,7 @@ import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.mesher.StlToTetraMesh;
 import org.cmps.tetrahedron.model.TetraModelApi;
 import org.cmps.tetrahedron.utils.DataWriter;
+import org.cmps.tetrahedron.utils.ModelDimensionUtils;
 import org.cmps.tetrahedron.view.common.ErrorDialog;
 import org.cmps.tetrahedron.view.mesh.MeshProgressDialog;
 
@@ -24,11 +27,10 @@ public class MeshViewModel {
     private static final MeshViewModel instance = new MeshViewModel();
 
     private final ModelController modelController = ModelController.getInstance();
+    private final DimensionViewModel dimensionViewModel = DimensionViewModel.getInstance();
 
     @Getter
     private final StringProperty stlFileName = new SimpleStringProperty();
-    @Getter
-    private final BooleanProperty is2D = new SimpleBooleanProperty(false);
 
     @Getter
     private final StringProperty minMeshSize = new SimpleStringProperty("-");
@@ -55,8 +57,8 @@ public class MeshViewModel {
     public void displayStlModel(String filePath) {
         try {
             TetraModelApi model = StlToTetraMesh.extractStlData(filePath, null);
-            if (is2D.get()) {
-                model = setInfoAboutZeroCoordinate(model);
+            if (dimensionViewModel.is2D()) {
+                model = ModelDimensionUtils.addInfoAboutZeroCoordinateOrThrowException(model);
             }
             tetraModelApi = model;
             stlFileName.set(filePath);
@@ -109,32 +111,6 @@ public class MeshViewModel {
                 .toList();
     }
 
-    private TetraModelApi setInfoAboutZeroCoordinate(TetraModelApi model) {
-        float[] firstCoord = model.coordinates().get(1);
-
-        Set<Integer> usedIn2dModelCoordinates = new HashSet<>();
-        for (float[] coordinate : model.coordinates().values()) {
-            for (int i = 0; i < coordinate.length; i++) {
-                if (coordinate[i] != firstCoord[i]) {
-                    usedIn2dModelCoordinates.add(i);
-                }
-            }
-            if (usedIn2dModelCoordinates.size() == 3) {
-                break;
-            }
-        }
-
-        for (int i = 0; i < 3; i++) {
-            if (!usedIn2dModelCoordinates.contains(i)) {
-                return model.toBuilder()
-                            .zeroCoordinateIndex(i)
-                            .build();
-            }
-        }
-
-        throw new RuntimeException("Not 2d mesh was loaded");
-    }
-
     private class MeshTask extends Task<Void> {
 
         private MeshTask() {
@@ -149,7 +125,7 @@ public class MeshViewModel {
             double processedMaxMesh = Double.parseDouble(maxMeshSize.getValue().replace(",", "."));
             double processedAngle = Double.parseDouble(angle.getValue().replace(",", "."));
 
-            if (is2D.get()) {
+            if (dimensionViewModel.is2D()) {
                 tetraModelApi = StlToTetraMesh.generate2dMesh(stlFileName.get(), processedMinMesh, processedMaxMesh,
                                                               processedAngle, this::appendLog);
             } else {

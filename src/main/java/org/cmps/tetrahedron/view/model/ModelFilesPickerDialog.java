@@ -13,11 +13,14 @@ import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
+import org.cmps.tetrahedron.model.TetraModelApi;
 import org.cmps.tetrahedron.router.Page;
 import org.cmps.tetrahedron.router.Router;
+import org.cmps.tetrahedron.utils.DataReader;
 import org.cmps.tetrahedron.utils.ResourceReader;
 import org.cmps.tetrahedron.view.common.ErrorDialog;
 import org.cmps.tetrahedron.view.common.FilePicker;
+import org.cmps.tetrahedron.viewmodel.DimensionViewModel;
 
 import java.io.IOException;
 import java.net.URL;
@@ -76,7 +79,9 @@ public class ModelFilesPickerDialog {
         }
 
         try {
-            modelController.initModelData(nodesController.getFile(), indicesController.getFile());
+            TetraModelApi model = DataReader.readModel(nodesController.getFile(), indicesController.getFile(),
+                                                       DimensionViewModel.getInstance().getDimension());
+            modelController.initModelData(model);
         } catch (ModelValidationException e) {
             new ErrorDialog(e);
             return;

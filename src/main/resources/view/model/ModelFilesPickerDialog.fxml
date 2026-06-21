@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.layout.*?>
-
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cmps.tetrahedron.view.model.ModelFilesPickerDialog"
@@ -12,6 +13,10 @@
     <children>
         <VBox>
             <VBox styleClass="file-selectors-block" minHeight="366">
+                <HBox alignment="CENTER">
+                    <fx:include source="/view/common/DimensionComboBox.fxml"
+                                resources="i18n/common"/>
+                </HBox>
                 <HBox styleClass="file-selectors-block" minWidth="613">
                     <fx:include fx:id="nodes" source="/view/common/FilePicker.fxml"
                                 resources="i18n/node-file-selector"/>

@@ -34,8 +34,6 @@ public class MeshFilesPickerDialog {
 
     @FXML
     private FilePicker stlController;
-    @FXML
-    private ComboBox<String> modelDimension;
 
     @Setter
     private Dialog<Scene> dialog;
@@ -77,7 +75,6 @@ public class MeshFilesPickerDialog {
             return;
         }
 
-        meshViewModel.getIs2D().set(modelDimension.getValue().equals("2D"));
         meshViewModel.displayStlModel(stlController.getFile().getAbsolutePath());
 
         if (dialog != null) {
@@ -105,7 +102,6 @@ public class MeshFilesPickerDialog {
 
     @FXML
     public void initialize() {
-        modelDimension.setValue(meshViewModel.getIs2D().get() ? "2D" : "3D");
         stlController.setOnFileSelectedCallback(this::updateCreateButtonState);
         updateCreateButtonState();
     }

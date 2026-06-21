@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import org.cmps.tetrahedron.controller.FileChooserController;
+import org.cmps.tetrahedron.viewmodel.FileLocationViewModel;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.enums.MeshStatus;
 import org.cmps.tetrahedron.model.ModelViewSettings;
@@ -88,15 +88,15 @@ public class RightToolbar {
 
     @FXML
     private void saveModel() {
-        FileChooserController fileChooserController = FileChooserController.getInstance();
-        DirectoryChooser fileChooser = fileChooserController.createDirectoryChooser();
+        FileLocationViewModel fileLocationViewModel = FileLocationViewModel.getInstance();
+        DirectoryChooser fileChooser = fileLocationViewModel.createDirectoryChooser();
         File directory = fileChooser.showDialog(stlFileNameLabel.getScene().getWindow());
 
         if (directory == null) {
             return;
         }
 
-        fileChooserController.saveLastUsedDirectory(directory);
+        fileLocationViewModel.saveLastUsedDirectory(directory);
         meshViewModel.saveModel(directory);
     }
 }
