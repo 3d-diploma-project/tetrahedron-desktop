@@ -24,11 +24,10 @@ public class MeshViewModel {
     private static final MeshViewModel instance = new MeshViewModel();
 
     private final ModelController modelController = ModelController.getInstance();
+    private final DimensionViewModel dimensionViewModel = DimensionViewModel.getInstance();
 
     @Getter
     private final StringProperty stlFileName = new SimpleStringProperty();
-    @Getter
-    private final BooleanProperty is2D = new SimpleBooleanProperty(false);
 
     @Getter
     private final StringProperty minMeshSize = new SimpleStringProperty("-");
@@ -55,7 +54,7 @@ public class MeshViewModel {
     public void displayStlModel(String filePath) {
         try {
             TetraModelApi model = StlToTetraMesh.extractStlData(filePath, null);
-            if (is2D.get()) {
+            if (dimensionViewModel.is2D()) {
                 model = setInfoAboutZeroCoordinate(model);
             }
             tetraModelApi = model;
@@ -149,7 +148,7 @@ public class MeshViewModel {
             double processedMaxMesh = Double.parseDouble(maxMeshSize.getValue().replace(",", "."));
             double processedAngle = Double.parseDouble(angle.getValue().replace(",", "."));
 
-            if (is2D.get()) {
+            if (dimensionViewModel.is2D()) {
                 tetraModelApi = StlToTetraMesh.generate2dMesh(stlFileName.get(), processedMinMesh, processedMaxMesh,
                                                               processedAngle, this::appendLog);
             } else {

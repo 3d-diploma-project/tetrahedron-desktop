@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import java.lang.String?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cmps.tetrahedron.view.common.DimensionSelector"
+      stylesheets="@/style/combo-box.css">
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="%model-dimension"/>
+        <ComboBox fx:id="dimension">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="2D"/>
+                    <String fx:value="3D"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </HBox>
+</HBox>

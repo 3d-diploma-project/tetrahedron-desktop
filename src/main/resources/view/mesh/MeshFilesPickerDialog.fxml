@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.String?>
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cmps.tetrahedron.view.mesh.MeshFilesPickerDialog"
@@ -13,16 +13,9 @@
     <children>
         <VBox>
             <VBox styleClass="file-selectors-block" minHeight="366">
-                <HBox spacing="10" alignment="CENTER">
-                    <Label text="%model-dimension"/>
-                    <ComboBox fx:id="modelDimension" styleClass="stress-selector">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="2D"/>
-                                <String fx:value="3D"/>
-                            </FXCollections>
-                        </items>
-                    </ComboBox>
+                <HBox alignment="CENTER">
+                    <fx:include source="/view/common/DimensionComboBox.fxml"
+                                resources="i18n/common"/>
                 </HBox>
                 <HBox styleClass="file-selectors-block" minWidth="613">
                     <fx:include fx:id="stl" source="/view/common/FilePicker.fxml"
