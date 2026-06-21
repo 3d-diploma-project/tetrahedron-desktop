@@ -38,16 +38,6 @@ public class ModelController {
                      .build();
     }
 
-    public void initModelData(File nodes, File indices) throws ModelValidationException, InternalValidationException {
-        Map<Integer, float[]> vertices = DataReader.readVertices(nodes);
-
-        model = Model.builder()
-                     .vertices(vertices)
-                     .faces(DataReader.readIndexesAndConvertToFaces(indices, vertices))
-                     .build();
-        modelReady = true;
-    }
-
     public void initModelData(TetraModelApi tetraModelApi) {
         Map<Integer, float[]> coordinates = tetraModelApi.coordinates();
 

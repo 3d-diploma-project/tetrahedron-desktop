@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.mesher;
 
 import javafx.util.Pair;
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.model.TetraModelApi;
 import org.gmsh.Gmsh;
 
@@ -74,6 +75,7 @@ public class StlToTetraMesh {
                 return TetraModelApi.builder()
                                     .coordinates(finalCoords)
                                     .indices(finalIndices)
+                                    .dimension(Dimension.THREE_D)
                                     .build();
 
             } finally {
@@ -110,6 +112,8 @@ public class StlToTetraMesh {
                 return TetraModelApi.builder()
                                     .coordinates(finalCoords)
                                     .indices(finalIndices)
+                                    .dimension(Dimension.TWO_D)
+                                    .zeroCoordinateIndex(2)
                                     .build();
 
             } finally {

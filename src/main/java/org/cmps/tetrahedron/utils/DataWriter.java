@@ -1,5 +1,6 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.model.TetraModelApi;
 
 import java.io.BufferedWriter;
@@ -38,9 +39,12 @@ public class DataWriter {
 
                 writer.write(String.format("%7d ", i + 1));
 
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[0]));
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[1]));
-                writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[2]));
+                for (int j = 0; j < 3; j++) {
+                    if (tetraModelApi.dimension() == Dimension.TWO_D && tetraModelApi.zeroCoordinateIndex() == j) {
+                        continue;
+                    }
+                    writer.write(String.format("%7.12E ", coordinates.get(originalIndex)[j]));
+                }
 
                 writer.newLine();
             }

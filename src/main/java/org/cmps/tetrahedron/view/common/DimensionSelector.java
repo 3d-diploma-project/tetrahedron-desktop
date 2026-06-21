@@ -4,12 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import org.cmps.tetrahedron.viewmodel.DimensionViewModel;
 
-/**
- * TODO: add description.
- *
- * @author Mariia Borodin (HappyMary16)
- * @since 1.0
- */
 public class DimensionSelector {
 
     private final DimensionViewModel dimensionViewModel = DimensionViewModel.getInstance();
@@ -19,7 +13,7 @@ public class DimensionSelector {
 
     @FXML
     public void initialize() {
-        dimension.setValue(dimensionViewModel.getDimension());
+        dimension.setValue(dimensionViewModel.getDimension().getLabel());
         dimensionViewModel.bind(dimension.getSelectionModel().selectedItemProperty());
     }
 }

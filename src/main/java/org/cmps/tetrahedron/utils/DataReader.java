@@ -1,8 +1,10 @@
 package org.cmps.tetrahedron.utils;
 
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.exception.InternalValidationException;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
+import org.cmps.tetrahedron.model.TetraModelApi;
 import org.cmps.tetrahedron.view.common.WarningDialog;
 
 import java.io.File;
@@ -20,112 +22,21 @@ public class DataReader {
     private static final int DEFORMATIONS_WITH_INDEX = 4;
     private static final int STRESS_WITH_INDICES = 7;
 
-    public static Map<Integer, float[]> readVertices(File coordinatesTableFile)
-            throws ModelValidationException {
-        Locale.setDefault(US);
+    public static TetraModelApi readModel(File nodes, File elements,
+                                          Dimension dimension) throws ModelValidationException, InternalValidationException {
+        boolean is2D = dimension == Dimension.TWO_D;
+        Map<Integer, float[]> coordinates = readVertices(nodes, is2D);
+        TetraModelApi model = TetraModelApi.builder()
+                                           .coordinates(coordinates)
+                                           .indices(DataReader.readIndexes(elements, coordinates, is2D)
+                                                              .toArray(new int[0][0]))
+                                           .dimension(dimension)
+                                           .build();
 
-        int i = 1;
-        String line = null;
-        try (Scanner fid = new Scanner(coordinatesTableFile)) {
-            Map<Integer, float[]> coordinates = new HashMap<>();
-
-            while (fid.hasNextLine()) {
-                line = fid.nextLine();
-                String[] elements = line.trim().split("\\s+");
-                int index, startIndex;
-
-                if (elements.length < 3 || elements.length > 4) {
-                    throw new ModelValidationException("vertices-count", "check-string", line);
-                }
-
-                if (elements.length == VERTICES_WITH_INDICES) {
-                    index = Integer.parseInt(elements[0]);
-                    startIndex = 1;
-                } else {
-                    index = i++;
-                    startIndex = 0;
-                }
-
-                float[] vertex = new float[3];
-                for (int j = startIndex; j < elements.length; j++) {
-                    vertex[j - startIndex] = Float.parseFloat(elements[j].replace(",", "."));
-                }
-
-                coordinates.put(index, vertex);
-            }
-
-            return coordinates;
-        } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException("vertices-read", "check-string", line);
+        if (is2D) {
+            return ModelDimensionUtils.addInfoAboutZeroCoordinateOrThrowException(model);
         }
-    }
-
-    public static List<float[][]> readIndexesAndConvertToFaces(File indicesMatrix,
-                                                               Map<Integer, float[]> verticesCoordinates)
-            throws InternalValidationException, ModelValidationException {
-        Locale.setDefault(US);
-
-        Set<Integer> usedIndices = new HashSet<>();
-        Set<Integer> availableVertices = verticesCoordinates.keySet();
-        List<Integer> invalidIndices = new ArrayList<>();
-
-        String line = null;
-        try (Scanner fid = new Scanner(indicesMatrix)) {
-            List<float[][]> faces = new ArrayList<>();
-            while (fid.hasNextLine()) {
-                line = fid.nextLine();
-                String[] elements = line.trim().split("\\s+");
-
-                if (elements.length < 4 || elements.length > 5) {
-                    throw new ModelValidationException("faces-count", "check-string", line);
-                }
-
-                float[][] tetrahedron = new float[4][];
-                int startIndex;
-
-                startIndex = elements.length == FACE_WITH_INDICES ? 1 : 0;
-                for (int j = startIndex; j < elements.length; j++) {
-                    int index = Integer.parseInt(elements[j]);
-                    usedIndices.add(index);
-
-                    if (!verticesCoordinates.containsKey(index)) {
-                        invalidIndices.add(index);
-                    } else {
-                        tetrahedron[j - startIndex] = verticesCoordinates.get(index);
-                    }
-                }
-
-                float[] vertex1 = tetrahedron[0];
-                float[] vertex2 = tetrahedron[1];
-                float[] vertex3 = tetrahedron[2];
-                float[] vertex4 = tetrahedron[3];
-
-                faces.add(new float[][]{vertex1, vertex2, vertex3});
-                faces.add(new float[][]{vertex1, vertex2, vertex4});
-                faces.add(new float[][]{vertex1, vertex4, vertex3});
-                faces.add(new float[][]{vertex4, vertex2, vertex3});
-
-                if (!invalidIndices.isEmpty()) {
-                    throw new ModelValidationException("faces-not-exist", invalidIndices);
-                }
-            }
-
-            Set<Integer> unusedVertices = new HashSet<>(availableVertices);
-            unusedVertices.removeAll(usedIndices);
-
-            if (!unusedVertices.isEmpty()) {
-                WarningDialog dialog = new WarningDialog("attention", "vertices-not-used-in-faces", "continue");
-                boolean userChoice = dialog.showAndWait();
-
-                if (!userChoice) {
-                    throw new InternalValidationException("Stop flow as user decided to select another file");
-                }
-            }
-
-            return faces;
-        } catch (FileNotFoundException | NumberFormatException e) {
-            throw new ModelValidationException("faces-read", "check-string", line);
-        }
+        return model;
     }
 
     public static Map<Integer, float[]> readStress(File stressData) throws ModelValidationException {
@@ -290,5 +201,114 @@ public class DataReader {
         }
 
         return result;
+    }
+
+
+    private static Map<Integer, float[]> readVertices(File coordinatesTableFile, boolean is2D)
+            throws ModelValidationException {
+        Locale.setDefault(US);
+
+        int i = 1;
+        String line = null;
+        try (Scanner fid = new Scanner(coordinatesTableFile)) {
+            Map<Integer, float[]> coordinates = new HashMap<>();
+
+            while (fid.hasNextLine()) {
+                line = fid.nextLine();
+                String[] elements = line.trim().split("\\s+");
+                int index, startIndex;
+
+                if (!is2D && (elements.length < 3 || elements.length > 4)) {
+                    throw new ModelValidationException("vertices-count", "check-string", line);
+                }
+                if (is2D && (elements.length < 2 || elements.length > 3)) {
+                    throw new ModelValidationException("vertices-count", "check-string", line);
+                }
+
+                if (!is2D && elements.length == VERTICES_WITH_INDICES
+                        || is2D && elements.length == 3) {
+                    index = Integer.parseInt(elements[0]);
+                    startIndex = 1;
+                } else {
+                    index = i++;
+                    startIndex = 0;
+                }
+
+                float[] vertex = new float[3];
+                for (int j = startIndex; j < elements.length; j++) {
+                    vertex[j - startIndex] = Float.parseFloat(elements[j].replace(",", "."));
+                }
+
+                coordinates.put(index, vertex);
+            }
+
+            return coordinates;
+        } catch (FileNotFoundException | NumberFormatException e) {
+            throw new ModelValidationException("vertices-read", "check-string", line);
+        }
+    }
+
+    private static List<int[]> readIndexes(File indicesMatrix,
+                                           Map<Integer, float[]> verticesCoordinates,
+                                           boolean is2D)
+            throws InternalValidationException, ModelValidationException {
+        Locale.setDefault(US);
+
+        Set<Integer> usedIndices = new HashSet<>();
+        Set<Integer> availableVertices = verticesCoordinates.keySet();
+        List<Integer> invalidIndices = new ArrayList<>();
+
+        String line = null;
+        try (Scanner fid = new Scanner(indicesMatrix)) {
+            List<int[]> elements = new ArrayList<>();
+            while (fid.hasNextLine()) {
+                line = fid.nextLine();
+                String[] element = line.trim().split("\\s+");
+
+                if (!is2D && (element.length < 4 || element.length > 5)) {
+                    throw new ModelValidationException("faces-count", "check-string", line);
+                }
+                if (is2D && (element.length < 3 || element.length > 4)) {
+                    throw new ModelValidationException("faces-count", "check-string", line);
+                }
+
+                int[] elementIndices = new int[is2D ? 3 : 4];
+                int startIndex;
+
+                startIndex = !is2D && element.length == FACE_WITH_INDICES || is2D && element.length == 4 ? 1 : 0;
+                for (int j = startIndex; j < element.length; j++) {
+                    int index = Integer.parseInt(element[j]);
+                    usedIndices.add(index);
+
+                    if (!verticesCoordinates.containsKey(index)) {
+                        invalidIndices.add(index);
+                    } else {
+                        elementIndices[j - startIndex] = index;
+                    }
+                }
+
+                elements.add(elementIndices);
+
+                if (!invalidIndices.isEmpty()) {
+                    throw new ModelValidationException("faces-not-exist", invalidIndices);
+                }
+            }
+
+            Set<Integer> unusedVertices = new HashSet<>(availableVertices);
+            unusedVertices.removeAll(usedIndices);
+
+            if (!unusedVertices.isEmpty()) {
+                WarningDialog dialog = new WarningDialog("attention", "vertices-not-used-in-faces", "continue");
+                boolean userChoice = dialog.showAndWait();
+
+                if (!userChoice) {
+                    throw new InternalValidationException("Stop flow as user decided to select another file");
+                }
+            }
+
+            return elements;
+        } catch (FileNotFoundException | NumberFormatException e) {
+            throw new ModelValidationException("faces-read", "check-string", line);
+        }
     }
 }

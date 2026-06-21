@@ -17,6 +17,7 @@ import org.cmps.tetrahedron.view.common.ErrorDialog;
 import org.cmps.tetrahedron.view.common.Switch;
 import org.cmps.tetrahedron.view.model.DeformationDialog;
 import org.cmps.tetrahedron.view.model.StressDialog;
+import org.cmps.tetrahedron.viewmodel.FileLocationViewModel;
 import org.cmps.tetrahedron.viewmodel.LegendData;
 
 import java.io.File;
@@ -79,13 +80,13 @@ public class RightToolbar {
 
     @FXML
     private void selectStressFile() {
-        FileChooserController fileChooserController = FileChooserController.getInstance();
-        FileChooser fileChooser = fileChooserController.createFileChooser();
+        FileLocationViewModel fileLocationViewModel = FileLocationViewModel.getInstance();
+        FileChooser fileChooser = fileLocationViewModel.createFileChooser();
         File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
         try {
             if (file != null) {
-                fileChooserController.saveLastUsedDirectory(file);
+                fileLocationViewModel.saveLastUsedDirectory(file.getParentFile());
                 StressController.getInstance().applyStress(file);
                 Stress stressModel = StressController.getInstance().getStress();
 
@@ -105,13 +106,13 @@ public class RightToolbar {
 
     @FXML
     private void selectCustomCharacteristicFile() {
-        FileChooserController fileChooserController = FileChooserController.getInstance();
-        FileChooser fileChooser = fileChooserController.createFileChooser();
+        FileLocationViewModel fileLocationViewModel = FileLocationViewModel.getInstance();
+        FileChooser fileChooser = fileLocationViewModel.createFileChooser();
         File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
         try {
             if (file != null) {
-                fileChooserController.saveLastUsedDirectory(file);
+                fileLocationViewModel.saveLastUsedDirectory(file.getParentFile());
                 ModelController.getInstance().initCustomCharacteristic(file);
                 CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
 
@@ -130,13 +131,13 @@ public class RightToolbar {
 
     @FXML
     private void selectDisplacementsFile(MouseEvent event) {
-        FileChooserController fileChooserController = FileChooserController.getInstance();
-        FileChooser fileChooser = fileChooserController.createFileChooser();
+        FileLocationViewModel fileLocationViewModel = FileLocationViewModel.getInstance();
+        FileChooser fileChooser = fileLocationViewModel.createFileChooser();
         File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
         try {
             if (file != null) {
-                fileChooserController.saveLastUsedDirectory(file);
+                fileLocationViewModel.saveLastUsedDirectory(file.getParentFile());
 
                 DeformationController.getInstance().applyDisplacements(file);
             }
