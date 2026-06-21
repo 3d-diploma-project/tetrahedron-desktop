@@ -11,6 +11,7 @@ import org.cmps.tetrahedron.controller.DeformationController;
 import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.StressController;
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.enums.StressDisplayOption;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.CustomCharacteristic;
@@ -20,6 +21,7 @@ import org.cmps.tetrahedron.view.common.ErrorDialog;
 import org.cmps.tetrahedron.view.common.Switch;
 import org.cmps.tetrahedron.view.model.DeformationDialog;
 import org.cmps.tetrahedron.view.model.StressDialog;
+import org.cmps.tetrahedron.viewmodel.DimensionViewModel;
 import org.cmps.tetrahedron.viewmodel.FileLocationViewModel;
 import org.cmps.tetrahedron.viewmodel.LegendData;
 
@@ -61,6 +63,13 @@ public class RightToolbar {
                                         modelViewSettings::setShowLight);
 
         stressSettings.setVisible(false);
+
+        stressButton.setDisable(DimensionViewModel.getInstance().getDimension() == Dimension.TWO_D);
+        DimensionViewModel
+                .getInstance()
+                .addDimensionListener(
+                        (_, _, newValue)
+                                -> stressButton.setDisable(Dimension.getDimensionByLabel(newValue) == Dimension.TWO_D));
     }
 
     public void setStressDisplayOption(StressDisplayOption stressDisplayOption) {
@@ -113,14 +122,16 @@ public class RightToolbar {
         FileChooser fileChooser = fileLocationViewModel.createFileChooser();
         File file = fileChooser.showOpenDialog(stressButton.getScene().getWindow());
 
-        try {
-            if (file != null) {
-                fileLocationViewModel.saveLastUsedDirectory(file.getParentFile());
-                ModelController.getInstance().initCustomCharacteristic(file);
-                CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
+        if (file == null) {
+            return;
+        }
 
-                LegendData.getInstance().updateValuesRange(customModel.getMinValue(), customModel.getMaxValue());
-            }
+        try {
+            fileLocationViewModel.saveLastUsedDirectory(file.getParentFile());
+            ModelController.getInstance().initCustomCharacteristic(file);
+            CustomCharacteristic customModel = ModelController.getInstance().getCustomCharacteristic();
+
+            LegendData.getInstance().updateValuesRange(customModel.getMinValue(), customModel.getMaxValue());
         } catch (ModelValidationException e) {
             new ErrorDialog(e);
         }

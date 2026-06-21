@@ -4,10 +4,12 @@ import org.cmps.tetrahedron.config.CanvasProperties;
 import org.cmps.tetrahedron.controller.ModelController;
 import org.cmps.tetrahedron.controller.MouseController;
 import org.cmps.tetrahedron.controller.VertexInfoController;
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.Model;
 import org.cmps.tetrahedron.model.ModelViewSettings;
 import org.cmps.tetrahedron.utils.CoordinatesConvertor;
+import org.cmps.tetrahedron.viewmodel.DimensionViewModel;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -85,7 +87,7 @@ public class ModelRenderer {
             // Reading depth value packed as 4 channel color (RGBA)
             ByteBuffer depthBuffer = BufferUtils.createByteBuffer(4);
             glReadPixels(vertexInfoController.getX(), vertexInfoController.getY(),
-                    1, 1, GL_BGRA_EXT, GL_UNSIGNED_BYTE, depthBuffer);
+                         1, 1, GL_BGRA_EXT, GL_UNSIGNED_BYTE, depthBuffer);
 
             float depth = unpackDepth(depthBuffer);
 
@@ -130,9 +132,9 @@ public class ModelRenderer {
         }
 
         modelMatrix.identity()
-                .rotateY(x)
-                .rotateX(y)
-                .translate(model.getCenter());
+                   .rotateY(x)
+                   .rotateX(y)
+                   .translate(model.getCenter());
 
         float eyeZ = zoomFactor * model.getRadius();
         viewMatrix.setLookAt(0.0f, 0.0f, eyeZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
@@ -226,9 +228,11 @@ public class ModelRenderer {
         int colorBuffer = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 
+        // We have "* 3 * 3" because one face has 3 coordinates and color has tree values (r, g, b).
         FloatBuffer colors = BufferUtils.createFloatBuffer(modelController.getFaces().size() * 3 * 3);
-        for (int i = 0; i < modelController.getFaces().size() / 4; i++) {
-            for (int j = 0; j < 4 * 3; j++) {
+        int finiteElementFaceCount = DimensionViewModel.getInstance().getDimension() == Dimension.TWO_D ? 1 : 4;
+        for (int i = 0; i < modelController.getFaces().size() / finiteElementFaceCount; i++) {
+            for (int j = 0; j < finiteElementFaceCount * 3; j++) {
                 for (float colorPart : colorsList.get(i)) {
                     colors.put(colorPart);
                 }
@@ -288,7 +292,7 @@ public class ModelRenderer {
         modelColor = glGetUniformLocation(program, "modelColor");
         showElementMesh = glGetUniformLocation(program, "showElementMesh");
         showLight = glGetUniformLocation(program, "showLight");
-        isDepthReading  = glGetUniformLocation(program, "isDepthReading");
+        isDepthReading = glGetUniformLocation(program, "isDepthReading");
     }
 
     private void initColors() {
