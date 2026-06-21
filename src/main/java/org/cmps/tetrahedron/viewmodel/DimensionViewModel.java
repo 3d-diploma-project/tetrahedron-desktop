@@ -1,6 +1,9 @@
 package org.cmps.tetrahedron.viewmodel;
 
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import lombok.Getter;
 import org.cmps.tetrahedron.enums.Dimension;
 
@@ -31,5 +34,9 @@ public class DimensionViewModel {
 
     public void bind(ReadOnlyObjectProperty<String> dimensionProperty) {
         dimension.bind(dimensionProperty);
+    }
+
+    public void addDimensionListener(ChangeListener<String> listener) {
+        dimension.addListener(listener);
     }
 }
