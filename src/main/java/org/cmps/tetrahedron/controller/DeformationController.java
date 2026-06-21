@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.controller;
 
 import lombok.Getter;
+import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.exception.ModelValidationException;
 import org.cmps.tetrahedron.model.ColorSettings;
 import org.cmps.tetrahedron.model.Model;
@@ -34,7 +35,8 @@ public class DeformationController {
             return;
         }
 
-        lastAppliedDeformations = DataReader.readDeformations(file, originalVertices.size());
+        lastAppliedDeformations = readDeformations(file, model);
+
         System.out.println("[DEBUG] Deformations loaded: " + lastAppliedDeformations.size());
 
         ColorSettings.getInstance().setColoredInSelectedColor(true);
@@ -72,5 +74,23 @@ public class DeformationController {
 
         model.updateVertices(modelVertices);
         ModelController.getInstance().setModelReady(true);
+    }
+
+    private List<float[]>  readDeformations(File file, Model model) throws ModelValidationException {
+        var deformationsMap = DataReader.readCoordinates(file, model.getDimension() == Dimension.TWO_D);
+        var expectedVerticesCount = model.getVertices().size();
+
+        List<float[]> result = new ArrayList<>(Collections.nCopies(expectedVerticesCount, null));
+
+        for (Map.Entry<Integer, float[]> e : deformationsMap.entrySet()) {
+            int idx = e.getKey();
+            float[] def = e.getValue();
+
+            if (idx < 1 || idx > expectedVerticesCount) {
+                throw new ModelValidationException("displacements-out-range", "check", idx);
+            }
+            result.set(idx - 1, def);
+        }
+        return result;
     }
 }

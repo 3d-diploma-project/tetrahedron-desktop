@@ -19,13 +19,12 @@ public class DataReader {
 
     private static final int VERTICES_WITH_INDICES = 4;
     private static final int FACE_WITH_INDICES = 5;
-    private static final int DEFORMATIONS_WITH_INDEX = 4;
     private static final int STRESS_WITH_INDICES = 7;
 
     public static TetraModelApi readModel(File nodes, File elements,
                                           Dimension dimension) throws ModelValidationException, InternalValidationException {
         boolean is2D = dimension == Dimension.TWO_D;
-        Map<Integer, float[]> coordinates = readVertices(nodes, is2D);
+        Map<Integer, float[]> coordinates = readCoordinates(nodes, is2D);
         TetraModelApi model = TetraModelApi.builder()
                                            .coordinates(coordinates)
                                            .indices(DataReader.readIndexes(elements, coordinates, is2D)
@@ -137,74 +136,7 @@ public class DataReader {
         }
     }
 
-    public static List<float[]> readDeformations(File deformationsFile, int expectedVerticesCount)
-            throws ModelValidationException {
-        Locale.setDefault(US);
-
-        Map<Integer, float[]> deformationsMap = new HashMap<>();
-
-        int autoIndex = 1;
-        String line = null;
-        try (Scanner fid = new Scanner(deformationsFile)) {
-            while (fid.hasNextLine()) {
-                line = fid.nextLine().trim();
-                if (line.isEmpty()) {
-                    continue;
-                }
-
-                String[] elements = line.split("\\s+");
-                if (elements.length < 3 || elements.length > 4) {
-                    throw new ModelValidationException("displacements-format", "check-string", line);
-                }
-
-                int index;
-                int startIdx;
-
-                if (elements.length == DEFORMATIONS_WITH_INDEX) {
-                    index = Integer.parseInt(elements[0]);
-                    startIdx = 1;
-                } else {
-                    index = autoIndex++;
-                    startIdx = 0;
-                }
-
-                float dx = Float.parseFloat(elements[startIdx]);
-                float dy = Float.parseFloat(elements[startIdx + 1]);
-                float dz = Float.parseFloat(elements[startIdx + 2]);
-
-                if (deformationsMap.containsKey(index)) {
-                    throw new ModelValidationException("repeating-index", "check", index);
-                }
-                deformationsMap.put(index, new float[]{dx, dy, dz});
-            }
-        } catch (FileNotFoundException e) {
-            throw new ModelValidationException("not-found-file");
-        } catch (NumberFormatException e) {
-            throw new ModelValidationException("read-number", "check-string", line);
-        }
-
-        if (deformationsMap.size() != expectedVerticesCount) {
-            throw new ModelValidationException("displacements-nodes", "check", deformationsMap.size(),
-                                               expectedVerticesCount);
-        }
-
-        List<float[]> result = new ArrayList<>(Collections.nCopies(expectedVerticesCount, null));
-
-        for (Map.Entry<Integer, float[]> e : deformationsMap.entrySet()) {
-            int idx = e.getKey();
-            float[] def = e.getValue();
-
-            if (idx < 1 || idx > expectedVerticesCount) {
-                throw new ModelValidationException("displacements-out-range", "check", idx);
-            }
-            result.set(idx - 1, def);
-        }
-
-        return result;
-    }
-
-
-    private static Map<Integer, float[]> readVertices(File coordinatesTableFile, boolean is2D)
+    public static Map<Integer, float[]> readCoordinates(File coordinatesTableFile, boolean is2D)
             throws ModelValidationException {
         Locale.setDefault(US);
 
