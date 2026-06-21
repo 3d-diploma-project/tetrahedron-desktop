@@ -14,7 +14,7 @@ public class DataWriter {
 
     private static final String CONSTANTS_FILE = "0_constants.txt";
     private static final String COORDINATES_FILE = "1_coordinates_matrix.txt";
-    private static final String ELEMENTS_FILE = "2_elements_matrix.txt";
+    private static final String INDICES_FILE = "2_indices_matrix.txt";
 
     public static void writeConstantsToFile(File directory, TetraModelApi tetraModelApi) throws IOException {
         File file = FileUtils.createFile(directory, CONSTANTS_FILE);
@@ -23,7 +23,7 @@ public class DataWriter {
             writer.newLine();
             writer.write(String.format("NodesCount=%d", tetraModelApi.coordinates().size()));
             writer.newLine();
-            writer.write(String.format("ElementsCunt=%d", tetraModelApi.indices().length));
+            writer.write(String.format("ElementsCount=%d", tetraModelApi.indices().length));
             writer.newLine();
         }
     }
@@ -53,7 +53,7 @@ public class DataWriter {
 
     public static void writeIndicesToFile(File directory, TetraModelApi tetraModelApi,
                                           Map<Integer, Integer> coordIndexToSortedIndex) throws IOException {
-        File file = FileUtils.createFile(directory, ELEMENTS_FILE);
+        File file = FileUtils.createFile(directory, INDICES_FILE);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             var elements = tetraModelApi.indices();
 
