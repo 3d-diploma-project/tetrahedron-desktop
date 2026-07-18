@@ -39,6 +39,7 @@ public class LegendData {
 
     public void updateValuesRange(float min, float max) {
         if (this.min == min && this.max == max) {
+            visible.set(true);
             return;
         }
 
