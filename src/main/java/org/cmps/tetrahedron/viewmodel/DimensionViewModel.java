@@ -9,6 +9,7 @@ import org.cmps.tetrahedron.enums.Dimension;
 
 import java.util.Objects;
 
+import static org.cmps.tetrahedron.enums.Dimension.THREE_D;
 import static org.cmps.tetrahedron.enums.Dimension.TWO_D;
 
 /**
@@ -22,7 +23,7 @@ public class DimensionViewModel {
     @Getter
     private static final DimensionViewModel instance = new DimensionViewModel();
 
-    private final ObjectProperty<String> dimension = new SimpleObjectProperty<>(TWO_D.getLabel());
+    private final ObjectProperty<String> dimension = new SimpleObjectProperty<>(THREE_D.getLabel());
 
     public Dimension getDimension() {
         return Dimension.getDimensionByLabel(dimension.get());

@@ -36,6 +36,6 @@ public class ModelDimensionUtils {
             }
         }
 
-        throw new RuntimeException("Not 2d mesh was loaded");
+        throw new RuntimeException("mesh-error-not-2d-mesh-loaded");
     }
 }
