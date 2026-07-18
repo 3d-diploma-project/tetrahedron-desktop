@@ -1,6 +1,7 @@
 package org.cmps.tetrahedron.mesher;
 
 import javafx.util.Pair;
+import org.cmps.tetrahedron.controller.LocalizationController;
 import org.cmps.tetrahedron.enums.Dimension;
 import org.cmps.tetrahedron.model.TetraModelApi;
 import org.gmsh.Gmsh;
@@ -192,7 +193,7 @@ public class StlToTetraMesh {
         Gmsh.gmshInitialize(2, argv, 0, 0, ierr);
         if (ierr.get(JAVA_INT, 0) != 0) {
             System.err.println("gmshInitialize failed");
-            throw new RuntimeException("gmshInitialize failed");
+            throw new RuntimeException("gmshInitialize-failed");
         }
     }
 
@@ -252,7 +253,7 @@ public class StlToTetraMesh {
         Gmsh.gmshMerge(arena.allocateFrom(inputStl), ierr);
         if (ierr.get(JAVA_INT, 0) != 0) {
             System.err.println("Error loading STL");
-            throw new RuntimeException("Error loading STL");
+            throw new RuntimeException("error-loading-stl");
         }
     }
 
@@ -618,7 +619,7 @@ public class StlToTetraMesh {
                 if (logger != null) logger.accept("Merging STL file: " + inputStl);
                 Gmsh.gmshMerge(arena.allocateFrom(inputStl), ierr);
                 if (ierr.get(JAVA_INT, 0) != 0) {
-                    throw new RuntimeException("Error loading STL");
+                    throw new RuntimeException("error-loading-stl");
                 }
 
                 if (logger != null) logger.accept("Classifying surfaces and creating CAD geometry...");
@@ -662,7 +663,11 @@ public class StlToTetraMesh {
 
                 Gmsh.gmshModelMeshGenerate(3, ierr);
                 if (ierr.get(JAVA_INT, 0) != 0) {
-                    throw new RuntimeException("Meshing failed with error code " + ierr.get(JAVA_INT, 0) + ".");
+                    throw new RuntimeException(LocalizationController.getInstance()
+                                                                     .getString(
+                                                                             LocalizationController.ERROR_DIALOG_BUNDLE,
+                                                                             "mesh-error-with-error-code")
+                                                       + ": " + ierr.get(JAVA_INT, 0) + ".");
                 }
 
                 Gmsh.gmshModelMeshOptimize(arena.allocateFrom("Netgen"), 0, 1, MemorySegment.NULL, 0, ierr);
@@ -678,7 +683,7 @@ public class StlToTetraMesh {
         }
 
         if (!success) {
-            throw new RuntimeException("Mesh generation failed after all attempts.");
+            throw new RuntimeException("mesh-failed");
         }
     }
 
@@ -697,7 +702,7 @@ public class StlToTetraMesh {
                 if (logger != null) logger.accept("Merging STL file: " + inputStl);
                 Gmsh.gmshMerge(arena.allocateFrom(inputStl), ierr);
                 if (ierr.get(JAVA_INT, 0) != 0) {
-                    throw new RuntimeException("Error loading STL");
+                    throw new RuntimeException("error-loading-stl");
                 }
 
                 if (logger != null) logger.accept("Classifying surfaces and creating CAD geometry...");
@@ -719,7 +724,11 @@ public class StlToTetraMesh {
 
                 Gmsh.gmshModelMeshGenerate(2, ierr);
                 if (ierr.get(JAVA_INT, 0) != 0) {
-                    throw new RuntimeException("Meshing failed with error code " + ierr.get(JAVA_INT, 0) + ".");
+                    throw new RuntimeException(LocalizationController.getInstance()
+                                                                     .getString(
+                                                                             LocalizationController.ERROR_DIALOG_BUNDLE,
+                                                                             "mesh-error-with-error-code")
+                                                       + ": " + ierr.get(JAVA_INT, 0) + ".");
                 }
 
                 Gmsh.gmshModelMeshOptimize(arena.allocateFrom("Netgen"), 0, 1, MemorySegment.NULL, 0, ierr);
@@ -735,7 +744,7 @@ public class StlToTetraMesh {
         }
 
         if (!success) {
-            throw new RuntimeException("Mesh generation failed after all attempts.");
+            throw new RuntimeException("mesh-failed");
         }
     }
 

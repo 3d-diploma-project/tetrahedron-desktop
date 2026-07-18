@@ -69,7 +69,7 @@ public class MeshViewModel {
             maxMeshSize.set(String.format("%.5f", tetraModelApi.maxMeshSize()));
             modelController.initModelData(tetraModelApi);
         } catch (Throwable e) {
-            new ErrorDialog(new ModelValidationException("Error when creating mesh. " + e.getMessage()));
+            new ErrorDialog(new ModelValidationException("mesh-error", e.getMessage()));
         }
     }
 
@@ -95,7 +95,7 @@ public class MeshViewModel {
             DataWriter.writeCoordinatesToFile(directory, tetraModelApi, sortedNodeIndices);
             DataWriter.writeIndicesToFile(directory, tetraModelApi, indexToSortedIndex);
         } catch (IOException | RuntimeException e) {
-            new ErrorDialog(new ModelValidationException("Error when saving model. " + e.getMessage()));
+            new ErrorDialog(new ModelValidationException("save-mesh-error", e.getMessage()));
         }
     }
 
