@@ -14,6 +14,6 @@ jlink --strip-debug --no-man-pages --no-header-files --compress zip-6 \
 
 jpackage --input tmp/app --main-jar Tetrahedron.jar --main-class org.cmps.tetrahedron.Launcher --runtime-image tmp/jre \
   --name Tetrahedron --vendor "CMPS, KhPI" --app-version $APP_VERSION --icon src/main/resources/logo.icns \
-  --mac-package-identifier cmps.tetrahedron --type dmg --dest dist
+  --mac-package-identifier cmps.tetrahedron --type app-image --dest dist
 
 rm -rf tmp
